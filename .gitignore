@@ -28,9 +28,10 @@
 docker-compose.override.yml
 
 # Package manager
-composer.lock
-package-lock.json
-yarn.lock
+# lockfiles (keep these tracked)
+# composer.lock
+# package-lock.json
+# yarn.lock
 
 # Build artifacts
 dist/
