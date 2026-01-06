@@ -5,6 +5,8 @@
         <span x-show="hasAlerts" style="position:absolute;top:-5px;right:-5px;width:28px;height:28px;background:#ef4444;border-radius:50%;color:white;font-size:16px;font-weight:bold;display:flex;align-items:center;justify-content:center;animation:pulse 1.5s infinite;border:3px solid white">!</span>
     </button>
 
+    <!-- Floating actions removed: buttons moved into the main modal header for a professional layout -->
+
     <!-- Developer Info Modal -->
     <div x-show="showDevInfo" x-transition @click.away="showDevInfo = false" class="fixed inset-0 z-[11000] flex items-center justify-center" style="display:none">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-75"></div>
@@ -21,44 +23,6 @@
                 </div>
                 <p class="text-xs text-purple-200 mt-4">#MaJHiBhai - Making Laravel Fast! ⚡</p>
             </div>
-        </div>
-    </div>
-
-    <!-- Settings Popout (top-level so it isn't nested inside dev-info) -->
-    <div x-show="openSettings" x-transition @click.away="handleSettingsLeave()" class="fixed inset-0 z-[10500] flex items-end justify-end p-6" style="display:none;pointer-events:auto">
-        <div class="bg-transparent w-full h-full absolute top-0 left-0"></div>
-        <div class="relative bg-gradient-to-br from-purple-600 via-blue-600 to-purple-700 text-white rounded-3xl shadow-2xl p-6 w-80 mr-6 mb-6">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-sm font-semibold">Settings</h3>
-                <button @click="openSettings = false" class="text-white bg-white bg-opacity-10 rounded-full w-7 h-7 flex items-center justify-center">×</button>
-            </div>
-            <div class="space-y-3 text-sm">
-                <div>
-                    <label class="block text-xs text-purple-200">Discord Webhook</label>
-                    <input x-model="discordWebhook" class="w-full text-sm p-2 rounded" style="background:white;color:#111" placeholder="https://discordapp.com/api/webhooks/..." />
-                    <label class="inline-flex items-center mt-1 text-white"><input type="checkbox" x-model="discordEnabled" class="mr-2"/> Enable</label>
-                </div>
-
-                <div>
-                    <label class="block text-xs text-purple-200">Slack Webhook</label>
-                    <input x-model="slackWebhook" class="w-full text-sm p-2 rounded" style="background:white;color:#111" placeholder="https://hooks.slack.com/services/..." />
-                    <label class="inline-flex items-center mt-1 text-white"><input type="checkbox" x-model="slackEnabled" class="mr-2"/> Enable</label>
-                </div>
-
-                <div>
-                    <label class="block text-xs text-purple-200">Alert Email (TO)</label>
-                    <input x-model="mailTo" class="w-full text-sm p-2 rounded" style="background:white;color:#111" placeholder="admin@example.com" />
-                    <label class="inline-flex items-center mt-1 text-white"><input type="checkbox" x-model="mailEnabled" class="mr-2"/> Enable</label>
-                </div>
-
-                <div class="flex gap-2">
-                    <button @click="saveSettings()" class="px-3 py-2 bg-white text-purple-700 rounded text-sm">Save</button>
-                    <button @click="copyEnvSnippet()" class="px-3 py-2 bg-white bg-opacity-20 text-sm rounded text-white">Copy .env Snippet</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Monitor Modal -->
     <div x-show="isOpen" x-transition class="fixed inset-0 z-[10000] flex items-center justify-center" style="display:none">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-75" @click="closeModal()"></div>
@@ -113,13 +77,13 @@
                             <button @click="clearLogs()" class="px-3 py-1 bg-red-600 text-white rounded text-sm">Clear</button>
                         </div>
                     </div>
-                    <div class="bg-gray-100 rounded p-3" style="height:48vh;overflow:auto;font-family:monospace;font-size:13px;white-space:pre-wrap;">
+                    <div class="bg-gray-100 rounded p-3" style="height:48vh;overflow-y:auto;font-family:monospace;font-size:12px;line-height:1.4;">
                         <template x-for="(log, idx) in consoleLogs" :key="idx">
-                            <div class="mb-2">
+                            <div class="mb-3 pb-2 border-b border-gray-300">
                                 <div class="text-xs text-gray-500" x-text="log.at"></div>
-                                <div>
-                                    <strong x-text="'['+log.level+'] '"></strong>
-                                    <pre style="margin:0;white-space:pre-wrap;word-break:break-word;" x-text="formatMsg(log.msg)"></pre>
+                                <div class="mt-1">
+                                    <span class="font-bold" :class="{'text-red-600': log.level==='error', 'text-orange-600': log.level==='warn', 'text-blue-600': log.level==='info'}" x-text="'['+log.level+'] '"></span>
+                                    <span style="white-space:pre-wrap;word-break:break-word;" x-html="formatMsgHtml(log.msg)"></span>
                                 </div>
                             </div>
                         </template>
@@ -129,13 +93,80 @@
             </div>
         </div>
     </div>
-</div>
 
+    <!-- Settings Modal (Redesigned) -->
+    <div x-show="openSettings" x-transition class="fixed inset-0 z-[10500] flex items-center justify-center p-4" style="display:none;pointer-events:auto">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-75" @click="openSettings = false"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-gradient-to-br from-purple-600 via-blue-600 to-purple-700 text-white rounded-3xl shadow-2xl p-8 w-full max-w-md mx-4">
+            <!-- Close Button -->
+            <button @click="openSettings = false" class="absolute top-4 right-4 text-white text-2xl bg-white bg-opacity-10 rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-20 transition">×</button>
+            
+            <div class="text-center space-y-4">
+                <!-- Larvae Icon -->
+                <div class="text-6xl mb-2 larvae-wiggle">🐛</div>
+                <h2 class="text-2xl font-bold">Lorapok Settings</h2>
+                <p class="text-sm text-purple-100 mb-4">Configure your notifications</p>
+                
+                <!-- Settings Form -->
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 space-y-4 text-left">
+                    
+                    <div>
+                        <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Discord Webhook</label>
+                        <input x-model="discordWebhook" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="https://discordapp.com/api/webhooks/..." />
+                        <label class="inline-flex items-center mt-2 text-white text-sm cursor-pointer hover:text-purple-200 transition">
+                            <input type="checkbox" x-model="discordEnabled" class="mr-2 rounded text-purple-600 focus:ring-purple-500 w-4 h-4 bg-white bg-opacity-20 border-transparent"/> 
+                            Enable Discord Alerts
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Slack Webhook</label>
+                        <input x-model="slackWebhook" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="https://hooks.slack.com/services/..." />
+                        <label class="inline-flex items-center mt-2 text-white text-sm cursor-pointer hover:text-purple-200 transition">
+                            <input type="checkbox" x-model="slackEnabled" class="mr-2 rounded text-purple-600 focus:ring-purple-500 w-4 h-4 bg-white bg-opacity-20 border-transparent"/> 
+                            Enable Slack Alerts
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Alert Email (TO)</label>
+                        <input x-model="mailTo" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="admin@example.com" />
+                        <label class="inline-flex items-center mt-2 text-white text-sm cursor-pointer hover:text-purple-200 transition">
+                            <input type="checkbox" x-model="mailEnabled" class="mr-2 rounded text-purple-600 focus:ring-purple-500 w-4 h-4 bg-white bg-opacity-20 border-transparent"/> 
+                            Enable Email Alerts
+                        </label>
+                    </div>
+
+                    <div class="flex gap-3 pt-3">
+                        <button @click="saveSettings()" class="flex-1 py-3 bg-white text-purple-700 font-bold rounded-xl hover:bg-purple-50 transition shadow-lg transform hover:-translate-y-0.5 active:translate-y-0">Save Changes</button>
+                        <button @click="copyEnvSnippet()" class="px-4 py-3 bg-black bg-opacity-20 text-white font-semibold rounded-xl hover:bg-opacity-30 transition">Copy .env</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        <button @click="saveSettings()" class="flex-1 py-3 bg-white text-purple-700 font-bold rounded-xl hover:bg-purple-50 transition shadow-lg transform hover:-translate-y-0.5 active:translate-y-0">Save Changes</button>
+
+.lorapok-btn:hover{transform:scale(1.1) rotate(5deg);animation:wiggle 0.5s ease-in-out infinite}
+
+
+</div>
 <style>
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:0.8}}
 @keyframes wiggle{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.lorapok-btn:hover ~ .dev-larvae-container .dev-larvae,
+.dev-larvae-container:hover .dev-larvae{
+    opacity:1!important;
+    transform:scale(1)!important;
+}
 
-.lorapok-btn:hover{transform:scale(1.1) rotate(5deg);animation:wiggle 0.5s ease-in-out infinite}
+.dev-larvae:hover{
+    transform:scale(1.15) rotate(-5deg)!important;
+    animation:wiggle 0.5s ease-in-out infinite;
+}
 
 /* Floating action buttons styling moved here from inline markup to avoid breaking layout */
 @keyframes larvae-bob { 0% { transform: translateY(0); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0); } }
@@ -218,8 +249,6 @@ document.addEventListener('alpine:init',()=>{
         clipboardHistory: [],
         selectedQueryIndex: null,
         copiedIndex: null,
-        devInfoCloseTimer: null,
-        settingsCloseTimer: null,
         init(){
             console.log('🐛 Lorapok Widget Initialized');
             this.fetchData();
@@ -262,18 +291,21 @@ document.addEventListener('alpine:init',()=>{
             // populate initial logs from global buffer if present
             try{
                 window.__lorapok_console_logs = window.__lorapok_console_logs || [];
+                // copy existing into Alpine state (most recent first)
                 this.consoleLogs = (window.__lorapok_console_logs||[]).slice().reverse();
             }catch(e){console.warn('Lorapok: init logs failed',e)}
 
+            // listen for new logs dispatched from the console wrapper
             window.addEventListener('lorapok:console-log', (ev)=>{
                 try{ this.consoleLogs.unshift(ev.detail); if(this.consoleLogs.length>200) this.consoleLogs.length=200 }catch(e){}
             });
         },
-        toggleSettings(){
-            if(this.openSettings){ this.openSettings = false; }
-            else { this.showDevInfo = false; this.openSettings = true; }
+        toggleSettings(){ console.log("Lorapok: Toggle Settings", this.openSettings);
+            // open settings; ensure dev info closed
+            if(!this.openSettings){ this.showDevInfo = false; this.openSettings = true; } else { this.openSettings = false; }
         },
         toggleDev(){
+            // open dev info; ensure settings closed
             if(!this.showDevInfo){ this.openSettings = false; this.showDevInfo = true; } else { this.showDevInfo = false; }
         },
         copyAllLogs(){
@@ -294,7 +326,6 @@ document.addEventListener('alpine:init',()=>{
         clearLogs(){
             try{ this.consoleLogs = []; window.__lorapok_console_logs = []; }catch(e){}
         },
-        // developer/profile and settings open only on click (hover handlers removed)
         saveSettings(){
             try{
                 localStorage.setItem('lorapok_settings', JSON.stringify({
@@ -359,17 +390,12 @@ document.addEventListener('alpine:init',()=>{
             try{
                 if(!msg) return '';
                 if(typeof msg !== 'string') return String(msg);
-                var parsed = JSON.parse(msg);
-                return JSON.stringify(parsed, null, 2);
-            }catch(e){
                 try{
-                    if(msg[0]==='"' && msg[msg.length-1]==='"'){
-                        var un = JSON.parse(msg);
-                        return JSON.stringify(un, null, 2);
-                    }
-                }catch(_){}
+                    var parsed = JSON.parse(msg);
+                    return JSON.stringify(parsed, null, 2);
+                }catch(e){}
                 return msg;
-            }
+            }catch(e){ return msg; }
         },
         formatMsgHtml(msg){
             try{
@@ -378,7 +404,7 @@ document.addEventListener('alpine:init',()=>{
                 try{
                     var parsed = JSON.parse(msg);
                     var pretty = JSON.stringify(parsed, null, 2);
-                    return '<pre style="margin:0;white-space:pre-wrap;word-break:break-word;background:#f5f5f5;padding:6px;border-radius:4px;border-left:3px solid #667eea;font-size:11px;">' + this.escapeHtml(pretty) + '</pre>';
+                    return '<pre style="margin:0;white-space:pre-wrap;word-break:break-word;background:#f5f5f5;padding:6px;border-radius:4px;border-left:3px solid #667eea;">' + this.escapeHtml(pretty) + '</pre>';
                 }catch(e){}
                 return this.escapeHtml(msg);
             }catch(e){ return this.escapeHtml(String(msg)); }
@@ -387,6 +413,9 @@ document.addEventListener('alpine:init',()=>{
             var m = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};
             return String(str).replace(/[&<>"']/g, function(s){ return m[s]; });
         }
+    }))
+});
+</script>
 
 <!-- Load local published listener (fallback to CDN handled inside the published asset) -->
 <!-- If app is configured to use Pusher, instantiate Echo so the published listener can attach to it -->
