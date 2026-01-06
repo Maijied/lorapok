@@ -42,6 +42,7 @@
 - ✅ Route, query, and function tracking
 - ✅ Memory profiling and usage tracking
 - ✅ Published assets for local serving of listener script
+- ✅ Redesigned Settings Modal with glassmorphism UI
 
 
 ## 📦 Installation
@@ -49,6 +50,28 @@
 ```bash
 composer require lorapok/laravel-execution-monitor
 ```
+
+## 🔔 Discord integration
+
+![Discord](laravel-test-app/laravel/resources/images/Discord.png)
+
+To enable Discord notifications, add the following to your application's `.env` (or set via your deployment configuration):
+
+```
+MONITOR_DISCORD_WEBHOOK=https://discordapp.com/api/webhooks/your_webhook_id/your_webhook_token
+MONITOR_DISCORD_ENABLED=true
+```
+
+For local development you can also open the Lorapok widget and save a local developer webhook under Settings (stored in browser localStorage) — this is intended for developer convenience only. For production, prefer the `.env` approach.
+
+To test sending an on-demand alert from the application, run:
+
+```
+php tools/trigger_discord_test.php
+```
+
+A GitHub Actions workflow is provided at `.github/workflows/phpunit.yml` that runs `composer install` and `phpunit` on push and pull requests.
+
 
 That's it! The package automatically enables in local/dev/staging and disables in production.
 

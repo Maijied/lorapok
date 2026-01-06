@@ -21,6 +21,7 @@ class SlowQueryDetected extends Notification
         $channels = [];
         if (config('execution-monitor.notifications.slack.enabled')) $channels[] = 'slack';
         if (config('execution-monitor.notifications.database.enabled')) $channels[] = 'database';
+        if (config('execution-monitor.notifications.discord.enabled')) $channels[] = 'discord';
         return $channels;
     }
 
@@ -43,5 +44,24 @@ class SlowQueryDetected extends Notification
     public function toArray($notifiable)
     {
         return $this->queryData;
+    }
+
+    public function toDiscord($notifiable)
+    {
+        $sql = substr($this->queryData['sql'] ?? '', 0, 1000);
+        $time = $this->queryData['time'] ?? 0;
+
+        $embed = [
+            'title' => '🐌 Slow Query Detected',
+            'description' => "A slow database query was detected",
+            'color' => 16753920, // orange
+            'fields' => [
+                ['name' => 'Time (ms)', 'value' => (string) $time, 'inline' => true],
+                ['name' => 'SQL', 'value' => $sql, 'inline' => false],
+            ],
+            'timestamp' => now()->toIso8601String(),
+        ];
+
+        return ['embeds' => [$embed]];
     }
 }

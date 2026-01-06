@@ -43,16 +43,18 @@ class MonitorApiController extends Controller
         ];
         
         // Format route duration for display and normalize `current_route` to a display string
-        if (isset($report['current_route']['duration'])) {
+        if (isset($report['current_route']) && is_array($report['current_route']) && isset($report['current_route']['duration'])) {
             $duration = $report['current_route']['duration'];
             $report['current_route']['duration_ms'] = round($duration * 1000, 2);
             $report['current_route']['duration_formatted'] = $this->formatDuration($duration);
         }
 
         // Normalize current_route for simple views that expect a string
-        $report['current_route'] = is_array($report['current_route'])
-            ? ($report['current_route']['path'] ?? 'N/A')
-            : (string) $report['current_route'];
+        if (isset($report['current_route']) && is_array($report['current_route'])) {
+            $report['current_route'] = $report['current_route']['path'] ?? 'N/A';
+        } else {
+            $report['current_route'] = (string) ($report['current_route'] ?? 'N/A');
+        }
 
         // Expose memory peak as a top-level key for legacy views
         $report['memory_peak'] = $report['memory']['peak'] ?? null;
@@ -67,10 +69,10 @@ class MonitorApiController extends Controller
         $alerts = [];
         
         // Check route duration threshold
-        if (isset($report['current_route']['duration'])) {
+        if (isset($report['current_route']) && is_array($report['current_route']) && isset($report['current_route']['duration'])) {
             $duration = $report['current_route']['duration'];
             $threshold = config('execution-monitor.thresholds.route_time', 1.0);
-            
+
             if ($duration > $threshold) {
                 $alerts[] = [
                     'type' => 'slow_route',

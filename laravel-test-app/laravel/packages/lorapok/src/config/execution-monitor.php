@@ -31,18 +31,18 @@ return [
     'log_functions' => false,
     'add_header' => true,
     'notifications' => [
-        'enabled' => false,
+        'enabled' => env('MONITOR_NOTIFICATIONS_ENABLED', false),
         'slack' => [
-            'enabled' => false,
+            'enabled' => env('MONITOR_SLACK_ENABLED', false),
             'webhook_url' => env('MONITOR_SLACK_WEBHOOK'),
             'channel' => '#monitoring',
         ],
         'discord' => [
-            'enabled' => false,
+            'enabled' => env('MONITOR_DISCORD_ENABLED', false),
             'webhook_url' => env('MONITOR_DISCORD_WEBHOOK'),
         ],
         'mail' => [
-            'enabled' => false,
+            'enabled' => env('MONITOR_MAIL_ENABLED', false),
             'to' => env('MONITOR_MAIL_TO', 'admin@example.com'),
         ],
     ],

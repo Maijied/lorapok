@@ -4,6 +4,7 @@ namespace Lorapok\ExecutionMonitor;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class ExecutionMonitorServiceProvider extends ServiceProvider
 {
@@ -53,6 +54,10 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 Console\MonitorInstallCommand::class,
             ]);
         }
+        // Register custom notification channel for Discord webhooks
+        Notification::extend('discord', function ($app) {
+            return new \Lorapok\ExecutionMonitor\Notifications\Channels\DiscordWebhookChannel();
+        });
     }
 
     protected function shouldEnable(): bool

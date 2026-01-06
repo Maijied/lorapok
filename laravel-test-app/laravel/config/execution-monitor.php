@@ -11,7 +11,7 @@ return [
         'routes' => true,
         'queries' => true,
         'functions' => true,
-        'notifications' => false,
+        'notifications' => true,
         'broadcasting' => true,
     ],
     'widget' => [
@@ -31,18 +31,18 @@ return [
     'log_functions' => false,
     'add_header' => true,
     'notifications' => [
-        'enabled' => false,
+        'enabled' => true,
         'slack' => [
             'enabled' => false,
             'webhook_url' => env('MONITOR_SLACK_WEBHOOK'),
             'channel' => '#monitoring',
         ],
         'discord' => [
-            'enabled' => false,
+            'enabled' => true,
             'webhook_url' => env('MONITOR_DISCORD_WEBHOOK'),
         ],
         'mail' => [
-            'enabled' => false,
+            'enabled' => true,
             'to' => env('MONITOR_MAIL_TO', 'admin@example.com'),
         ],
     ],

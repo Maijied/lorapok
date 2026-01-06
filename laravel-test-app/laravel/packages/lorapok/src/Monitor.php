@@ -114,6 +114,30 @@ class Monitor
         foreach ($routes as $channel => $destination) {
             if (empty($destination)) continue;
             try {
+                // Discord: send webhook POST directly to avoid requiring a custom notification channel
+                if ($channel === 'discord') {
+                    try {
+                        $payload = [
+                            'username' => config('app.name', 'ExecutionMonitor'),
+                            'embeds' => [
+                                [
+                                    'title' => 'Execution Monitor Alert',
+                                    'description' => json_encode($notification->toArray(null)),
+                                    'color' => 15158332,
+                                    'fields' => [],
+                                ]
+                            ]
+                        ];
+
+                        \Illuminate\Support\Facades\Http::withHeaders([
+                            'Accept' => 'application/json',
+                        ])->post($destination, $payload);
+                    } catch (\Throwable $e) {
+                        \Log::error('ExecutionMonitor: discord webhook failed', ['error' => $e->getMessage()]);
+                    }
+                    continue;
+                }
+
                 \Illuminate\Support\Facades\Notification::route($channel, $destination)->notify($notification);
             } catch (\Throwable $e) {
                 \Log::error('ExecutionMonitor: notification failed', ['channel' => $channel, 'error' => $e->getMessage()]);
