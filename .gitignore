@@ -1,42 +1,30 @@
-# Laravel
-/vendor/
+## Package-focused .gitignore
+
+# Ignore the example Laravel app and its build/runtime artifacts
+/laravel-test-app/
+
+# Node and Composer artifacts
 /node_modules/
+
+# Environment / secrets
 /.env
-/.env.local
-/.env.*.local
-/storage/logs/*
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
-/bootstrap/cache/
-/public/hot
-/public/storage
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Testing
-/coverage/
-.phpunit.result.cache
-
-# Docker
-docker-compose.override.yml
-
-# Package manager
-# lockfiles (keep these tracked)
-# composer.lock
-# package-lock.json
-# yarn.lock
+/.env.*
 
 # Build artifacts
-dist/
-build/
+/dist/
+/build/
 
-# OS
+# OS / Editor
+.DS_Store
 Thumbs.db
-.env.*.php
+.vscode/
+.idea/
+
+# Laravel-specific (for repo root we don't want to ignore package `src` or `config`)
+/storage/
+/bootstrap/cache/
+
+# Logs and temp files
+/logs/
+
+# Keep composer.lock/package-lock.json tracked for reproducibility (do not ignore)
