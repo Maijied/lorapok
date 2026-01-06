@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lorapok-test-app
+    ports:
+      - "8085:80"
+    volumes:
+      - ./laravel:/var/www/html
+    networks:
+      - lorapok-network
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=sqlite
+
+networks:
+  lorapok-network:
+    driver: bridge

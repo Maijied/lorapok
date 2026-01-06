@@ -1,95 +1,41 @@
-.bashrc
-.bash_history
-.bash_logout
-.angular
-node_modules
-.vscode
+# Laravel
 /vendor/
 /node_modules/
-composer.lock
-.phpunit.result.cache
-.DS_Store
+/.env
+/.env.local
+/.env.*.local
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/bootstrap/cache/
+/public/hot
+/public/storage
+
+# IDE
+.vscode/
 .idea/
-*.log
-.env
-.env.local
-.env.*.local
 *.swp
 *.swo
 *~
-.vscode/
-.sublime-project
-.sublime-workspace
-build/
-dist/
-.pytest_cache/
-.coverage
-htmlcov/
-*.egg-info/
-.tox/
-venv/
-.venv/
-*.pyc
-__pycache__/
-.DS_Store
-Thumbs.db
-*.bak
-*.tmp
-.*
-./*
-# Node / Angular
-node_modules/
-dist/
-.vscode/
-.angular/
-
-
-# OS / Editor
 .DS_Store
 
-# User-specific shell files (ONLY if this is intentional)
-.bash_history
-.bash_logout
-.bashrc
-
-
-# user / system files
-.bashrc
-.bash_logout
-.bash_history
-.angular-config.json
-.vscode/
-
-
-*
-!private/
-!public/
-!.gitignore
-
-
-*.log
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
+# Testing
+/coverage/
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
-Thumbs.db
 
-~/.cache/*
+# Docker
+docker-compose.override.yml
+
+# Package manager
+composer.lock
+package-lock.json
+yarn.lock
+
+# Build artifacts
+dist/
+build/
+
+# OS
+Thumbs.db
+.env.*.php
