@@ -282,6 +282,6 @@ Lorapok makes it easy for developers to:
 🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)  
 🐙 GitHub: [@Maijied](https://github.com/Maijied)
 
-</div>
-
 Made with ❤️ for the Laravel community by [@Maijied](https://github.com/Maijied)
+
+</div>
