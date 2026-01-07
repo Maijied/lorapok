@@ -39,8 +39,59 @@ jobs:
 
       - name: Setup Laravel environment
         run: |
-          cp .env.example .env
-          php artisan key:generate
+          cat > .env << 'EOF'
+          APP_NAME=Lorapok_Test
+          APP_ENV=testing
+          APP_KEY=base64:BbuOoKy82tWHwrrY14EEV3iWGChIms+UjUm8g09WI1o=
+          APP_DEBUG=true
+          APP_URL=http://localhost
+
+          LOG_CHANNEL=stack
+          LOG_LEVEL=debug
+
+          DB_CONNECTION=sqlite
+
+          BROADCAST_DRIVER=pusher
+          PUSHER_APP_ID=${{ secrets.PUSHER_APP_ID }}
+          PUSHER_APP_KEY=${{ secrets.PUSHER_APP_KEY }}
+          PUSHER_APP_SECRET=${{ secrets.PUSHER_APP_SECRET }}
+          PUSHER_APP_CLUSTER=ap2
+
+          CACHE_DRIVER=array
+          FILESYSTEM_DISK=local
+          QUEUE_CONNECTION=sync
+          SESSION_DRIVER=array
+          SESSION_LIFETIME=120
+
+          # Master toggle
+          EXECUTION_MONITOR_ENABLED=true
+
+          # Mode selection
+          EXECUTION_MONITOR_MODE=local-only
+
+          # Feature toggles
+          EXECUTION_MONITOR_WIDGET=true
+          EXECUTION_MONITOR_ROUTES=true
+          EXECUTION_MONITOR_QUERIES=true
+
+          # Thresholds
+          MONITOR_ROUTE_THRESHOLD=1000
+          MONITOR_QUERY_THRESHOLD=100
+
+          # Widget settings
+          EXECUTION_MONITOR_WIDGET_POSITION=bottom-right
+
+          # Monitor notification settings
+          MONITOR_DISCORD_WEBHOOK=${{ secrets.MONITOR_DISCORD_WEBHOOK }}
+          MONITOR_MAIL_TO=test@example.com
+          MONITOR_NOTIFICATIONS_ENABLED=false
+          MONITOR_DISCORD_ENABLED=false
+
+          # Mail settings for testing
+          MAIL_MAILER=log
+          MAIL_FROM_ADDRESS=test@example.com
+          MAIL_FROM_NAME="Lorapok Monitor"
+          EOF
         working-directory: laravel-test-app/laravel
 
       - name: Run PHPUnit
