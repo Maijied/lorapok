@@ -37,6 +37,12 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
         working-directory: laravel-test-app/laravel
 
+      - name: Setup Laravel environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+        working-directory: laravel-test-app/laravel
+
       - name: Run PHPUnit
         run: ./vendor/bin/phpunit --testdox
         working-directory: laravel-test-app/laravel
