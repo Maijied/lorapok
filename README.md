@@ -4,6 +4,8 @@
 
 #MaJHiBhai - Your friendly Laravel performance companion 🐛
 
+![Lorapok Marketing](images/widget-showcase.png)
+
 ## ✨ Features
 
 ### Core Monitoring
@@ -105,6 +107,8 @@ A beautiful floating button appears in your application. Click it to see:
 - 🗄️ Queries - Database queries with timing and copy-to-clipboard
 - ⚡ Functions - Custom tracked functions
 - 💾 Memory - Memory usage statistics
+
+![Widget Showcase](images/widget-showcase.png)
 
 ### Clipboard Features
 
@@ -270,10 +274,14 @@ Lorapok makes it easy for developers to:
   <p><strong>#MaJHiBhai</strong> - Making Laravel Fast! ⚡</p>
 </div>
 
+<div align="center">
+
 **Lorapok** is developed and maintained by **Mohammad Maizied Hasan Majumder**
 
-- 📧 Email: [mdshuvo40@gmail.com](mailto:mdshuvo40@gmail.com)
-- 🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)
-- 🐙 GitHub: [@Maijied](https://github.com/Maijied)
+📧 Email: [mdshuvo40@gmail.com](mailto:mdshuvo40@gmail.com)  
+🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)  
+🐙 GitHub: [@Maijied](https://github.com/Maijied)
+
+</div>
 
 Made with ❤️ for the Laravel community by [@Maijied](https://github.com/Maijied)
