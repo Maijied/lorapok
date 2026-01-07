@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - Lorapok</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <span class="larvae-icon">🐛</span>
+                <span class="logo-text">Lorapok</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="download.html" class="btn-primary">Download</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="installation" style="min-height: 80vh;">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Download Lorapok</h1>
+                <p class="section-subtitle">Get started with zero-config Laravel performance monitoring</p>
+            </div>
+
+            <div class="install-steps">
+                <div class="install-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Requirements</h3>
+                        <ul style="margin-left: 1.5rem; line-height: 2;">
+                            <li>PHP 8.2 or higher</li>
+                            <li>Laravel 10.x or 11.x</li>
+                            <li>Composer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Install via Composer</h3>
+                        <div class="code-block">
+                            <code>composer require lorapok/laravel-execution-monitor</code>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Auto-Configuration</h3>
+                        <p>The package automatically enables in local/dev/staging environments. No additional
+                            configuration needed!</p>
+                        <p style="margin-top: 1rem;">The floating widget will appear in your application automatically.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="install-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Optional: Publish Configuration</h3>
+                        <div class="code-block">
+                            <code>php artisan vendor:publish --tag=lorapok-config</code>
+                            <button class="copy-btn" onclick="copyCode(this)">
+                                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p style="margin-top: 1rem;">Edit <code>config/execution-monitor.php</code> to customize
+                            thresholds, features, and notification channels.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h3>Need Help?</h3>
+                <p style="margin-bottom: 2rem;">Check out our comprehensive documentation</p>
+                <a href="docs.html" class="btn-large btn-primary">View Documentation</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>Made with ❤️ for the Laravel community by <a href="https://github.com/Maijied">@Maijied</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode(btn) {
+            const code = btn.previousElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                setTimeout(() => {
+                    btn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -53,7 +53,7 @@ composer require lorapok/laravel-execution-monitor
 
 ## 🔔 Discord integration
 
-![Discord](laravel-test-app/laravel/resources/images/Discord.png)
+![Discord Integration](images/discord-screenshot.png)
 
 To enable Discord notifications, add the following to your application's `.env` (or set via your deployment configuration):
 
@@ -264,12 +264,16 @@ Lorapok makes it easy for developers to:
 
 ## 👨‍💻 About the Creator
 
-**Lorapok** is developed and maintained by **Mohammad Maizied Hasan Majumder** (#MaJHiBhai)
+<div align="center">
+  <img src="images/author.jpg" alt="Mohammad Maizied Hasan Majumder" width="150" style="border-radius: 50%; border: 4px solid #667eea; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);" />
+  <h3>Mohammad Maizied Hasan Majumder</h3>
+  <p><strong>#MaJHiBhai</strong> - Making Laravel Fast! ⚡</p>
+</div>
+
+**Lorapok** is developed and maintained by **Mohammad Maizied Hasan Majumder**
 
 - 📧 Email: [mdshuvo40@gmail.com](mailto:mdshuvo40@gmail.com)
 - 🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)
 - 🐙 GitHub: [@Maijied](https://github.com/Maijied)
-
-**#MaJHiBhai** - Making Laravel Fast! ⚡
 
 Made with ❤️ for the Laravel community by [@Maijied](https://github.com/Maijied)

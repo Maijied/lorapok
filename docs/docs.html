@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Lorapok</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .docs-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .docs-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .docs-content h2 {
+            color: var(--purple-600);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .docs-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .docs-content code {
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        .docs-content pre {
+            background: var(--gray-900);
+            color: #10b981;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .docs-content pre code {
+            background: none;
+            padding: 0;
+            color: #10b981;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <span class="larvae-icon">🐛</span>
+                <span class="logo-text">Lorapok</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="download.html" class="btn-primary">Download</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="docs-container">
+        <div class="docs-content">
+            <h1>📚 Lorapok Documentation</h1>
+            <p>Complete guide to using Lorapok Laravel Performance Monitoring Package</p>
+
+            <h2>Installation</h2>
+            <pre><code>composer require lorapok/laravel-execution-monitor</code></pre>
+            <p>That's it! The package automatically enables in local/dev/staging environments.</p>
+
+            <h2>Configuration</h2>
+            <h3>Publish Config (Optional)</h3>
+            <pre><code>php artisan vendor:publish --tag=lorapok-config</code></pre>
+
+            <h3>Environment Variables</h3>
+            <pre><code># Discord Notifications
+MONITOR_DISCORD_WEBHOOK=https://discordapp.com/api/webhooks/...
+MONITOR_DISCORD_ENABLED=true
+
+# Slack Notifications
+MONITOR_SLACK_WEBHOOK=https://hooks.slack.com/services/...
+MONITOR_SLACK_ENABLED=true
+
+# Email Notifications
+MONITOR_MAIL_TO=admin@example.com
+MONITOR_MAIL_ENABLED=true</code></pre>
+
+            <h2>Usage</h2>
+            <h3>Track Execution Time</h3>
+            <pre><code>use Lorapok\ExecutionMonitor\Facades\Monitor;
+
+Monitor::start('expensive-operation');
+// ... your code
+Monitor::end('expensive-operation');</code></pre>
+
+            <h3>Using Closures</h3>
+            <pre><code>$result = monitor('api-call', function() {
+    return Http::get('https://api.example.com/data');
+});</code></pre>
+
+            <h3>In Controllers</h3>
+            <pre><code>use Lorapok\ExecutionMonitor\Traits\TracksExecutionTime;
+
+class UserController extends Controller
+{
+    use TracksExecutionTime;
+
+    public function index()
+    {
+        $this->startTimer('user-fetch');
+        $users = User::paginate(20);
+        $this->endTimer('user-fetch');
+        
+        return view('users.index', compact('users'));
+    }
+}</code></pre>
+
+            <h2>Features</h2>
+            <h3>Widget</h3>
+            <p>A beautiful floating button appears in your application with:</p>
+            <ul>
+                <li>📊 Overview - Performance metrics at a glance</li>
+                <li>🛣️ Routes - All tracked routes with execution times</li>
+                <li>🗄️ Queries - Database queries with timing and copy-to-clipboard</li>
+                <li>📝 Logs - Client console logs</li>
+            </ul>
+
+            <h3>Keyboard Shortcuts</h3>
+            <p>Press <code>Ctrl+Shift+C</code> (or <code>Cmd+Shift+C</code> on Mac) to copy the selected query</p>
+
+            <h3>Clipboard History</h3>
+            <p>All copied queries are stored in browser localStorage (max 20 entries)</p>
+
+            <h2>Commands</h2>
+            <pre><code># Check monitoring status
+php artisan monitor:status
+
+# Force enable
+php artisan monitor:enable
+
+# Disable monitoring
+php artisan monitor:disable</code></pre>
+
+            <h2>Broadcasting</h2>
+            <p>Configure Pusher for real-time alerts:</p>
+            <pre><code>BROADCAST_DRIVER=pusher
+PUSHER_APP_ID=your_app_id
+PUSHER_APP_KEY=your_app_key
+PUSHER_APP_SECRET=your_secret
+PUSHER_APP_CLUSTER=ap2</code></pre>
+
+            <h2>Support</h2>
+            <p>For issues and questions:</p>
+            <ul>
+                <li>GitHub: <a href="https://github.com/Maijied/lorapok">github.com/Maijied/lorapok</a></li>
+                <li>Email: <a href="mailto:mdshuvo40@gmail.com">mdshuvo40@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>Made with ❤️ for the Laravel community by <a href="https://github.com/Maijied">@Maijied</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
