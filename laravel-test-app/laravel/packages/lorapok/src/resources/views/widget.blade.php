@@ -310,9 +310,29 @@
                         </div>
                     </div>
 
-                    <div x-show="settingsTab==='advanced'" style="display:none">
-                        <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Rate Limit (Minutes)</label>
-                        <input x-model.number="rateLimitMinutes" type="number" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 transition" />
+                    <!-- Panel: Advanced -->
+                    <div x-show="settingsTab==='advanced'" class="space-y-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" style="display:none">
+                        <div class="text-center mb-4">
+                             <div class="bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                <span class="text-2xl larvae-wiggle">⚙️</span>
+                             </div>
+                             <h3 class="text-lg font-bold">Advanced Settings</h3>
+                             <p class="text-purple-200 text-xs">Configure rate limiting and monitoring behavior</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Rate Limit (Minutes)</label>
+                            <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border border-transparent placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
+                            <p class="text-xs text-purple-200 mt-1 ml-2">Minimum time between alerts for the same issue (1-1440 minutes)</p>
+                        </div>
+                        <div class="bg-purple-900 bg-opacity-30 rounded-lg p-4 border border-purple-400 border-opacity-30">
+                            <div class="flex items-start gap-2">
+                                <span class="text-lg">ℹ️</span>
+                                <div class="text-xs text-purple-100">
+                                    <p class="font-semibold mb-1">About Rate Limiting</p>
+                                    <p>Rate limiting prevents alert spam by limiting how often the same type of alert can be sent. For example, with a 30-minute limit, if a slow route is detected, you won't receive another slow route alert for 30 minutes.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex gap-3 pt-6">
