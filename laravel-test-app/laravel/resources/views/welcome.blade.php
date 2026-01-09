@@ -126,6 +126,15 @@
                     <p class="text-xs text-gray-500 mt-1">Triggers a hard exception to verify stack trace and alert logging.</p>
                 </a>
 
+                <a href="/lorapok/test/middleware" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-blue-200 group">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-2xl">🔗</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold">TRAIT</span>
+                    </div>
+                    <h4 class="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Middleware Tracking</h4>
+                    <p class="text-xs text-gray-500 mt-1">Uses the MeasuresMiddleware trait to track execution time of custom middleware.</p>
+                </a>
+
                 <div class="glass-card p-5 rounded-2xl shadow-sm border border-gray-100 opacity-60">
                     <div class="flex justify-between items-start mb-2">
                         <span class="text-2xl">🎨</span>

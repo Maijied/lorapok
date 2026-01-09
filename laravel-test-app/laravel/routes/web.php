@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Middleware\TrackedMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,3 +82,8 @@ Route::get('/lorapok/test/high-memory', function () {
 Route::get('/lorapok/test/exception', function () {
     throw new \Exception('This is a test exception from Lorapok Lab 🔥');
 });
+
+Route::get('/lorapok/test/middleware', function () {
+    usleep(100000); // 0.1s simulate work
+    return response()->json(['message' => 'Middleware tracking test completed']);
+})->middleware(TrackedMiddleware::class);

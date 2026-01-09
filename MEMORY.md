@@ -10,6 +10,8 @@ This file serves as a continuous record of development milestones, fixes, and pu
 - **Verification**: Verified website features section and updated landing page.
 
 ### 2026-01-09 - v1.2.5 Larvae Trail & Controller Tracking
+- **Feature**: Transformed test app into a professional **Performance Lab** with Glassmorphism UI.
+- **Feature**: Added **Middleware Tracking** test scenario using `MeasuresMiddleware` trait.
 - **Feature**: Added **System Info** to Monitor footer (Laravel version, Env, Monitor/Widget status, Git branch).
 - **Fix**: Completed "Larvae Trail" timeline by adding missing `queries` and `controller` segments.
 
