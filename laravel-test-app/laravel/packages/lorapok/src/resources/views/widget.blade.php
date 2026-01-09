@@ -28,6 +28,9 @@
                 </div>
                 <p class="text-xs text-purple-200 mt-4">#MaJHiBhai - Making Laravel Fast! ⚡</p>
             </div>
+        </div>
+    </div>
+
     <!-- Main Monitor Modal -->
     <div x-show="isOpen" x-transition class="fixed inset-0 z-[10000] flex items-center justify-center" style="display:none">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-75" @click="closeModal()"></div>
@@ -153,11 +156,6 @@
             </div>
         </div>
     </div>
-                        <button @click="saveSettings()" class="flex-1 py-3 bg-white text-purple-700 font-bold rounded-xl hover:bg-purple-50 transition shadow-lg transform hover:-translate-y-0.5 active:translate-y-0">Save Changes</button>
-
-.lorapok-btn:hover{transform:scale(1.1) rotate(5deg);animation:wiggle 0.5s ease-in-out infinite}
-
-
 </div>
 <style>
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:0.8}}

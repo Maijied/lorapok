@@ -2,12 +2,21 @@
     "name": "lorapok/laravel-execution-monitor",
     "description": "Zero-configuration performance monitoring for Laravel applications with real-time alerts and beautiful UI",
     "type": "library",
-    "keywords": ["laravel", "monitoring", "performance", "profiler", "lorapok", "execution-time", "query-monitor", "debugging"],
+    "keywords": [
+        "laravel",
+        "monitoring",
+        "performance",
+        "profiler",
+        "lorapok",
+        "execution-time",
+        "query-monitor",
+        "debugging"
+    ],
     "license": "MIT",
     "authors": [
         {
-            "name": "Lorapok Team",
-            "email": "info@lorapok.com"
+            "name": "Mohammad Maizied Hasan Majumder",
+            "email": "mdshuvo40@gmail.com"
         }
     ],
     "require": {

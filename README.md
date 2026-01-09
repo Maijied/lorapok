@@ -4,6 +4,8 @@
 
 #MaJHiBhai - Your friendly Laravel performance companion 🐛
 
+[Explore Documentation](https://maijied.github.io/lorapok/docs.html) • [View Changelog](https://maijied.github.io/lorapok/changelog.html) • [Download](https://maijied.github.io/lorapok/download.html)
+
 ![Lorapok Marketing](images/widget-showcase.png)
 
 ## ✨ Features
@@ -33,18 +35,20 @@
 
 ### Changelog
 
+**v1.1.1** (2026-01-09)
+- ✅ Fixed critical modal nesting bug
+- ✅ Corrected author branding in metadata
+- ✅ Optimized premium glassmorphism UI
+
+**v1.1.0** (2026-01-08)
+- ✅ Enhanced Developer Profile with photo
+- ✅ Redesigned Settings Modal
+- ✅ Professional marketing assets integrated
+
 **v1.0.0** (2026-01-06)
 - ✅ Initial release with core monitoring features
-- ✅ Copy-to-clipboard for queries with history (localStorage)
-- ✅ Keyboard shortcut `Ctrl+Shift+C` for quick copy
-- ✅ Real-time broadcasting with Pusher/Laravel Echo
-- ✅ Multi-channel notifications (Slack, Discord, Email, Database)
-- ✅ Performance threshold detection and alerting
-- ✅ Beautiful floating widget with developer profile
-- ✅ Route, query, and function tracking
-- ✅ Memory profiling and usage tracking
-- ✅ Published assets for local serving of listener script
-- ✅ Redesigned Settings Modal with glassmorphism UI
+- ✅ Query tracking and history
+- ✅ Multi-channel notifications
 
 
 ## 📦 Installation
@@ -116,6 +120,17 @@ A beautiful floating button appears in your application. Click it to see:
 - **Keyboard Shortcut** - Press **Ctrl+Shift+C** (or Cmd+Shift+C on Mac) to copy the selected query (or first if none selected)
 - **Clipboard History** - All copied queries are stored in browser localStorage (max 20 entries) for easy access
 
+
+## 🖼️ Gallery
+
+### Real-Time Monitor
+![Monitor Dashboard](images/monitor_main.png)
+
+### Developer Profile (#MaJHiBhai)
+![Developer Profile](images/developer_profile.png)
+
+### Smart Settings Panel
+![Settings Modal](images/settings_modal.png)
 
 ## 📊 Check Status
 

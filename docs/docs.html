@@ -66,7 +66,10 @@
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#installation">Installation</a></li>
                 <li><a href="docs.html">Documentation</a></li>
+                <li><a href="changelog.html">Changelog</a></li>
                 <li><a href="download.html" class="btn-primary">Download</a></li>
             </ul>
         </nav>
@@ -138,10 +141,33 @@ class UserController extends Controller
                 <li>📝 Logs - Client console logs</li>
             </ul>
 
-            <h3>Keyboard Shortcuts</h3>
+            <h3>Visual Tour</h3>
+            <div class="docs-gallery">
+                <div class="gallery-item">
+                    <h4>Main Dashboard</h4>
+                    <img src="images/monitor_main.png" alt="Monitor Dashboard"
+                        style="width:100%; border-radius:1rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                </div>
+                <div class="gallery-item">
+                    <h4>Developer Info</h4>
+                    <img src="images/developer_profile.png" alt="Developer Profile"
+                        style="width:100%; border-radius:1rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                </div>
+                <div class="gallery-item">
+                    <h4>Settings Panel</h4>
+                    <img src="images/settings_modal.png" alt="Settings Panel"
+                        style="width:100%; border-radius:1rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+
+            <h2>Keyboard Shortcuts</h2>
             <p>Press <code>Ctrl+Shift+C</code> (or <code>Cmd+Shift+C</code> on Mac) to copy the selected query</p>
 
-            <h3>Clipboard History</h3>
+            <h2>Changelog</h2>
+            <p>Stay up to date with the latest improvements. <a
+                    href="https://github.com/Maijied/lorapok/blob/main/CHANGELOG.md">View Full Changelog</a></p>
+
+            <h2>Clipboard History</h2>
             <p>All copied queries are stored in browser localStorage (max 20 entries)</p>
 
             <h2>Commands</h2>
