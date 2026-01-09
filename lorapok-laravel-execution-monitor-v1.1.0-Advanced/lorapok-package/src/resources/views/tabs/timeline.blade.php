@@ -11,7 +11,7 @@
         <template x-for="(event, idx) in data?.timeline" :key="idx">
             <div 
                 class="h-full border-r border-white border-opacity-30 relative group cursor-help transition-all hover:brightness-110"
-                :style="`width: ${Math.max(2, (event.duration / data.request.duration / 10))}%`"
+                :style="`width: ${data?.request?.duration ? Math.max(2, (event.duration / data.request.duration / 10)) : (100 / (data?.timeline?.length || 1))}%`"
                 :class="{
                     'bg-purple-500': event.name === 'boot',
                     'bg-blue-500': event.name === 'routing',

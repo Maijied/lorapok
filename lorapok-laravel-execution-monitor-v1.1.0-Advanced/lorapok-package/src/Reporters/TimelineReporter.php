@@ -21,6 +21,13 @@ class TimelineReporter
         ];
     }
 
+    public function reset()
+    {
+        $this->start = microtime(true);
+        $this->events = [];
+        $this->record('boot', $this->start);
+    }
+
     public function getTimeline(): array
     {
         $lastTime = $this->start;

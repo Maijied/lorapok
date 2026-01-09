@@ -46,6 +46,13 @@ class TrackExecutionTime
             $duration = microtime(true) - $start;
             app('execution-monitor')->endRoute($path, $duration);
             
+            app('execution-monitor')->setRequestData([
+                'path' => $path,
+                'method' => $request->method(),
+                'duration' => $duration,
+                'status' => 500,
+            ]);
+
             // Persist report immediately before crashing
             $this->persistReport($request, $path, $duration, $queryCaptured);
             
@@ -55,6 +62,13 @@ class TrackExecutionTime
         $duration = microtime(true) - $start;
         app('execution-monitor')->endRoute($path, $duration);
         
+        app('execution-monitor')->setRequestData([
+            'path' => $path,
+            'method' => $request->method(),
+            'duration' => $duration,
+            'status' => $response->getStatusCode(),
+        ]);
+
         $this->persistReport($request, $path, $duration, $queryCaptured);
 
         if (config('execution-monitor.add_header')) {

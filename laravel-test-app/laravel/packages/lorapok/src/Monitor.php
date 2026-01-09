@@ -548,6 +548,7 @@ class Monitor
         $this->queries = [];
         $this->routes = [];
         $this->currentRoute = null;
+        $this->timeline->reset();
     }
 
     public function start($name)

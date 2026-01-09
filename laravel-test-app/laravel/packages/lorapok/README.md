@@ -34,11 +34,12 @@
 
 ### Changelog
 
-**v1.2.4** (2026-01-09)
-- ✅ **Timeline Fix**: Fixed "Larvae Trail" where query segments weren't being recorded.
-- ✅ **Memory**: Updated project memory brain (`MEMORY.md`).
+**v1.2.5** (2026-01-09)
+- ✅ **Timeline Complete**: Added missing `queries` and `controller` segments to Larvae Trail.
+- ✅ **Fixed N/A Data**: Updated middleware to ensure request metrics (method, path, status) are captured.
+- ✅ **Isolation**: Added timeline reset to prevent data pollution between requests.
 
-**v1.2.3** (2026-01-09)
+**v1.2.4** (2026-01-09)
 - ✅ **UI Fix**: Resolved `[object Object]` rendering in performance alerts modal.
 - ✅ **CI/CD**: Improved reliability of automated builds.
 
@@ -305,7 +306,7 @@ Lorapok makes it easy for developers to:
 ## 🕒 Recent Activity
 
 <!-- START_SECTION:activity -->
-*Last updated on: 2026-01-09* - Finalized stable release v1.2.4 🚀
+*Last updated on: 2026-01-09* - Finalized stable release v1.2.5 🚀
 <!-- END_SECTION:activity -->
 
 <div align="center">

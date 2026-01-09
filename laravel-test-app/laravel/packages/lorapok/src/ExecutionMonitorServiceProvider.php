@@ -103,6 +103,13 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
         Notification::extend('discord', function ($app) {
             return new \Lorapok\ExecutionMonitor\Notifications\Channels\DiscordWebhookChannel();
         });
+
+        // Record controller entry when route is matched
+        \Illuminate\Support\Facades\Event::listen(\Illuminate\Routing\Events\RouteMatched::class, function ($event) {
+            if (app()->bound('execution-monitor')) {
+                app('execution-monitor')->recordTimeline('controller');
+            }
+        });
     }
 
     protected function shouldEnable(): bool

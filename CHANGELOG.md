@@ -2,13 +2,14 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
-## [1.2.4] - 2026-01-09
+## [1.2.5] - 2026-01-09
 
 ### Fixed
-- **Timeline Fix**: Resolved issue where "Larvae Trail" (timeline) wasn't recording database query segments.
-- **Project Memory**: Updated `MEMORY.md` with full development history.
+- **Timeline Enhancement**: Completed "Larvae Trail" (timeline) by adding missing `queries` and `controller` segments.
+- **Request Metadata**: Fixed issue where fingerprints showed "N/A" for method and path by ensuring `setRequestData` is called in middleware.
+- **Data Isolation**: Implemented `reset()` in `TimelineReporter` to ensure each request starts with a fresh timeline.
 
-## [1.2.3] - 2026-01-09
+## [1.2.4] - 2026-01-09
 
 ### Fixed
 - **UI Fix**: Resolved `[object Object]` rendering in performance alerts modal by correctly accessing the message property.
