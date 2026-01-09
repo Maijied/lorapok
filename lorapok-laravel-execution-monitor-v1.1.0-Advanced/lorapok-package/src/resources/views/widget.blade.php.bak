@@ -1,0 +1,41 @@
+    <div x-show="isOpen" x-transition class="fixed inset-0 z-50 flex items-center justify-center" style="display:none;">
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-75" @click="closeModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <span class="text-2xl">🐛</span> Lorapok Monitor
+                    </h2>
+                    <p class="text-purple-100 text-sm">#MaJHiBhai</p>
+                </div>
+                <button @click="closeModal()" class="text-white hover:text-purple-200 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="border-b border-gray-200 bg-gray-50">
+                <nav class="flex space-x-1 px-6">
+                    <button @click="activeTab='overview'" :class="activeTab==='overview'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">📊 Overview</button>
+                    <button @click="activeTab='routes'" :class="activeTab==='routes'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🛣️ Routes</button>
+                    <button @click="activeTab='queries'" :class="activeTab==='queries'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🗄️ Queries</button>
+                </nav>
+            </div>
+            <div class="p-6 overflow-y-auto" style="max-height:calc(90vh - 180px);">
+                <div x-show="activeTab==='overview'">@include('execution-monitor::tabs.overview')</div>
+                <div x-show="activeTab==='routes'">@include('execution-monitor::tabs.routes')</div>
+                <div x-show="activeTab==='queries'">@include('execution-monitor::tabs.queries')</div>
+            </div>
+        </div>
+    </div>
+<style>
+@keyframes wiggle { 0%, 100% { transform: rotate(-3deg) translateY(0); } 25% { transform: rotate(3deg) translateY(-2px); } 50% { transform: rotate(-3deg) translateY(0); } 75% { transform: rotate(3deg) translateY(2px); } }
+@keyframes segment-wave { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-2px) scaleY(1.05); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } }
+.lorapok-larvae-button { transition: transform 0.2s ease; }
+.lorapok-larvae-button:hover { transform: scale(1.1); }
+.lorapok-larvae-button:hover .larvae-svg { animation: wiggle 0.8s ease-in-out infinite; }
+.segment-1 { animation: segment-wave 2s ease-in-out infinite; animation-delay: 0.2s; }
+.segment-2 { animation: segment-wave 2s ease-in-out infinite; animation-delay: 0.1s; }
+.segment-3 { animation: segment-wave 2s ease-in-out infinite; }
+</style>
