@@ -19,7 +19,7 @@
                     'bg-pink-500': event.name === 'controller',
                     'bg-red-400': event.name === 'queries',
                     'bg-green-500': event.name === 'response',
-                    'bg-yellow-400': true
+                    'bg-yellow-400': !['boot','routing','controller','queries','response'].includes(event.name) && !event.name.startsWith('middleware')
                 }"
             >
                 <!-- Tooltip -->
