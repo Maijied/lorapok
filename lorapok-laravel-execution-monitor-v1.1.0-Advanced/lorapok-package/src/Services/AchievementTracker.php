@@ -27,6 +27,21 @@ class AchievementTracker
             'name' => '💾 Cache Champion',
             'description' => 'Achieved a 95% cache hit rate.',
             'goal' => 1
+        ],
+        'error_evader' => [
+            'name' => '🛡️ Error Evader',
+            'description' => 'Successfully handled 50 requests without a single exception.',
+            'goal' => 50
+        ],
+        'latency_legend' => [
+            'name' => '🛸 Latency Legend',
+            'description' => 'Maintained an average response time under 100ms for 20 requests.',
+            'goal' => 20
+        ],
+        'payload_pilot' => [
+            'name' => '📦 Payload Pilot',
+            'description' => 'Optimized request payloads to stay under 50KB.',
+            'goal' => 5
         ]
     ];
 
@@ -38,7 +53,37 @@ class AchievementTracker
 
         $this->checkMemoryMaster($report);
         $this->checkQuerySlayer($report);
+        $this->checkErrorEvader($report);
+        $this->checkLatencyLegend($report);
         // More checks can be added here
+    }
+
+    protected function checkErrorEvader(array $report)
+    {
+        $consecutiveKey = 'monitor_error_evader_consecutive';
+        if (empty($report['last_exception'])) {
+            $count = Cache::get($consecutiveKey, 0) + 1;
+            Cache::put($consecutiveKey, $count, 86400);
+            $this->updateProgress('error_evader', $count);
+        } else {
+            Cache::put($consecutiveKey, 0, 86400);
+            $this->updateProgress('error_evader', 0);
+        }
+    }
+
+    protected function checkLatencyLegend(array $report)
+    {
+        $duration = ($report['request']['duration'] ?? 0) * 1000;
+        $consecutiveKey = 'monitor_latency_legend_consecutive';
+        
+        if ($duration < 100) {
+            $count = Cache::get($consecutiveKey, 0) + 1;
+            Cache::put($consecutiveKey, $count, 86400);
+            $this->updateProgress('latency_legend', $count);
+        } else {
+            Cache::put($consecutiveKey, 0, 86400);
+            $this->updateProgress('latency_legend', 0);
+        }
     }
 
     protected function checkMemoryMaster(array $report)
