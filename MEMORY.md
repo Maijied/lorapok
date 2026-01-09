@@ -9,6 +9,10 @@ This file serves as a continuous record of development milestones, fixes, and pu
 - **CI/CD**: Stabilized GitHub Actions by synchronizing test-app and package source.
 - **Verification**: Verified website features section and updated landing page.
 
+### 2026-01-09 - v1.2.7 Error Page Optimization
+- **Fix**: Improved `InjectMonitorWidget` middleware to use `strripos` for precise `</body>` replacement, ensuring the widget works on Laravel error (500) pages.
+- **Fix**: Resolved issue where widget was injected into code snippets instead of the actual document body.
+
 ### 2026-01-09 - v1.2.5 Larvae Trail & Controller Tracking
 - **Feature**: Transformed test app into a professional **Performance Lab** with Glassmorphism UI.
 - **Feature**: Added **Middleware Tracking** test scenario using `MeasuresMiddleware` trait.

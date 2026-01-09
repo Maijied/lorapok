@@ -2,6 +2,12 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
+## [1.2.7] - 2026-01-09
+
+### Fixed
+- **Error Page Injection**: Improved widget injection logic to accurately target the final `</body>` tag, ensuring the monitor works correctly on Laravel error (500) pages.
+- **UI Conflict**: Resolved issue where widget HTML was appearing inside exception code snippets.
+
 ## [1.2.5] - 2026-01-09
 
 ### Added

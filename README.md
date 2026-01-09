@@ -34,6 +34,10 @@
 
 ### Changelog
 
+**v1.2.7** (2026-01-09)
+- ✅ **Error Pages**: Fixed widget injection on 500 error pages by correctly targeting the final `</body>` tag.
+- ✅ **UI Stability**: Prevented widget code from appearing inside Laravel exception code snippets.
+
 **v1.2.5** (2026-01-09)
 - ✅ **Navigation**: Added floating **Home** button to all test lab pages for easier navigation.
 - ✅ **System Info**: Added PHP and Database (driver + version) information to monitor footer.
@@ -308,7 +312,7 @@ Lorapok makes it easy for developers to:
 ## 🕒 Recent Activity
 
 <!-- START_SECTION:activity -->
-*Last updated on: 2026-01-09* - Finalized stable release v1.2.5 🚀
+*Last updated on: 2026-01-09* - Finalized stable release v1.2.7 🚀
 <!-- END_SECTION:activity -->
 
 <div align="center">

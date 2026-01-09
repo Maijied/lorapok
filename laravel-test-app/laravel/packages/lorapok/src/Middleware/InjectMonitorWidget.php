@@ -22,33 +22,51 @@ class InjectMonitorWidget
 
         $response = $next($request);
 
-                if ($this->isHtmlResponse($response)) {
+                        if ($this->isHtmlResponse($response)) {
 
-                    $content = $response->getContent();
+                            $content = $response->getContent();
 
-                    
+                            
 
-                    // Avoid double injection
+                            // Avoid double injection
 
-                    if (str_contains($content, 'id="execution-monitor-widget"')) {
+                            if (str_contains($content, 'id="execution-monitor-widget"')) {
 
-                        \Log::debug('Lorapok Widget Middleware: Widget already present, skipping injection');
+                                \Log::debug('Lorapok Widget Middleware: Widget already present, skipping injection');
 
-                        return $response;
+                                return $response;
 
-                    }
+                            }
 
-        
+                
 
-                    \Log::debug('Lorapok Widget Middleware: Injecting into HTML response');
+                            \Log::debug('Lorapok Widget Middleware: Injecting into HTML response');
 
-                    $widget = view('execution-monitor::widget')->render();
+                            $widget = view('execution-monitor::widget')->render();
 
-                    $content = str_replace('</body>', $widget . '</body>', $content);
+                            
 
-                    $response->setContent($content);
+                            // Find the last </body> tag to avoid replacing code snippets in error pages
 
-                }
+                            $pos = strripos($content, '</body>');
+
+                            if ($pos !== false) {
+
+                                $content = substr_replace($content, $widget . '</body>', $pos, strlen('</body>'));
+
+                                $response->setContent($content);
+
+                            } else {
+
+                                // Fallback: just append if no body tag found (rare for HTML responses)
+
+                                $response->setContent($content . $widget);
+
+                            }
+
+                        }
+
+                
 
          else {
             \Log::debug('Lorapok Widget Middleware: Not an HTML response');
