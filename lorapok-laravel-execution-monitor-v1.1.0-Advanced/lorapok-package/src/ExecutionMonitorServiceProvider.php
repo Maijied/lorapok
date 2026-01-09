@@ -6,6 +6,16 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
+use Lorapok\ExecutionMonitor\Console\MonitorStatusCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorEnableCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorDisableCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorInstallCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorFindCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorHeatmapCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorReplayCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorExportCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorAuditCommand;
+
 class ExecutionMonitorServiceProvider extends ServiceProvider
 {
     public function register()

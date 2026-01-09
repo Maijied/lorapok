@@ -19,6 +19,15 @@ use Lorapok\ExecutionMonitor\Services\PerformanceBudget;
 use Lorapok\ExecutionMonitor\Services\FingerprintGenerator;
 use Lorapok\ExecutionMonitor\Reporters\TimelineReporter;
 use Lorapok\ExecutionMonitor\Services\PrivacyMasker;
+use Lorapok\ExecutionMonitor\Console\MonitorStatusCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorEnableCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorDisableCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorInstallCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorFindCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorHeatmapCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorReplayCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorExportCommand;
+use Lorapok\ExecutionMonitor\Console\MonitorAuditCommand;
 use Throwable;
 
 class Monitor
