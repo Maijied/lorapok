@@ -5,9 +5,8 @@ use Lorapok\ExecutionMonitor\Http\Controllers\MonitorApiController;
 Route::middleware(['web'])->group(function () {
     Route::get('/execution-monitor/api/data', [MonitorApiController::class, 'getData'])
         ->name('execution-monitor.api.data');
-    Route::get('/api/data', [MonitorApiController::class, 'getData']);
-    Route::post('/api/settings', [MonitorApiController::class, 'saveSettings']);
-    Route::post('/api/settings/test', [MonitorApiController::class, 'testSettings']);
+    Route::post('/execution-monitor/api/settings/test', [MonitorApiController::class, 'testSettings'])
+        ->name('execution-monitor.api.settings.test');
     Route::post('/execution-monitor/api/settings', [MonitorApiController::class, 'saveSettings'])
         ->name('execution-monitor.api.settings');
     

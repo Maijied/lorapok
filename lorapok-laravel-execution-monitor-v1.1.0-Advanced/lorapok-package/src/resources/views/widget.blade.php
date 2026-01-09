@@ -574,7 +574,7 @@ document.addEventListener('alpine:init',()=>{
                     };
                 }
                 
-                const r = await fetch('/api/settings', { // Updated path to match routes
+                const r = await fetch('/execution-monitor/api/settings', { // Updated path to match routes
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -588,7 +588,7 @@ document.addEventListener('alpine:init',()=>{
                     
                     // Trigger Test
                     try {
-                        const test = await fetch('/api/settings/test', { // Updated path
+                        const test = await fetch('/execution-monitor/api/settings/test', { // Updated path
                             method: 'POST',
                             headers: { 
                                 'Content-Type': 'application/json',

@@ -88,8 +88,29 @@ class MonitorApiController extends Controller
     protected function getGitBranch()
     {
         try {
+            // Try shell command first
             $branch = shell_exec('git rev-parse --abbrev-ref HEAD 2>/dev/null');
-            return $branch ? trim($branch) : 'N/A';
+            if ($branch) return trim($branch);
+
+            // Fallback: try reading .git/HEAD manually (if mapped)
+            $headPath = base_path('.git/HEAD');
+            if (file_exists($headPath)) {
+                $head = file_get_contents($headPath);
+                if (preg_match('/ref: refs\/heads\/(.*)/', $head, $matches)) {
+                    return trim($matches[1]);
+                }
+            }
+            
+            // Try parent directory (common in Docker if base_path is a subdir)
+            $headPath = base_path('../.git/HEAD');
+            if (file_exists($headPath)) {
+                $head = file_get_contents($headPath);
+                if (preg_match('/ref: refs\/heads\/(.*)/', $head, $matches)) {
+                    return trim($matches[1]);
+                }
+            }
+
+            return 'N/A';
         } catch (\Throwable $e) {
             return 'N/A';
         }
@@ -146,22 +167,27 @@ class MonitorApiController extends Controller
 
     public function saveSettings(Request $request)
     {
-        $data = $request->validate([
-            'discord_webhook' => 'nullable|url',
-            'discord_enabled' => 'boolean',
-            'slack_webhook' => 'nullable|string', // Changed to string to support API Tokens (xoxp...)
-            'slack_channel' => 'nullable|string',
-            'slack_enabled' => 'boolean',
-            'mail_to' => 'nullable|email',
-            'mail_enabled' => 'boolean',
-            'mail_host' => 'nullable|string',
-            'mail_port' => 'nullable|numeric',
-            'mail_username' => 'nullable|string',
-            'mail_password' => 'nullable|string',
-            'mail_encryption' => 'nullable|string',
-            'mail_from_address' => 'nullable|email',
-            'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
-        ]);
+        try {
+            $data = $request->validate([
+                'discord_webhook' => 'nullable|url',
+                'discord_enabled' => 'boolean',
+                'slack_webhook' => 'nullable|string', 
+                'slack_channel' => 'nullable|string',
+                'slack_enabled' => 'boolean',
+                'mail_to' => 'nullable|email',
+                'mail_enabled' => 'boolean',
+                'mail_host' => 'nullable|string',
+                'mail_port' => 'nullable|numeric',
+                'mail_username' => 'nullable|string',
+                'mail_password' => 'nullable|string',
+                'mail_encryption' => 'nullable|string',
+                'mail_from_address' => 'nullable|email',
+                'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Lorapok Settings Validation Failed:', $e->errors());
+            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+        }
 
         $path = storage_path('app/lorapok/settings.json');
         
@@ -175,8 +201,7 @@ class MonitorApiController extends Controller
             $existing = json_decode(File::get($path), true) ?? [];
         }
 
-        // Merge: Only update keys that are present and non-null in the request, or explicitly allow nulls if needed.
-        // For this use case, we'll merge standard array values.
+        // Merge
         $merged = array_merge($existing, array_filter($data, function($value) {
             return !is_null($value) && $value !== '';
         }));
@@ -188,22 +213,27 @@ class MonitorApiController extends Controller
 
     public function testSettings(Request $request)
     {
-         $data = $request->validate([
-            'discord_webhook' => 'nullable|url',
-            'discord_enabled' => 'boolean',
-            'slack_webhook' => 'nullable|string',
-            'slack_channel' => 'nullable|string',
-            'slack_enabled' => 'boolean',
-            'mail_to' => 'nullable|email',
-            'mail_enabled' => 'boolean',
-            'mail_host' => 'nullable|string',
-            'mail_port' => 'nullable|numeric',
-            'mail_username' => 'nullable|string',
-            'mail_password' => 'nullable|string',
-            'mail_encryption' => 'nullable|string',
-            'mail_from_address' => 'nullable|email',
-            'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
-        ]);
+        try {
+            $data = $request->validate([
+                'discord_webhook' => 'nullable|url',
+                'discord_enabled' => 'boolean',
+                'slack_webhook' => 'nullable|string',
+                'slack_channel' => 'nullable|string',
+                'slack_enabled' => 'boolean',
+                'mail_to' => 'nullable|email',
+                'mail_enabled' => 'boolean',
+                'mail_host' => 'nullable|string',
+                'mail_port' => 'nullable|numeric',
+                'mail_username' => 'nullable|string',
+                'mail_password' => 'nullable|string',
+                'mail_encryption' => 'nullable|string',
+                'mail_from_address' => 'nullable|email',
+                'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Lorapok Test Settings Validation Failed:', $e->errors());
+            return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+        }
 
         try {
              if (app()->bound('execution-monitor')) {
@@ -211,6 +241,7 @@ class MonitorApiController extends Controller
                 return response()->json(['success' => true]);
              }
         } catch (\Throwable $e) {
+            \Log::error('Lorapok Test Alert Failed: ' . $e->getMessage());
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
 

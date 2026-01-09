@@ -67,6 +67,5 @@
         </div>
     </div>
 
-    @include('execution-monitor::widget')
 </body>
 </html>

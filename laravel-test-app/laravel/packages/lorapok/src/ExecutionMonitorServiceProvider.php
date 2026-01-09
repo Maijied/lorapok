@@ -134,12 +134,14 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
 
     protected function registerMiddleware()
     {
-        $kernel = $this->app[\Illuminate\Contracts\Http\Kernel::class];
+        $router = $this->app['router'];
+        
         if ($this->isFeatureEnabled('routes')) {
-            $kernel->pushMiddleware(Middleware\TrackExecutionTime::class);
+            $router->prependMiddlewareToGroup('web', Middleware\TrackExecutionTime::class);
         }
+        
         if ($this->isFeatureEnabled('widget')) {
-            $kernel->pushMiddleware(Middleware\InjectMonitorWidget::class);
+            $router->pushMiddlewareToGroup('web', Middleware\InjectMonitorWidget::class);
         }
     }
 
