@@ -2,13 +2,16 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
-## [1.2.7] - 2026-01-09
+## [1.2.8] - 2026-01-09
+
+### Added
+- **UI Enhancements**: Redesigned header action buttons with unique, professional identities (Amber for Quests, Blue for Developer, Indigo for Settings) and improved hover/active states.
 
 ### Fixed
-- **Error Page Injection**: Improved widget injection logic to accurately target the final `</body>` tag, ensuring the monitor works correctly on Laravel error (500) pages.
-- **UI Conflict**: Resolved issue where widget HTML was appearing inside exception code snippets.
+- **CI/CD Build**: Resolved critical `BindingResolutionException` in GitHub Actions by correcting workflow path drift and ensuring proper class registration.
+- **Navigation Logic**: Moved Quests to the top header for better accessibility and a cleaner main tab interface.
 
-## [1.2.5] - 2026-01-09
+## [1.2.7] - 2026-01-09
 
 ### Added
 - **Navigation**: Added floating **Home** button to all test lab pages for improved developer experience.
