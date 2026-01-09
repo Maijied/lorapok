@@ -139,6 +139,7 @@ class UserController extends Controller
                 <li>🛣️ Routes - All tracked routes with execution times</li>
                 <li>🗄️ Queries - Database queries with timing and copy-to-clipboard</li>
                 <li>📝 Logs - Client console logs</li>
+                <li>🏆 Quests - Achievement system for performance milestones</li>
             </ul>
 
             <h3>Visual Tour</h3>
@@ -178,7 +179,13 @@ php artisan monitor:status
 php artisan monitor:enable
 
 # Disable monitoring
-php artisan monitor:disable</code></pre>
+php artisan monitor:disable
+
+# Run full performance audit
+php artisan monitor:audit
+
+# Generate performance heatmap
+php artisan monitor:heatmap</code></pre>
 
             <h2>Broadcasting</h2>
             <p>Configure Pusher for real-time alerts:</p>
