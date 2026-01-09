@@ -9,6 +9,10 @@ This file serves as a continuous record of development milestones, fixes, and pu
 - **CI/CD**: Stabilized GitHub Actions by synchronizing test-app and package source.
 - **Verification**: Verified website features section and updated landing page.
 
+### 2026-01-09 - v1.2.5 Larvae Trail & Controller Tracking
+- **Feature**: Added **System Info** to Monitor footer (Laravel version, Env, Monitor/Widget status, Git branch).
+- **Fix**: Completed "Larvae Trail" timeline by adding missing `queries` and `controller` segments.
+
 ### 2026-01-09 - v1.2.0 Major Refactor & Optimization
 - **Refactor**: PSR-4 compliance - moved core classes to `Reporters/` and `Services/`.
 - **Feature**: Achievement System - earners badges like "Memory Master" and "Query Slayer".

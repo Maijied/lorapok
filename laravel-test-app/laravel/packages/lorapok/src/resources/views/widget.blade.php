@@ -115,7 +115,17 @@
                     </div>
                     <div class="h-4 w-px bg-gray-300"></div>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-purple-600">v1.1.0-Advanced</span>
+                        <span class="text-purple-600">v1.2.5-Advanced</span>
+                    </div>
+                    <div class="h-4 w-px bg-gray-300"></div>
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                        <span class="text-gray-500 whitespace-nowrap">📊 System Info:</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-gray-400 whitespace-nowrap">Laravel <span class="text-gray-600" x-text="data?.system_info?.laravel_version || 'N/A'"></span></span>
+                            <span class="text-gray-400 whitespace-nowrap">Env: <span class="text-gray-600" x-text="data?.system_info?.environment || 'N/A'"></span></span>
+                            <span class="text-gray-400 whitespace-nowrap">Monitor: <span x-text="data?.system_info?.monitor_status || 'N/A'"></span></span>
+                            <span class="text-gray-400 whitespace-nowrap">Widget: <span class="text-purple-500" x-text="(data?.system_info?.widget_status || 'Loaded') + ' (' + (data?.system_info?.git_branch || 'main') + ')'"></span></span>
+                        </div>
                     </div>
                 </div>
                 
