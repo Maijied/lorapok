@@ -66,7 +66,7 @@
             <div class="space-y-2">
                 <template x-for="(alert, idx) in data.alerts" :key="idx">
                     <div class="bg-white rounded-lg p-3 border border-red-200">
-                        <p class="text-sm font-medium text-red-700" x-text="alert"></p>
+                        <p class="text-sm font-medium text-red-700" x-text="typeof alert === 'object' ? alert.message : alert"></p>
                     </div>
                 </template>
             </div>

@@ -2,6 +2,12 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
+## [1.2.3] - 2026-01-09
+
+### Fixed
+- **UI Fix**: Resolved `[object Object]` rendering in performance alerts modal by correctly accessing the message property.
+- **CI/CD**: Improved synchronization between package source and test application to prevent build drift.
+
 ## [1.2.0] - 2026-01-09
 
 ### Added

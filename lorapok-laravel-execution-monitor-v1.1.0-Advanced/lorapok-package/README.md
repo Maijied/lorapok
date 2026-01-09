@@ -34,6 +34,10 @@
 
 ### Changelog
 
+**v1.2.3** (2026-01-09)
+- ✅ **UI Fix**: Resolved `[object Object]` rendering in performance alerts modal.
+- ✅ **CI/CD**: Improved reliability of automated builds.
+
 **v1.2.0** (2026-01-09)
 - 🚀 **Major Refactoring**: PSR-4 compliant structure (Reporters/Services)
 - 🏆 **Achievement System**: Persistent performance milestones
@@ -297,7 +301,7 @@ Lorapok makes it easy for developers to:
 ## 🕒 Recent Activity
 
 <!-- START_SECTION:activity -->
-*Last updated on: 2026-01-09* - Finalized stable release v1.2.0 🚀
+*Last updated on: 2026-01-09* - Finalized stable release v1.2.3 🚀
 <!-- END_SECTION:activity -->
 
 <div align="center">
@@ -311,3 +315,5 @@ Lorapok makes it easy for developers to:
 Made with ❤️ for the Laravel community by [@Maijied](https://github.com/Maijied)
 
 </div>
+ 
+ 
