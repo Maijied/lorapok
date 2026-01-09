@@ -16,7 +16,12 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button title="Developer Info" @click.stop="toggleDev()" class="modal-action-btn" style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;">
+                    <!-- Quests Button -->
+                    <button title="Optimization Quests" @click.stop="activeTab='quests'" :class="activeTab==='quests' ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span class="text-xl larvae-animate" style="filter: drop-shadow(0 0 8px rgba(255,255,255,0.3))">🏆</span>
+                    </button>
+
+                    <button title="Developer Info" @click.stop="toggleDev()" :class="showDevInfo ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
                         <svg viewBox="0 0 48 48" class="larvae-wiggle" style="width:22px;height:22px">
                             <g fill="none" stroke="#fff" stroke-width="1.2">
                                 <path d="M12 28c2-8 12-10 18-6 6 4 6 12 0 16-6 4-16 4-18-4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -25,8 +30,8 @@
                         </svg>
                     </button>
 
-                    <button title="Settings" @click.stop="toggleSettings()" class="modal-action-btn" style="width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;">
-                        <svg viewBox="0 0 24 24" class="larvae-spin" style="width:18px;height:18px;transform:scale(1);">
+                    <button title="Settings" @click.stop="toggleSettings()" :class="openSettings ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <svg viewBox="0 0 24 24" class="larvae-spin" style="width:18px;height:18px">
                             <path fill="#fff" d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"/>
                             <path fill="#fff" d="M19.4 15a7.94 7.94 0 0 0 .1-1 7.94 7.94 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a8.1 8.1 0 0 0-1.7-1l-.4-2.7A.5.5 0 0 0 12.6 3h-4a.5.5 0 0 0-.5.4l-.4 2.7a8.1 8.1 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.5 12a7.94 7.94 0 0 0-.1 1c0 .3 0 .7.1 1L2.4 15.6a.5.5 0 0 0-.1.6l2 3.5a.5.5 0 0 0 .6.2l2.5-1a8.1 8.1 0 0 0 1.7 1l.4 2.7c.05.3.3.5.6.5h4c.3 0 .55-.2.6-.5l.4-2.7a8.1 8.1 0 0 0 1.7-1l2.5 1c.25.1.54 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 15z"/>
                         </svg>
@@ -43,7 +48,6 @@
                     <button @click="activeTab='routes'" :class="activeTab==='routes'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🛣️ Routes</button>
                     <button @click="activeTab='queries'" :class="activeTab==='queries'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🗄️ Queries</button>
                     <button @click="activeTab='middleware'" :class="activeTab==='middleware'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🔗 Middleware</button>
-                    <button @click="activeTab='quests'" :class="activeTab==='quests'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">🏆 Quests</button>
                     <button @click="activeTab='logs'" :class="activeTab==='logs'?'border-purple-500 text-purple-600':'border-transparent text-gray-500'" class="px-4 py-3 text-sm font-medium border-b-2 transition">📝 Logs</button>
                 </nav>
             </div>
