@@ -1,6 +1,6 @@
 <?php
 
-namespace Lorapok\ExecutionMonitor;
+namespace Lorapok\ExecutionMonitor\Services;
 
 class FingerprintGenerator
 {

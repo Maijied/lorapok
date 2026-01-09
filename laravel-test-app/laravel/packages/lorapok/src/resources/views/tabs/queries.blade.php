@@ -1,5 +1,6 @@
-<div x-data="{ copiedIndex: null }">
-	<h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+<div>
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+
 		<span class="text-2xl">🗄️</span> Database Queries
 		<span class="text-sm font-normal text-gray-500" x-text="(data?.queries?.length) ? '(' + data.queries.length + ' total)' : ''"></span>
 	</h3>

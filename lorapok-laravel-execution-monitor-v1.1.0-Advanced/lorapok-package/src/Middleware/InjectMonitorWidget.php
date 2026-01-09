@@ -14,7 +14,6 @@ class InjectMonitorWidget
         
         if ($request->expectsJson() || $request->ajax()) return $next($request);
         $response = $next($request);
-        \Illuminate\Support\Facades\Log::info('Lorapok: Injecting widget. Current count in response: ' . substr_count($response->getContent(), 'execution-monitor-widget'));
         if ($this->isHtmlResponse($response)) {
             $content = $response->getContent();
             $widget = view('execution-monitor::widget')->render();

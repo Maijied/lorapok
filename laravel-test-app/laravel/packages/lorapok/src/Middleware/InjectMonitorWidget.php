@@ -8,7 +8,10 @@ class InjectMonitorWidget
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!config('execution-monitor.enabled', false)) return $next($request);
+        if (app()->bound('execution-monitor') && !app('execution-monitor')->isEnabled()) {
+            return $next($request);
+        }
+        
         if ($request->expectsJson() || $request->ajax()) return $next($request);
         $response = $next($request);
         if ($this->isHtmlResponse($response)) {

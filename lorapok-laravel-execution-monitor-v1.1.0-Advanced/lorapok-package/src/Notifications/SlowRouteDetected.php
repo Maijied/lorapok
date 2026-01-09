@@ -31,11 +31,10 @@ class SlowRouteDetected extends Notification
     {
         $route = $this->routeData['path'] ?? 'unknown';
         $time = round(($this->routeData['duration'] ?? 0) * 1000, 2);
-        $url = config('app.url') . '/execution-monitor';
 
         $embed = [
             'title' => '⚠️ Slow Route Detected',
-            'description' => "Route `{$route}` exceeded configured threshold\n\n[🔍 View Report]({$url})",
+            'description' => "Route `{$route}` exceeded configured threshold",
             'color' => 16711680, // red
             'fields' => [
                 ['name' => 'Route', 'value' => $route, 'inline' => true],
@@ -54,18 +53,16 @@ class SlowRouteDetected extends Notification
     {
         $route = $this->routeData['path'] ?? 'unknown';
         $time = round(($this->routeData['duration'] ?? 0) * 1000, 2);
-        $url = config('app.url') . '/execution-monitor';
 
         return (new SlackMessage)
             ->error()
             ->content('⚠️ Slow Route Detected: ' . $route)
-            ->attachment(function ($attachment) use ($route, $time, $url) {
+            ->attachment(function ($attachment) use ($route, $time) {
                 $attachment->fields([
                     'Route' => $route,
                     'Time' => $time . ' ms',
                     'Method' => $this->routeData['method'] ?? 'GET',
-                ])->color('danger')
-                ->action('View Report', $url);
+                ])->color('danger');
             });
     }
 

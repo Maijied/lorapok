@@ -1,4 +1,34 @@
 <div class="space-y-6">
+    <!-- Exception Alert (Global) -->
+    <div x-show="lastException" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r shadow-sm">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <span class="text-2xl">⚠️</span>
+            </div>
+            <div class="ml-3 w-full">
+                <p class="text-sm font-bold text-red-800">
+                    Last Request Failed: <span x-text="lastException?.message"></span>
+                </p>
+                <p class="text-xs text-red-600 mt-1">
+                    File: <span x-text="lastException?.file"></span>:<span x-text="lastException?.line"></span>
+                </p>
+                <!-- Trace (Simple) -->
+                <div class="mt-2" x-data="{ showTrace: false }">
+                    <button @click="showTrace = !showTrace" class="text-xs text-red-500 hover:text-red-700 underline focus:outline-none">
+                        <span x-text="showTrace ? 'Hide Trace' : 'Show Trace'"></span>
+                    </button>
+                    <div x-show="showTrace" class="mt-2 p-2 bg-red-100 rounded text-xs font-mono overflow-x-auto whitespace-pre-wrap" style="max-height: 150px;">
+                        <template x-for="(frame, idx) in lastException?.trace || []">
+                            <div class="mb-1">
+                                #<span x-text="idx"></span> <span x-text="frame.file"></span>:<span x-text="frame.line"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Current Route Card -->
         <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-5 border-2 border-blue-200 shadow-sm">

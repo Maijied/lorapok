@@ -29,17 +29,15 @@ class SlowQueryDetected extends Notification
     {
         $sql = substr($this->queryData['sql'] ?? '', 0, 300);
         $time = $this->queryData['time'] ?? 0;
-        $url = config('app.url') . '/execution-monitor';
 
         return (new SlackMessage)
             ->warning()
             ->content('🐌 Slow Query Detected')
-            ->attachment(function ($attachment) use ($sql, $time, $url) {
+            ->attachment(function ($attachment) use ($sql, $time) {
                 $attachment->fields([
                     'Query' => $sql,
                     'Time (ms)' => $time
-                ])->color('warning')
-                ->action('View Report', $url);
+                ])->color('warning');
             });
     }
 
@@ -52,11 +50,10 @@ class SlowQueryDetected extends Notification
     {
         $sql = substr($this->queryData['sql'] ?? '', 0, 1000);
         $time = $this->queryData['time'] ?? 0;
-        $url = config('app.url') . '/execution-monitor';
 
         $embed = [
             'title' => '🐌 Slow Query Detected',
-            'description' => "A slow database query was detected\n\n[🔍 View Report]({$url})",
+            'description' => "A slow database query was detected",
             'color' => 16753920, // orange
             'fields' => [
                 ['name' => 'Time (ms)', 'value' => (string) $time, 'inline' => true],

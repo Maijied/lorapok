@@ -25,38 +25,47 @@ class TrackExecutionTime
         // Reset monitor data for new request
         app('execution-monitor')->reset();
 
+        // Listen for queries during this request
+        $queryCaptured = 0;
+        DB::listen(function ($query) use (&$queryCaptured) {
+            app('execution-monitor')->logQuery($query->sql, $query->time);
+            $queryCaptured++;
+        });
+
         $start = microtime(true);
         $path = $request->path();
         app('execution-monitor')->startRoute($path);
         
-        app('execution-monitor')->recordTimeline('controller');
-        $response = $next($request);
+        try {
+            $response = $next($request);
+        } catch (\Throwable $e) {
+            // Capture exception
+            app('execution-monitor')->setException($e);
+            
+            // End route timing (approximate)
+            $duration = microtime(true) - $start;
+            app('execution-monitor')->endRoute($path, $duration);
+            
+            // Persist report immediately before crashing
+            $this->persistReport($request, $path, $duration, $queryCaptured);
+            
+            throw $e;
+        }
         
         $duration = microtime(true) - $start;
         app('execution-monitor')->endRoute($path, $duration);
-
-        // Capture Request/Response Profiling
-        $requestSize = strlen($request->getContent());
-        foreach($request->headers->all() as $name => $values) {
-            foreach($values as $value) {
-                $requestSize += strlen($name) + strlen((string)$value) + 4;
-            }
-        }
         
-        $responseSize = 0;
-        if (method_exists($response, 'getContent')) {
-            $responseSize = strlen($response->getContent());
+        $this->persistReport($request, $path, $duration, $queryCaptured);
+
+        if (config('execution-monitor.add_header')) {
+            $response->headers->set('X-Execution-Time', round($duration * 1000, 2) . 'ms');
         }
 
-        app('execution-monitor')->setRequestData([
-            'method' => $request->method(),
-            'path' => $request->path(),
-            'status' => $response->getStatusCode(),
-            'request_size' => $requestSize,
-            'response_size' => $responseSize,
-            'duration' => $duration,
-        ]);
-        
+        return $response;
+    }
+
+    protected function persistReport($request, $path, $duration, $queryCaptured)
+    {
         // Store monitor data in cache
         $report = app('execution-monitor')->getReport();
         $report['current_route'] = [
@@ -69,33 +78,13 @@ class TrackExecutionTime
         Log::info('Lorapok: 💾 Storing data for ' . $path, [
             'duration_ms' => round($duration * 1000, 2),
             'queries' => count($report['queries'] ?? []),
+            'captured' => $queryCaptured,
+            'has_exception' => !empty($report['last_exception'])
         ]);
         
         // Store in cache for 5 minutes
         Cache::put('lorapok_latest_monitor', $report, 300);
-
-        // Record snapshot for history
-        try {
-            (new \Lorapok\ExecutionMonitor\MonitorReporter())->recordSnapshot($report);
-            (new \Lorapok\ExecutionMonitor\Services\AchievementTracker())->track($report);
-
-            // Capture snapshot if slow
-            if ($duration * 1000 > config('execution-monitor.thresholds.route', 1000)) {
-                (new \Lorapok\ExecutionMonitor\Services\SnapshotService())->capture($report);
-            }
-
-        } catch (\Throwable $e) {
-            Log::error('Lorapok: history/achievement recording failed - ' . $e->getMessage());
-        }
-
-        // Budget Guardrails (outside recording try-catch)
-        if (app()->environment('local') && config('execution-monitor.budgets_enabled', true)) {
-            $violations = $report['budget_violations'] ?? [];
-            if (!empty($violations) && config('execution-monitor.stop_on_violation', false)) {
-                throw new \Exception("Performance Budget Violated: " . implode(', ', $violations));
-            }
-        }
-
+        
         // Check thresholds and send alerts if needed
         try {
             if (app()->bound('execution-monitor')) {
@@ -104,11 +93,6 @@ class TrackExecutionTime
         } catch (\Throwable $e) {
             Log::error('Lorapok: checkThresholds failed - ' . $e->getMessage());
         }
-        if (config('execution-monitor.add_header')) {
-            $response->headers->set('X-Execution-Time', round($duration * 1000, 2) . 'ms');
-        }
-
-        return $response;
     }
 
     protected function shouldEnable(): bool

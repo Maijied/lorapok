@@ -3,7 +3,7 @@
 ## Requirements
 
 - PHP 8.2 or higher
-- Laravel 10.x or 11.x
+- Laravel 10.x, 11.x, or 12.x
 - Composer
 
 ## Installation
@@ -88,6 +88,12 @@ php artisan monitor:enable
 
 # Disable monitoring
 php artisan monitor:disable
+
+# Run performance audit
+php artisan monitor:audit
+
+# Generate performance heatmap
+php artisan monitor:heatmap
 
 # Run full installation (optional)
 php artisan monitor:install

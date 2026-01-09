@@ -26,19 +26,22 @@
 - 🔍 **Query Selection** - Click to select queries with visual highlighting
 - ⏱️ **Query Timing** - See execution time for each database query
 
-### Alerts & Notifications
-- 🔔 **Performance Alerts** - Automatic detection of slow routes/queries based on thresholds
-- 📢 **Real-Time Broadcasting** - Pusher/Laravel Echo integration for live alerts
-- 📧 **Multi-Channel Notifications** - Slack, Discord, Email, Database notification support
-- 🎛️ **Threshold Configuration** - Customizable performance thresholds per feature
-- 🚫 **Rate Limiting** - Built-in rate limiting to prevent alert spam
+### CLI Tools & Auditing
+- 📋 **Performance Audit** - `php artisan monitor:audit` for security and performance health checks
+- 🔥 **Heatmap Visualization** - `php artisan monitor:heatmap` to see which routes are consistently slow
+- 🏆 **Achievement System** - Earn badges for performance optimizations (Memory Master, Query Slayer)
+- 📊 **Status Check** - Quick view of monitoring state and environment
 
 ### Changelog
 
+**v1.2.0** (2026-01-09)
+- 🚀 **Major Refactoring**: PSR-4 compliant structure (Reporters/Services)
+- 🏆 **Achievement System**: Persistent performance milestones
+- 🔥 **Performance Heatmap**: New `monitor:heatmap` visualization
+- 🔒 **Security Audit**: New `monitor:audit` command
+- ✅ **Bug Fixes**: Class loading, Dashboard sync, UI feedback
+
 **v1.1.1** (2026-01-09)
-- ✅ Fixed critical modal nesting bug
-- ✅ Corrected author branding in metadata
-- ✅ Optimized premium glassmorphism UI
 
 **v1.1.0** (2026-01-08)
 - ✅ Enhanced Developer Profile with photo
@@ -294,7 +297,7 @@ Lorapok makes it easy for developers to:
 ## 🕒 Recent Activity
 
 <!-- START_SECTION:activity -->
-*Last updated on: 2026-01-09* - Finalized stable release v1.1.1 🚀
+*Last updated on: 2026-01-09* - Finalized stable release v1.2.0 🚀
 <!-- END_SECTION:activity -->
 
 <div align="center">

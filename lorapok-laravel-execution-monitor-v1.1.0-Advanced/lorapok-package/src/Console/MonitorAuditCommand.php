@@ -4,7 +4,7 @@ namespace Lorapok\ExecutionMonitor\Console;
 
 use Illuminate\Console\Command;
 use Lorapok\ExecutionMonitor\Analyzers\SecurityScanner;
-use Lorapok\ExecutionMonitor\MonitorReporter;
+use Lorapok\ExecutionMonitor\Reporters\MonitorReporter;
 
 class MonitorAuditCommand extends Command
 {
@@ -36,8 +36,8 @@ class MonitorAuditCommand extends Command
         $stats = $reporter->getStats();
         
         if ($stats['count'] > 0) {
-            $this->line("Average Request Time: <fg=purple>{$stats['avg_duration']}ms</>");
-            $this->line("Average Queries:      <fg=purple>{$stats['avg_queries']}</>");
+            $this->line("Average Request Time: <fg=magenta>{$stats['avg_duration']}ms</>");
+            $this->line("Average Queries:      <fg=magenta>{$stats['avg_queries']}</>");
             $this->line("Total Requests Tracked: {$stats['count']}");
         } else {
             $this->warn('No performance data available yet.');

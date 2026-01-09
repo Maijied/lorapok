@@ -14,7 +14,7 @@ class MonitorFindCommand extends Command
     {
         $history = Cache::get('lorapok_history', []);
         $query = $this->option('contains');
-        $generator = new \Lorapok\ExecutionMonitor\FingerprintGenerator();
+        $generator = new \Lorapok\ExecutionMonitor\Services\FingerprintGenerator();
 
         if (empty($history)) {
             $this->warn('No history found.');
@@ -42,7 +42,7 @@ class MonitorFindCommand extends Command
                 continue;
             }
 
-            $this->line("<fg=purple>#</> {$fingerprint} <fg=gray>({$item['timestamp']})</>");
+            $this->line("<fg=magenta>#</> {$fingerprint} <fg=gray>({$item['timestamp']})</>");
         }
     }
 }

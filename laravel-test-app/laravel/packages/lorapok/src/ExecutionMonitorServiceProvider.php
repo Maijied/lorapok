@@ -28,6 +28,7 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
         // ALWAYS load views - regardless of enabled status
         $this->loadViewsFrom(__DIR__.'/resources/views', 'execution-monitor');
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         
         $this->publishes([
             __DIR__.'/config/execution-monitor.php' => config_path('execution-monitor.php'),
@@ -41,6 +42,45 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
             __DIR__.'/resources/assets' => public_path('vendor/lorapok'),
         ], 'lorapok-assets');
         
+        // Merge persistent settings if they exist
+        $settingsPath = storage_path('app/lorapok/settings.json');
+        if (file_exists($settingsPath)) {
+            $settings = json_decode(file_get_contents($settingsPath), true);
+            if ($settings) {
+                // Merge notifications config
+                $notifications = [];
+                if (isset($settings['discord_webhook'])) $notifications['discord']['webhook_url'] = $settings['discord_webhook'];
+                if (isset($settings['discord_enabled'])) $notifications['discord']['enabled'] = $settings['discord_enabled'];
+                if (isset($settings['slack_webhook'])) $notifications['slack']['webhook_url'] = $settings['slack_webhook'];
+                if (isset($settings['slack_channel'])) $notifications['slack']['channel'] = $settings['slack_channel'];
+                if (isset($settings['slack_enabled'])) $notifications['slack']['enabled'] = $settings['slack_enabled'];
+                if (isset($settings['mail_to'])) $notifications['mail']['to'] = $settings['mail_to'];
+                if (isset($settings['mail_enabled'])) $notifications['mail']['enabled'] = $settings['mail_enabled'];
+                
+                config(['execution-monitor.notifications' => array_replace_recursive(
+                    config('execution-monitor.notifications', []),
+                    $notifications
+                )]);
+
+                if (isset($settings['rate_limit_minutes'])) {
+                    config(['execution-monitor.rate_limiting.max_per_hour' => 60 / $settings['rate_limit_minutes']]); // Rough conversion if needed
+                }
+
+                // Override Mail Server Config if provided
+                if (!empty($settings['mail_host'])) {
+                    config([
+                        'mail.default' => 'smtp',
+                        'mail.mailers.smtp.host' => $settings['mail_host'],
+                        'mail.mailers.smtp.port' => $settings['mail_port'] ?? 587,
+                        'mail.mailers.smtp.username' => $settings['mail_username'] ?? null,
+                        'mail.mailers.smtp.password' => $settings['mail_password'] ?? null,
+                        'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'tls',
+                        'mail.from.address' => $settings['mail_from_address'] ?? config('mail.from.address'),
+                    ]);
+                }
+            }
+        }
+
         // Register middleware
         if ($this->shouldEnable()) {
             $this->registerMiddleware();
@@ -52,6 +92,11 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 Console\MonitorEnableCommand::class,
                 Console\MonitorDisableCommand::class,
                 Console\MonitorInstallCommand::class,
+                Console\MonitorFindCommand::class,
+                Console\MonitorHeatmapCommand::class,
+                Console\MonitorReplayCommand::class,
+                Console\MonitorExportCommand::class,
+                Console\MonitorAuditCommand::class,
             ]);
         }
         // Register custom notification channel for Discord webhooks

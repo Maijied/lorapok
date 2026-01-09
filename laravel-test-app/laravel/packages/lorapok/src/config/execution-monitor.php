@@ -23,8 +23,12 @@ return [
     'thresholds' => [
         'route' => 1000,
         'query' => 100,
+        'query_count' => 50,
         'memory' => 128 * 1024 * 1024,
         'function' => 500,
+    ],
+    'privacy' => [
+        'allow_reveal' => env('MONITOR_ALLOW_REVEAL', false),
     ],
     'log_routes' => false,
     'log_queries' => false,

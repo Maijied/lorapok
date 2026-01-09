@@ -1,6 +1,6 @@
 <?php
 
-namespace Lorapok\ExecutionMonitor;
+namespace Lorapok\ExecutionMonitor\Reporters;
 
 use Illuminate\Support\Facades\Cache;
 

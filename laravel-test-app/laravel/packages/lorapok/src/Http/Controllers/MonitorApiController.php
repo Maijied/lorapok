@@ -3,6 +3,8 @@ namespace Lorapok\ExecutionMonitor\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class MonitorApiController extends Controller
 {
@@ -14,7 +16,7 @@ class MonitorApiController extends Controller
         // Fallback: if cache is empty, try to read from the monitor singleton (useful in dev)
         if (!$report && app()->bound('execution-monitor')) {
             try {
-                $report = app('execution-monitor')->getReport();
+                $report = app('execution-monitor')->getReport(false);
             } catch (\Throwable $e) {
                 $report = null;
             }
@@ -42,12 +44,10 @@ class MonitorApiController extends Controller
             'peak' => $this->formatBytes(memory_get_peak_usage(true)),
         ];
         
-        // Format route duration for display and normalize `current_route` to a display string
-        if (isset($report['current_route']) && is_array($report['current_route']) && isset($report['current_route']['duration'])) {
-            $duration = $report['current_route']['duration'];
-            $report['current_route']['duration_ms'] = round($duration * 1000, 2);
-            $report['current_route']['duration_formatted'] = $this->formatDuration($duration);
-        }
+        // Expose memory peak as a top-level key for legacy views
+        $report['memory_peak'] = $report['memory']['peak'] ?? null;
+        
+        $report['alerts'] = $this->checkThresholds($report);
 
         // Normalize current_route for simple views that expect a string
         if (isset($report['current_route']) && is_array($report['current_route'])) {
@@ -55,11 +55,9 @@ class MonitorApiController extends Controller
         } else {
             $report['current_route'] = (string) ($report['current_route'] ?? 'N/A');
         }
-
-        // Expose memory peak as a top-level key for legacy views
-        $report['memory_peak'] = $report['memory']['peak'] ?? null;
         
-        $report['alerts'] = $this->checkThresholds($report);
+        // Merge persistent settings
+        $report['settings'] = $this->getSettings();
         
         return response()->json($report);
     }
@@ -71,7 +69,7 @@ class MonitorApiController extends Controller
         // Check route duration threshold
         if (isset($report['current_route']) && is_array($report['current_route']) && isset($report['current_route']['duration'])) {
             $duration = $report['current_route']['duration'];
-            $threshold = config('execution-monitor.thresholds.route_time', 1.0);
+            $threshold = config('execution-monitor.thresholds.route', 1000) / 1000;
 
             if ($duration > $threshold) {
                 $alerts[] = [
@@ -112,7 +110,100 @@ class MonitorApiController extends Controller
         if ($ms < 1000) return '🟡 Normal';
         return '🔴 Slow';
     }
-    
+
+    public function saveSettings(Request $request)
+    {
+        $data = $request->validate([
+            'discord_webhook' => 'nullable|url',
+            'discord_enabled' => 'boolean',
+            'slack_webhook' => 'nullable|string', // Changed to string to support API Tokens (xoxp...)
+            'slack_channel' => 'nullable|string',
+            'slack_enabled' => 'boolean',
+            'mail_to' => 'nullable|email',
+            'mail_enabled' => 'boolean',
+            'mail_host' => 'nullable|string',
+            'mail_port' => 'nullable|numeric',
+            'mail_username' => 'nullable|string',
+            'mail_password' => 'nullable|string',
+            'mail_encryption' => 'nullable|string',
+            'mail_from_address' => 'nullable|email',
+            'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
+        ]);
+
+        $path = storage_path('app/lorapok/settings.json');
+        
+        if (!File::exists(dirname($path))) {
+            File::makeDirectory(dirname($path), 0755, true);
+        }
+
+        // Read existing settings
+        $existing = [];
+        if (File::exists($path)) {
+            $existing = json_decode(File::get($path), true) ?? [];
+        }
+
+        // Merge: Only update keys that are present and non-null in the request, or explicitly allow nulls if needed.
+        // For this use case, we'll merge standard array values.
+        $merged = array_merge($existing, array_filter($data, function($value) {
+            return !is_null($value) && $value !== '';
+        }));
+
+        File::put($path, json_encode($merged, JSON_PRETTY_PRINT));
+
+        return response()->json(['success' => true]);
+    }
+
+    public function testSettings(Request $request)
+    {
+         $data = $request->validate([
+            'discord_webhook' => 'nullable|url',
+            'discord_enabled' => 'boolean',
+            'slack_webhook' => 'nullable|string',
+            'slack_channel' => 'nullable|string',
+            'slack_enabled' => 'boolean',
+            'mail_to' => 'nullable|email',
+            'mail_enabled' => 'boolean',
+            'mail_host' => 'nullable|string',
+            'mail_port' => 'nullable|numeric',
+            'mail_username' => 'nullable|string',
+            'mail_password' => 'nullable|string',
+            'mail_encryption' => 'nullable|string',
+            'mail_from_address' => 'nullable|email',
+            'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
+        ]);
+
+        try {
+             if (app()->bound('execution-monitor')) {
+                app('execution-monitor')->sendTestAlert($data);
+                return response()->json(['success' => true]);
+             }
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+
+        return response()->json(['success' => false, 'error' => 'Monitor not bound'], 500);
+    }
+
+    protected function getSettings()
+    {
+        $path = storage_path('app/lorapok/settings.json');
+        
+        $settings = [];
+        if (File::exists($path)) {
+            $settings = json_decode(File::get($path), true);
+        }
+
+        return array_merge([
+            'discord_webhook' => config('execution-monitor.notifications.discord.webhook_url'),
+            'discord_enabled' => config('execution-monitor.notifications.discord.enabled', false),
+            'slack_webhook' => config('execution-monitor.notifications.slack.webhook_url'),
+            'slack_enabled' => config('execution-monitor.notifications.slack.enabled', false),
+            'mail_to' => config('execution-monitor.notifications.mail.to'),
+            'mail_enabled' => config('execution-monitor.notifications.mail.enabled', false),
+            'rate_limit_minutes' => 30, // Default to 30 as per user request
+        ], $settings);
+    }
+
     protected function formatBytes($bytes)
     {
         if ($bytes >= 1048576) return round($bytes / 1048576, 2) . ' MB';

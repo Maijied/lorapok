@@ -23,8 +23,12 @@ return [
     'thresholds' => [
         'route' => 1000,
         'query' => 100,
+        'query_count' => 50,
         'memory' => 128 * 1024 * 1024,
         'function' => 500,
+    ],
+    'privacy' => [
+        'allow_reveal' => env('MONITOR_ALLOW_REVEAL', false),
     ],
     'log_routes' => false,
     'log_queries' => false,
@@ -49,22 +53,5 @@ return [
     'rate_limiting' => [
         'enabled' => true,
         'max_per_hour' => 10,
-    ],
-    'theme' => [
-        'primary' => '#667eea', // Purple
-        'secondary' => '#764ba2', // Blue
-        'accent' => '#ef4444', // Laravel Red
-    ],
-    'privacy' => [
-        'auto_mask' => true,
-        'allow_reveal' => false,
-    ],
-    'achievements' => [
-        'enabled' => true,
-    ],
-    'budgets_enabled' => true,
-    'stop_on_violation' => false,
-    'budgets' => [
-        // '*' => ['duration' => 2000, 'queries' => 50],
     ],
 ];

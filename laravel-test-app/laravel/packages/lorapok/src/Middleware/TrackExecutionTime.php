@@ -36,11 +36,36 @@ class TrackExecutionTime
         $path = $request->path();
         app('execution-monitor')->startRoute($path);
         
-        $response = $next($request);
+        try {
+            $response = $next($request);
+        } catch (\Throwable $e) {
+            // Capture exception
+            app('execution-monitor')->setException($e);
+            
+            // End route timing (approximate)
+            $duration = microtime(true) - $start;
+            app('execution-monitor')->endRoute($path, $duration);
+            
+            // Persist report immediately before crashing
+            $this->persistReport($request, $path, $duration, $queryCaptured);
+            
+            throw $e;
+        }
         
         $duration = microtime(true) - $start;
         app('execution-monitor')->endRoute($path, $duration);
         
+        $this->persistReport($request, $path, $duration, $queryCaptured);
+
+        if (config('execution-monitor.add_header')) {
+            $response->headers->set('X-Execution-Time', round($duration * 1000, 2) . 'ms');
+        }
+
+        return $response;
+    }
+
+    protected function persistReport($request, $path, $duration, $queryCaptured)
+    {
         // Store monitor data in cache
         $report = app('execution-monitor')->getReport();
         $report['current_route'] = [
@@ -53,11 +78,13 @@ class TrackExecutionTime
         Log::info('Lorapok: 💾 Storing data for ' . $path, [
             'duration_ms' => round($duration * 1000, 2),
             'queries' => count($report['queries'] ?? []),
-            'captured' => $queryCaptured
+            'captured' => $queryCaptured,
+            'has_exception' => !empty($report['last_exception'])
         ]);
         
         // Store in cache for 5 minutes
         Cache::put('lorapok_latest_monitor', $report, 300);
+        
         // Check thresholds and send alerts if needed
         try {
             if (app()->bound('execution-monitor')) {
@@ -66,11 +93,6 @@ class TrackExecutionTime
         } catch (\Throwable $e) {
             Log::error('Lorapok: checkThresholds failed - ' . $e->getMessage());
         }
-        if (config('execution-monitor.add_header')) {
-            $response->headers->set('X-Execution-Time', round($duration * 1000, 2) . 'ms');
-        }
-
-        return $response;
     }
 
     protected function shouldEnable(): bool

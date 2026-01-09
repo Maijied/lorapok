@@ -21,9 +21,10 @@ return [
         ],
     ],
     'thresholds' => [
-        'route' => 1000,
-        'query' => 100,
-        'memory' => 128 * 1024 * 1024,
+        'route' => env('MONITOR_ROUTE_THRESHOLD', 1000), // ms
+        'query' => env('MONITOR_QUERY_THRESHOLD', 100), // ms
+        'query_count' => env('MONITOR_QUERY_COUNT', 100), // count
+        'memory' => env('MONITOR_MEMORY_THRESHOLD', 128), // MB
         'function' => 500,
     ],
     'log_routes' => false,
@@ -47,7 +48,7 @@ return [
         ],
     ],
     'rate_limiting' => [
-        'enabled' => true,
-        'max_per_hour' => 10,
+        'enabled' => env('MONITOR_RATE_LIMIT_ENABLED', true),
+        'minutes' => env('MONITOR_RATE_LIMIT_MINUTES', 30), // Changed from max_per_hour to minutes
     ],
 ];

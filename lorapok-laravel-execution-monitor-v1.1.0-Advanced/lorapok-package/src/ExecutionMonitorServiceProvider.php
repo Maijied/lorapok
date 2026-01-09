@@ -13,11 +13,7 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/config/execution-monitor.php', 'execution-monitor');
         
         $this->app->singleton('execution-monitor', function ($app) {
-            $monitor = new Monitor();
-            if (!$this->shouldEnable()) {
-                $monitor->disable();
-            }
-            return $monitor;
+            return new Monitor();
         });
         $this->app->alias('execution-monitor', Monitor::class);
         
@@ -46,6 +42,45 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
             __DIR__.'/resources/assets' => public_path('vendor/lorapok'),
         ], 'lorapok-assets');
         
+        // Merge persistent settings if they exist
+        $settingsPath = storage_path('app/lorapok/settings.json');
+        if (file_exists($settingsPath)) {
+            $settings = json_decode(file_get_contents($settingsPath), true);
+            if ($settings) {
+                // Merge notifications config
+                $notifications = [];
+                if (isset($settings['discord_webhook'])) $notifications['discord']['webhook_url'] = $settings['discord_webhook'];
+                if (isset($settings['discord_enabled'])) $notifications['discord']['enabled'] = $settings['discord_enabled'];
+                if (isset($settings['slack_webhook'])) $notifications['slack']['webhook_url'] = $settings['slack_webhook'];
+                if (isset($settings['slack_channel'])) $notifications['slack']['channel'] = $settings['slack_channel'];
+                if (isset($settings['slack_enabled'])) $notifications['slack']['enabled'] = $settings['slack_enabled'];
+                if (isset($settings['mail_to'])) $notifications['mail']['to'] = $settings['mail_to'];
+                if (isset($settings['mail_enabled'])) $notifications['mail']['enabled'] = $settings['mail_enabled'];
+                
+                config(['execution-monitor.notifications' => array_replace_recursive(
+                    config('execution-monitor.notifications', []),
+                    $notifications
+                )]);
+
+                if (isset($settings['rate_limit_minutes'])) {
+                    config(['execution-monitor.rate_limiting.max_per_hour' => 60 / $settings['rate_limit_minutes']]); // Rough conversion if needed
+                }
+
+                // Override Mail Server Config if provided
+                if (!empty($settings['mail_host'])) {
+                    config([
+                        'mail.default' => 'smtp',
+                        'mail.mailers.smtp.host' => $settings['mail_host'],
+                        'mail.mailers.smtp.port' => $settings['mail_port'] ?? 587,
+                        'mail.mailers.smtp.username' => $settings['mail_username'] ?? null,
+                        'mail.mailers.smtp.password' => $settings['mail_password'] ?? null,
+                        'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? 'tls',
+                        'mail.from.address' => $settings['mail_from_address'] ?? config('mail.from.address'),
+                    ]);
+                }
+            }
+        }
+
         // Register middleware
         if ($this->shouldEnable()) {
             $this->registerMiddleware();
@@ -99,21 +134,6 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
         if ($this->isFeatureEnabled('widget')) {
             $kernel->pushMiddleware(Middleware\InjectMonitorWidget::class);
         }
-
-        // Track view rendering
-        $this->app['view']->composer('*', function ($view) {
-            $startTime = microtime(true);
-            $this->app->terminating(function () use ($view, $startTime) {
-                // This is not perfect as it happens after response
-            });
-            
-            // A better way for views is to use events if available or just record that it was loaded
-            if ($this->app->bound('execution-monitor')) {
-                // Since we can't easily get the end time of a specific view render here
-                // We'll just record it was loaded for now. 
-                // Advanced version would use a custom View engine or wrapper.
-            }
-        });
     }
 
     protected function trackDatabaseQueriesEarly()
