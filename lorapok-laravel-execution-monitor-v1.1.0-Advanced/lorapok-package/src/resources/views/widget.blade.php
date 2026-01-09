@@ -418,334 +418,168 @@
     window.addEventListener('unhandledrejection', function(ev){ pushLog('error', ['Unhandled Rejection', ev.reason]); });
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
-document.addEventListener('alpine:init',()=>{
-    Alpine.data('monitorWidget',()=>({
-        isOpen:false,
-        showDevInfo:false,
-        openSettings:false,
-        settingsTab: 'discord',
-        showSuccessModal: false,
-        isError: false,
-        modalMessage: '',
-        isSaving: false,
-        // notification settings stored locally for developer convenience
-        discordWebhook: null,
-        discordEnabled: false,
-        slackWebhook: null,
-        slackChannel: null,
-        slackEnabled: false,
-        lastException: null,
-        mailTo: null,
-        mailEnabled: false,
-        mailHost: '',
-        mailPort: '',
-        mailUsername: '',
-        mailPassword: '',
-        mailEncryption: '',
-        mailFromAddress: '',
-        rateLimitMinutes: 30,
-        activeTab:'overview',
-        data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
-        consoleLogs: [],
-        hasAlerts:false,
-        // Clipboard & selection
-        clipboardHistory: [],
-        selectedQueryIndex: null,
-        copiedIndex: null,
-        init(){
-            console.log('🐛 Lorapok Widget Initialized');
-            this.fetchData();
-            setInterval(()=>this.fetchData(),5000);
-            // load clipboard history from localStorage
-            try{
-                var h = localStorage.getItem('lorapok_clipboard_history');
-                if(h) this.clipboardHistory = JSON.parse(h);
-            }catch(e){console.warn('Lorapok: load history failed',e)}
-
-            // load local settings
-            try{
-                var s = localStorage.getItem('lorapok_settings');
-                if(s){
-                    var cfg = JSON.parse(s);
-                    this.discordWebhook = cfg.discordWebhook || null;
-                    this.discordEnabled = !!cfg.discordEnabled;
-                    this.slackWebhook = cfg.slackWebhook || null;
-                    this.slackChannel = cfg.slackChannel || null;
-                    this.slackEnabled = !!cfg.slackEnabled;
-                    this.mailTo = cfg.mailTo || null;
-                    this.mailEnabled = !!cfg.mailEnabled;
-                }
-            }catch(e){console.warn('Lorapok: load settings failed', e)}
-
-            // keyboard shortcut: Ctrl+Shift+C to copy selected (or first) query
-            window.addEventListener('keydown', (e)=>{
-                if((e.ctrlKey||e.metaKey) && e.shiftKey && (e.code === 'KeyC' || e.key === 'C')){
-                    e.preventDefault();
-                    try{
-                        var idx = this.selectedQueryIndex;
-                        var q = (this.data && this.data.queries && this.data.queries[idx]) ? this.data.queries[idx] : (this.data && this.data.queries && this.data.queries[0]) || null;
-                        if(q){
-                            var sql = q.sql || q;
-                            this.copyQuery(sql, idx||0);
-                        }
-                    }catch(err){console.warn('Lorapok: shortcut copy failed',err)}
-                }
-            });
-
-            // populate initial logs from global buffer if present
-            try{
-                window.__lorapok_console_logs = window.__lorapok_console_logs || [];
-                // copy existing into Alpine state (most recent first)
-                this.consoleLogs = (window.__lorapok_console_logs||[]).slice().reverse();
-            }catch(e){console.warn('Lorapok: init logs failed',e)}
-
-            // listen for new logs dispatched from the console wrapper
-            window.addEventListener('lorapok:console-log', (ev)=>{
-                try{ this.consoleLogs.unshift(ev.detail); if(this.consoleLogs.length>200) this.consoleLogs.length=200 }catch(e){}
-            });
-        },
-        toggleSettings(){ console.log("Lorapok: Toggle Settings", this.openSettings);
-            // open settings; ensure dev info closed
-            if(!this.openSettings){ this.showDevInfo = false; this.openSettings = true; } else { this.openSettings = false; }
-        },
-        toggleDev(){
-            // open dev info; ensure settings closed
-            if(!this.showDevInfo){ this.openSettings = false; this.showDevInfo = true; } else { this.showDevInfo = false; }
-        },
-        copyAllLogs(){
-            try{
-                var txt = this.consoleLogs.map(l=>`[${l.at}] [${l.level}] ${l.msg}`).join('\n');
-                navigator.clipboard.writeText(txt);
-                alert('Copied '+this.consoleLogs.length+' log lines to clipboard');
-            }catch(e){console.warn('Lorapok: copy logs failed',e)}
-        },
-        downloadLogs(){
-            try{
-                var txt = this.consoleLogs.map(l=>`[${l.at}] [${l.level}] ${l.msg}`).join('\n');
-                var b = new Blob([txt], { type: 'text/plain' });
-                var url = URL.createObjectURL(b);
-                var a = document.createElement('a'); a.href = url; a.download = 'lorapok-client-logs.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-            }catch(e){console.warn('Lorapok: download logs failed',e)}
-        },
-        clearLogs(){
-            try{ this.consoleLogs = []; window.__lorapok_console_logs = []; }catch(e){}
-        },
-        async saveSettings(){
-            // Validation
-            if (this.slackEnabled && !this.slackWebhook) {
-                this.isError = true;
-                this.modalMessage = 'Please enter a valid Slack webhook URL.';
-                this.showSuccessModal = true;
-                return;
-            }
-
-            this.isSaving = true;
-            try{
-                // Build payload based on active tab only
-                let payload = {};
-                
-                if (this.settingsTab === 'discord') {
-                    payload = {
-                        discord_webhook: this.discordWebhook,
-                        discord_enabled: this.discordEnabled ? 1 : 0,
-                    };
-                } else if (this.settingsTab === 'slack') {
-                    payload = {
-                        slack_webhook: this.slackWebhook,
-                        slack_channel: this.slackChannel,
-                        slack_enabled: this.slackEnabled ? 1 : 0,
-                    };
-                } else if (this.settingsTab === 'email') {
-                    payload = {
-                        mail_to: this.mailTo,
-                        mail_enabled: this.mailEnabled ? 1 : 0,
-                        mail_host: this.mailHost,
-                        mail_port: this.mailPort,
-                        mail_username: this.mailUsername,
-                        mail_password: this.mailPassword,
-                        mail_encryption: this.mailEncryption,
-                        mail_from_address: this.mailFromAddress,
-                    };
-                } else if (this.settingsTab === 'advanced') {
-                    payload = {
-                        rate_limit_minutes: this.rateLimitMinutes,
-                    };
-                }
-                
-                const r = await fetch('/execution-monitor/api/settings', { // Updated path to match routes
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                    },
-                    body: JSON.stringify(payload)
+    // Define component globally so it's available even if injected late
+    window.monitorWidget = function() {
+        return {
+            isOpen: false,
+            showDevInfo: false,
+            openSettings: false,
+            settingsTab: 'discord',
+            showSuccessModal: false,
+            isError: false,
+            modalMessage: '',
+            isSaving: false,
+            discordWebhook: null,
+            discordEnabled: false,
+            slackWebhook: null,
+            slackChannel: null,
+            slackEnabled: false,
+            lastException: null,
+            mailTo: null,
+            mailEnabled: false,
+            mailHost: '',
+            mailPort: '',
+            mailUsername: '',
+            mailPassword: '',
+            mailEncryption: '',
+            mailFromAddress: '',
+            rateLimitMinutes: 30,
+            activeTab: 'overview',
+            data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
+            consoleLogs: [],
+            hasAlerts: false,
+            clipboardHistory: [],
+            selectedQueryIndex: null,
+            copiedIndex: null,
+            init() {
+                console.log('🐛 Lorapok Widget Initialized');
+                this.fetchData();
+                setInterval(() => this.fetchData(), 5000);
+                try {
+                    var h = localStorage.getItem('lorapok_clipboard_history');
+                    if (h) this.clipboardHistory = JSON.parse(h);
+                } catch (e) {}
+                try {
+                    var s = localStorage.getItem('lorapok_settings');
+                    if (s) {
+                        var cfg = JSON.parse(s);
+                        this.discordWebhook = cfg.discordWebhook || null;
+                        this.discordEnabled = !!cfg.discordEnabled;
+                        this.slackWebhook = cfg.slackWebhook || null;
+                        this.slackChannel = cfg.slackChannel || null;
+                        this.slackEnabled = !!cfg.slackEnabled;
+                        this.mailTo = cfg.mailTo || null;
+                        this.mailEnabled = !!cfg.mailEnabled;
+                    }
+                } catch (e) {}
+                window.addEventListener('lorapok:console-log', (ev) => {
+                    try { this.consoleLogs.unshift(ev.detail); if (this.consoleLogs.length > 200) this.consoleLogs.length = 200 } catch (e) {}
                 });
-
-                if(r.ok) {
-                    localStorage.setItem('lorapok_settings', JSON.stringify(payload));
+            },
+            toggleModal() { this.isOpen = !this.isOpen; if (this.isOpen) this.fetchData(); },
+            closeModal() { this.isOpen = false; },
+            toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) this.showDevInfo = false; },
+            toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) this.openSettings = false; },
+            async fetchData() {
+                try {
+                    const r = await fetch('/execution-monitor/api/data');
+                    this.data = await r.json();
+                    this.hasAlerts = this.data.alerts && this.data.alerts.length > 0;
+                    this.lastException = this.data.last_exception || null;
+                    if (this.data.settings && !this.openSettings) {
+                        this.discordWebhook = this.data.settings.discord_webhook;
+                        this.discordEnabled = !!this.data.settings.discord_enabled;
+                        this.slackWebhook = this.data.settings.slack_webhook;
+                        this.slackChannel = this.data.settings.slack_channel;
+                        this.slackEnabled = !!this.data.settings.slack_enabled;
+                        this.mailTo = this.data.settings?.mail_to || '';
+                        this.mailEnabled = !!this.data.settings?.mail_enabled;
+                        this.mailHost = this.data.settings?.mail_host || '';
+                        this.mailPort = this.data.settings?.mail_port || '';
+                        this.mailUsername = this.data.settings?.mail_username || '';
+                        this.mailPassword = this.data.settings?.mail_password || '';
+                        this.mailEncryption = this.data.settings?.mail_encryption || '';
+                        this.mailFromAddress = this.data.settings?.mail_from_address || '';
+                        this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
+                    }
+                } catch (e) { console.error('❌ Lorapok Error:', e); }
+            },
+            async saveSettings() {
+                if (this.slackEnabled && !this.slackWebhook) {
+                    this.isError = true;
+                    this.modalMessage = 'Please enter a valid Slack webhook URL.';
+                    this.showSuccessModal = true;
+                    return;
+                }
+                this.isSaving = true;
+                try {
+                    let payload = {};
+                    if (this.settingsTab === 'discord') payload = { discord_webhook: this.discordWebhook, discord_enabled: this.discordEnabled ? 1 : 0 };
+                    else if (this.settingsTab === 'slack') payload = { slack_webhook: this.slackWebhook, slack_channel: this.slackChannel, slack_enabled: this.slackEnabled ? 1 : 0 };
+                    else if (this.settingsTab === 'email') payload = { mail_to: this.mailTo, mail_enabled: this.mailEnabled ? 1 : 0, mail_host: this.mailHost, mail_port: this.mailPort, mail_username: this.mailUsername, mail_password: this.mailPassword, mail_encryption: this.mailEncryption, mail_from_address: this.mailFromAddress };
+                    else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes };
                     
-                    // Trigger Test
-                    try {
-                        const test = await fetch('/execution-monitor/api/settings/test', { // Updated path
+                    const r = await fetch('/execution-monitor/api/settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
+                        body: JSON.stringify(payload)
+                    });
+                    if (r.ok) {
+                        localStorage.setItem('lorapok_settings', JSON.stringify(payload));
+                        const test = await fetch('/execution-monitor/api/settings/test', {
                             method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                            },
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
                             body: JSON.stringify(payload)
                         });
-                        
                         const resStart = await test.json();
-
-                        if (test.ok && resStart.success) {
-                            this.isError = false;
-                            this.modalMessage = 'Settings saved and test alert sent successfully!';
-                            this.showSuccessModal = true;
-                        } else {
-                            this.isError = true;
-                            this.modalMessage = 'Settings saved, but connection test failed: ' + (resStart.error || 'Unknown error');
-                            this.showSuccessModal = true;
-                        }
-                    } catch(e) {
-                         this.isError = true;
-                         this.modalMessage = 'Settings saved, but could not run connection test.';
-                         this.showSuccessModal = true;
-                    }
-                } else {
+                        this.isError = !test.ok || !resStart.success;
+                        this.modalMessage = test.ok && resStart.success ? 'Settings saved and test alert sent!' : 'Saved, but test failed: ' + (resStart.error || 'Check server');
+                        this.showSuccessModal = true;
+                    } else { throw new Error('Server sync failed'); }
+                } catch (e) {
                     this.isError = true;
-                    this.modalMessage = 'Server sync failed. Please check your network or server logs.';
+                    this.modalMessage = e.message;
                     this.showSuccessModal = true;
-                }
-            }catch(e){ 
-                console.warn('Lorapok: save settings failed', e);
-                this.isError = true;
-                this.modalMessage = 'An unexpected error occurred: ' + e.message;
-                this.showSuccessModal = true;
-            }
-            finally { this.isSaving = false; }
-        },
-        copyEnvSnippet(){
-            try{
-                var snippet = '\n# Lorapok monitor settings\nMONITOR_DISCORD_WEBHOOK=' + (this.discordWebhook || '') + "\nMONITOR_DISCORD_ENABLED=" + (this.discordEnabled ? 'true' : 'false') + '\n';
-                snippet += 'MONITOR_SLACK_WEBHOOK=' + (this.slackWebhook || '') + "\nMONITOR_SLACK_ENABLED=" + (this.slackEnabled ? 'true' : 'false') + '\n';
-                snippet += 'MONITOR_MAIL_TO=' + (this.mailTo || '') + "\nMONITOR_MAIL_ENABLED=" + (this.mailEnabled ? 'true' : 'false') + '\n';
-                snippet += 'MONITOR_MAIL_HOST=' + (this.mailHost || '') + '\n';
-                snippet += 'MONITOR_MAIL_PORT=' + (this.mailPort || '') + '\n';
-                snippet += 'MONITOR_MAIL_USERNAME=' + (this.mailUsername || '') + '\n';
-                snippet += 'MONITOR_MAIL_PASSWORD=' + (this.mailPassword || '') + '\n';
-                snippet += 'MONITOR_MAIL_ENCRYPTION=' + (this.mailEncryption || '') + '\n';
-                snippet += 'MONITOR_MAIL_FROM_ADDRESS=' + (this.mailFromAddress || '') + '\n';
-                navigator.clipboard.writeText(snippet);
-                alert('.env snippet copied to clipboard');
-            }catch(e){ console.warn('Lorapok: copy env failed', e) }
-        },
-        async fetchData(){
-            try{
-                const r=await fetch('/execution-monitor/api/data');
-                this.data=await r.json();
-                this.hasAlerts=this.data.alerts&&this.data.alerts.length>0;
-                this.lastException = this.data.last_exception || null;
-                
-                // Sync settings from server if available (only if settings modal is closed to avoid overwriting user input)
-                if (this.data.settings && !this.openSettings) {
-                    this.discordWebhook = this.data.settings.discord_webhook;
-                    this.discordEnabled = !!this.data.settings.discord_enabled;
-                    this.slackWebhook = this.data.settings.slack_webhook;
-                    this.slackChannel = this.data.settings.slack_channel;
-                    this.slackEnabled = !!this.data.settings.slack_enabled;
-                    this.mailTo = this.data.settings?.mail_to || '';
-                    this.mailEnabled = !!this.data.settings?.mail_enabled;
-                    this.mailHost = this.data.settings?.mail_host || '';
-                    this.mailPort = this.data.settings?.mail_port || '';
-                    this.mailUsername = this.data.settings?.mail_username || '';
-                    this.mailPassword = this.data.settings?.mail_password || '';
-                    this.mailEncryption = this.data.settings?.mail_encryption || '';
-                    this.mailFromAddress = this.data.settings?.mail_from_address || '';
-                    this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
-                }
-
-                // Pre-fill Slack Token if empty (User Convenience)
-                // Pre-fill Slack Token/Channel if empty (User Convenience)
-                if (!this.slackWebhook) {
-                    this.slackWebhook = '';
-                }
-                if (!this.slackChannel) {
-                    this.slackChannel = ''; 
-                }
-
-                // Pre-fill Mail Defaults if empty
-                if (!this.mailHost) {
-                    this.mailHost = '';
-                    this.mailPort = '';
-                    this.mailUsername = '';
-                    this.mailPassword = '';
-                    this.mailEncryption = '';
-                }
-                
-                console.log('📊 Lorapok Data:',this.data);
-            }catch(e){
-                console.error('❌ Lorapok Error:',e);
-            }
-        },
-        // copy query string to clipboard and record history
-        async copyQuery(sql, idx){
-            if(!sql) return;
-            try{
-                await navigator.clipboard.writeText(sql);
-                this.copiedIndex = idx;
-                setTimeout(()=> this.copiedIndex = null, 1500);
-                // add to history (unique recent)
-                try{
-                    var entry = { sql: sql, at: new Date().toISOString() };
-                    // remove duplicate
-                    this.clipboardHistory = this.clipboardHistory.filter(h=>h.sql !== sql);
-                    this.clipboardHistory.unshift(entry);
-                    if(this.clipboardHistory.length>20) this.clipboardHistory.length=20;
+                } finally { this.isSaving = false; }
+            },
+            async copyQuery(sql, idx) {
+                if (!sql) return;
+                try {
+                    await navigator.clipboard.writeText(sql);
+                    this.copiedIndex = idx;
+                    setTimeout(() => this.copiedIndex = null, 1500);
+                    this.clipboardHistory = this.clipboardHistory.filter(h => h.sql !== sql);
+                    this.clipboardHistory.unshift({ sql: sql, at: new Date().toISOString() });
+                    if (this.clipboardHistory.length > 20) this.clipboardHistory.length = 20;
                     localStorage.setItem('lorapok_clipboard_history', JSON.stringify(this.clipboardHistory));
-                }catch(err){console.warn('Lorapok: history save failed',err)}
-            }catch(e){ console.warn('❌ Lorapok copy failed:',e); }
-        },
-        toggleModal(){
-            console.log('🔄 Toggle Modal - Current:',this.isOpen);
-            this.isOpen=!this.isOpen;
-            if(this.isOpen)this.fetchData();
-        },
-        closeModal(){
-            console.log('✖ Close Modal');
-            this.isOpen=false;
-        }
-        ,formatMsg(msg){
-            try{
-                if(!msg) return '';
-                if(typeof msg !== 'string') return String(msg);
-                try{
+                } catch (e) {}
+            },
+            formatMsgHtml(msg) {
+                if (!msg) return '';
+                if (typeof msg !== 'string') return this.escapeHtml(String(msg));
+                try {
                     var parsed = JSON.parse(msg);
-                    return JSON.stringify(parsed, null, 2);
-                }catch(e){}
-                return msg;
-            }catch(e){ return msg; }
-        },
-        formatMsgHtml(msg){
-            try{
-                if(!msg) return '';
-                if(typeof msg !== 'string') return this.escapeHtml(msg);
-                try{
-                    var parsed = JSON.parse(msg);
-                    var pretty = JSON.stringify(parsed, null, 2);
-                    return '<pre style="margin:0;white-space:pre-wrap;word-break:break-word;background:#f5f5f5;padding:6px;border-radius:4px;border-left:3px solid #667eea;">' + this.escapeHtml(pretty) + '</pre>';
-                }catch(e){}
-                return this.escapeHtml(msg);
-            }catch(e){ return this.escapeHtml(String(msg)); }
-        },
-        escapeHtml(str){
-            var m = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};
-            return String(str).replace(/[&<>"']/g, function(s){ return m[s]; });
-        }
-    }))
-});
+                    return '<pre class="bg-gray-50 p-2 rounded border-l-4 border-purple-500">' + this.escapeHtml(JSON.stringify(parsed, null, 2)) + '</pre>';
+                } catch (e) { return this.escapeHtml(msg); }
+            },
+            escapeHtml(str) {
+                var m = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return String(str).replace(/[&<>"']/g, function(s) { return m[s]; });
+            }
+        };
+    };
+
+    // Register with Alpine if it's already there, or wait for init
+    if (window.Alpine) {
+        Alpine.data('monitorWidget', window.monitorWidget);
+    } else {
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('monitorWidget', window.monitorWidget);
+        });
+    }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 <!-- Load local published listener (fallback to CDN handled inside the published asset) -->
 <!-- If app is configured to use Pusher, instantiate Echo so the published listener can attach to it -->
