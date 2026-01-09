@@ -4,6 +4,9 @@ All notable changes to the **Lorapok Laravel Execution Monitor** will be documen
 
 ## [1.2.5] - 2026-01-09
 
+### Added
+- **System Info**: Added PHP version and Database (driver + version) information to the monitor dashboard footer for better environment visibility.
+
 ### Fixed
 - **Timeline Enhancement**: Completed "Larvae Trail" (timeline) by adding missing `queries` and `controller` segments.
 - **Request Metadata**: Fixed issue where fingerprints showed "N/A" for method and path by ensuring `setRequestData` is called in middleware.

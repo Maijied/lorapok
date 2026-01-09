@@ -35,6 +35,7 @@
 ### Changelog
 
 **v1.2.5** (2026-01-09)
+- ✅ **System Info**: Added PHP and Database (driver + version) information to monitor footer.
 - ✅ **Timeline Complete**: Added missing `queries` and `controller` segments to Larvae Trail.
 - ✅ **Fixed N/A Data**: Updated middleware to ensure request metrics (method, path, status) are captured.
 - ✅ **Isolation**: Added timeline reset to prevent data pollution between requests.

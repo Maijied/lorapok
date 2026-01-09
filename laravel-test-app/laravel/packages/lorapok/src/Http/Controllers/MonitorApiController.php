@@ -62,13 +62,27 @@ class MonitorApiController extends Controller
         // System Information
         $report['system_info'] = [
             'laravel_version' => app()->version(),
+            'php_version' => PHP_VERSION,
             'environment' => app()->environment(),
+            'database' => $this->getDatabaseInfo(),
             'monitor_status' => app()->bound('execution-monitor') && app('execution-monitor')->isEnabled() ? '✅ Active' : '❌ Disabled',
             'widget_status' => '🟣 Loaded',
             'git_branch' => $this->getGitBranch(),
         ];
         
         return response()->json($report);
+    }
+
+    protected function getDatabaseInfo()
+    {
+        try {
+            $connection = \DB::connection();
+            $driver = $connection->getDriverName();
+            $version = $connection->getPdo()->getAttribute(\PDO::ATTR_SERVER_VERSION);
+            return ucfirst($driver) . ' ' . $version;
+        } catch (\Throwable $e) {
+            return 'N/A';
+        }
     }
 
     protected function getGitBranch()

@@ -122,6 +122,8 @@
                         <span class="text-gray-500 whitespace-nowrap">📊 System Info:</span>
                         <div class="flex items-center gap-3">
                             <span class="text-gray-400 whitespace-nowrap">Laravel <span class="text-gray-600" x-text="data?.system_info?.laravel_version || 'N/A'"></span></span>
+                            <span class="text-gray-400 whitespace-nowrap">PHP <span class="text-gray-600" x-text="data?.system_info?.php_version || 'N/A'"></span></span>
+                            <span class="text-gray-400 whitespace-nowrap">DB: <span class="text-gray-600" x-text="data?.system_info?.database || 'N/A'"></span></span>
                             <span class="text-gray-400 whitespace-nowrap">Env: <span class="text-gray-600" x-text="data?.system_info?.environment || 'N/A'"></span></span>
                             <span class="text-gray-400 whitespace-nowrap">Monitor: <span x-text="data?.system_info?.monitor_status || 'N/A'"></span></span>
                             <span class="text-gray-400 whitespace-nowrap">Widget: <span class="text-purple-500" x-text="(data?.system_info?.widget_status || 'Loaded') + ' (' + (data?.system_info?.git_branch || 'main') + ')'"></span></span>
