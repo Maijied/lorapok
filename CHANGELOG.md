@@ -5,6 +5,7 @@ All notable changes to the **Lorapok Laravel Execution Monitor** will be documen
 ## [1.2.5] - 2026-01-09
 
 ### Added
+- **Navigation**: Added floating **Home** button to all test lab pages for improved developer experience.
 - **System Info**: Added PHP version and Database (driver + version) information to the monitor dashboard footer for better environment visibility.
 
 ### Fixed
