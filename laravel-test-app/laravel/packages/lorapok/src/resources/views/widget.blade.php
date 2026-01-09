@@ -492,6 +492,11 @@
             copiedIndex: null,
             init() {
                 console.log('🐛 Lorapok Widget Initialized');
+                
+                // Populate initial logs from global buffer
+                window.__lorapok_console_logs = window.__lorapok_console_logs || [];
+                this.consoleLogs = (window.__lorapok_console_logs || []).slice().reverse();
+
                 this.fetchData();
                 setInterval(() => this.fetchData(), 5000);
                 try {
@@ -519,6 +524,15 @@
             closeModal() { this.isOpen = false; },
             toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) this.showDevInfo = false; },
             toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) this.openSettings = false; },
+            copyAllLogs() {
+                try {
+                    var txt = this.consoleLogs.map(l => `[${l.at}] [${l.level}] ${l.msg}`).join('\n');
+                    navigator.clipboard.writeText(txt);
+                } catch (e) {}
+            },
+            clearLogs() {
+                try { this.consoleLogs = []; window.__lorapok_console_logs = []; } catch (e) {}
+            },
             async fetchData() {
                 try {
                     const r = await fetch('/execution-monitor/api/data');
