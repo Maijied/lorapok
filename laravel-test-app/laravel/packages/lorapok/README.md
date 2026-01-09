@@ -289,6 +289,14 @@ Lorapok makes it easy for developers to:
   <p><strong>#MaJHiBhai</strong> - Making Laravel Fast! ⚡</p>
 </div>
 
+---
+
+## 🕒 Recent Activity
+
+<!-- START_SECTION:activity -->
+*Last updated on: 2026-01-09* - Finalized stable release v1.1.1 🚀
+<!-- END_SECTION:activity -->
+
 <div align="center">
 
 **Lorapok** is developed and maintained by **Mohammad Maizied Hasan Majumder**
