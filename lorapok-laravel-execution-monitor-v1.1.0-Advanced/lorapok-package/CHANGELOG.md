@@ -2,6 +2,12 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
+## [1.2.4] - 2026-01-09
+
+### Fixed
+- **Timeline Fix**: Resolved issue where "Larvae Trail" (timeline) wasn't recording database query segments.
+- **Project Memory**: Updated `MEMORY.md` with full development history.
+
 ## [1.2.3] - 2026-01-09
 
 ### Fixed

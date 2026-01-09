@@ -580,6 +580,10 @@ class Monitor
     {
         if (!$this->enabled) return;
         
+        if (empty($this->queries)) {
+            $this->recordTimeline('queries');
+        }
+
         $this->queries[] = [
             "sql" => $sql,
             "time" => $time
