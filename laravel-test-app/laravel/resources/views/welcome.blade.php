@@ -126,8 +126,17 @@
                     <p class="text-xs text-gray-500 mt-1">Triggers a hard exception to verify stack trace and alert logging.</p>
                 </a>
 
+                <a href="/lorapok/test/middleware" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-blue-200 group">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-2xl">🔗</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold uppercase tracking-wider">Trait</span>
+                    </div>
+                    <h4 class="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Middleware Tracking</h4>
+                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">Uses the MeasuresMiddleware trait to track execution time of custom middleware.</p>
+                </a>
+
                 <!-- Redesigned Verification Card -->
-                <div class="test-card block glass-card p-6 rounded-3xl shadow-sm border border-purple-200 relative overflow-hidden group h-full">
+                <div class="test-card block glass-card p-6 rounded-3xl shadow-sm border border-purple-200 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 text-7xl opacity-10 group-hover:scale-110 transition-transform">🐛</div>
                     <div class="flex justify-between items-start mb-4">
                         <span class="p-3 bg-purple-100 rounded-2xl text-2xl">🧪</span>
