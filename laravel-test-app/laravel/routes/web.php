@@ -59,3 +59,25 @@ Route::get("/lorapok-slow-v2", function () {
 Route::get("/widget-test", function () {
     return view("widget-test");
 });
+
+// Advanced Lab Tests
+Route::get('/lorapok/test/many-queries', function () {
+    // Execute many queries to trigger high query count alert
+    for ($i = 0; $i < 155; $i++) {
+        \DB::table("migrations")->count();
+    }
+    return response()->json(['message' => 'Many queries test completed', 'queries' => 155]);
+});
+
+Route::get('/lorapok/test/high-memory', function () {
+    // Allocate memory to trigger alert
+    $data = [];
+    for ($i = 0; $i < 500000; $i++) {
+        $data[] = str_repeat('x', 512);
+    }
+    return response()->json(['message' => 'High memory test completed', 'allocated' => count($data)]);
+});
+
+Route::get('/lorapok/test/exception', function () {
+    throw new \Exception('This is a test exception from Lorapok Lab 🔥');
+});
