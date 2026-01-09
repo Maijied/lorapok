@@ -58,8 +58,27 @@ class MonitorApiController extends Controller
         
         // Merge persistent settings
         $report['settings'] = $this->getSettings();
+
+        // System Information
+        $report['system_info'] = [
+            'laravel_version' => app()->version(),
+            'environment' => app()->environment(),
+            'monitor_status' => app()->bound('execution-monitor') && app('execution-monitor')->isEnabled() ? '✅ Active' : '❌ Disabled',
+            'widget_status' => '🟣 Loaded',
+            'git_branch' => $this->getGitBranch(),
+        ];
         
         return response()->json($report);
+    }
+
+    protected function getGitBranch()
+    {
+        try {
+            $branch = shell_exec('git rev-parse --abbrev-ref HEAD 2>/dev/null');
+            return $branch ? trim($branch) : 'N/A';
+        } catch (\Throwable $e) {
+            return 'N/A';
+        }
     }
     
     protected function checkThresholds($report)
