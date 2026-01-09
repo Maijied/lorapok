@@ -16,28 +16,36 @@
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <!-- Quests Button -->
-                    <button title="Optimization Quests" @click.stop="activeTab='quests'" :class="activeTab==='quests' ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
-                        <span class="text-xl larvae-animate" style="filter: drop-shadow(0 0 8px rgba(255,255,255,0.3))">🏆</span>
+                    <!-- Quests Button: Amber Identity -->
+                    <button title="Optimization Quests" @click.stop="activeTab='quests'" 
+                        :class="activeTab==='quests' ? 'bg-amber-500/30 ring-2 ring-amber-400/50 scale-105' : 'bg-white/10 hover:bg-amber-500/20'" 
+                        class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span class="text-xl larvae-animate" style="filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4))">🏆</span>
                     </button>
 
-                    <button title="Developer Info" @click.stop="toggleDev()" :class="showDevInfo ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
-                        <svg viewBox="0 0 48 48" class="larvae-wiggle" style="width:22px;height:22px">
-                            <g fill="none" stroke="#fff" stroke-width="1.2">
+                    <!-- Developer Button: Blue Identity -->
+                    <button title="Developer Info" @click.stop="toggleDev()" 
+                        :class="showDevInfo ? 'bg-blue-500/30 ring-2 ring-blue-400/50 scale-105' : 'bg-white/10 hover:bg-blue-500/20'" 
+                        class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <svg viewBox="0 0 48 48" class="larvae-wiggle" style="width:22px;height:22px; filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4))">
+                            <g fill="none" stroke="#fff" stroke-width="1.5">
                                 <path d="M12 28c2-8 12-10 18-6 6 4 6 12 0 16-6 4-16 4-18-4" stroke-linecap="round" stroke-linejoin="round"/>
                                 <circle cx="22" cy="18" r="3" fill="#fff" />
                             </g>
                         </svg>
                     </button>
 
-                    <button title="Settings" @click.stop="toggleSettings()" :class="openSettings ? 'bg-white/20 ring-2 ring-white/30' : ''" class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
-                        <svg viewBox="0 0 24 24" class="larvae-spin" style="width:18px;height:18px">
+                    <!-- Settings Button: Purple Identity -->
+                    <button title="Settings" @click.stop="toggleSettings()" 
+                        :class="openSettings ? 'bg-indigo-500/30 ring-2 ring-indigo-400/50 scale-105' : 'bg-white/10 hover:bg-indigo-500/20'" 
+                        class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <svg viewBox="0 0 24 24" class="larvae-spin" style="width:18px;height:18px; filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4))">
                             <path fill="#fff" d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z"/>
                             <path fill="#fff" d="M19.4 15a7.94 7.94 0 0 0 .1-1 7.94 7.94 0 0 0-.1-1l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a8.1 8.1 0 0 0-1.7-1l-.4-2.7A.5.5 0 0 0 12.6 3h-4a.5.5 0 0 0-.5.4l-.4 2.7a8.1 8.1 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.5 12a7.94 7.94 0 0 0-.1 1c0 .3 0 .7.1 1L2.4 15.6a.5.5 0 0 0-.1.6l2 3.5a.5.5 0 0 0 .6.2l2.5-1a8.1 8.1 0 0 0 1.7 1l.4 2.7c.05.3.3.5.6.5h4c.3 0 .55-.2.6-.5l.4-2.7a8.1 8.1 0 0 0 1.7-1l2.5 1c.25.1.54 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 15z"/>
                         </svg>
                     </button>
 
-                    <button @click="closeModal()" class="text-white hover:text-purple-200 text-3xl ml-2" style="background:transparent;border:none;padding:0 6px">×</button>
+                    <button @click="closeModal()" class="text-white hover:text-purple-200 text-3xl ml-2 transition-colors" style="background:transparent;border:none;padding:0 6px">×</button>
                 </div>
             </div>
             
