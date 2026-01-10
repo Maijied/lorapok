@@ -110,3 +110,31 @@ Route::prefix('lorapok/lab/ajax')->group(function() {
         return view('welcome')->render(); 
     });
 });
+
+// Extra Advanced Lab Scenarios
+Route::prefix('lorapok/lab/advanced')->group(function() {
+    Route::get('/heavy-json', function() {
+        $data = [];
+        for($i=0; $i<5000; $i++) $data[] = ['id' => $i, 'uuid' => str()->uuid(), 'content' => str()->random(50)];
+        return response()->json($data);
+    });
+
+    Route::get('/cache-test', function() {
+        $hit = cache()->has('storm_hit');
+        cache()->remember('storm_hit', 60, fn() => 'Premium Data');
+        \DB::table('migrations')->count();
+        return response()->json(['type' => 'Cache', 'status' => $hit ? 'HIT' : 'MISS']);
+    });
+
+    Route::get('/redirect-loop', function() {
+        if (request()->has('final')) return response()->json(['message' => 'Loop Finished']);
+        return redirect('/lorapok/lab/advanced/redirect-loop?final=1');
+    });
+
+    Route::get('/batch-db', function() {
+        \DB::transaction(function() {
+            for($i=0; $i<10; $i++) \DB::table('migrations')->where('id', 1)->update(['batch' => \DB::raw('batch')]);
+        });
+        return response()->json(['message' => 'Batch Update Finished']);
+    });
+});

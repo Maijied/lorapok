@@ -51,6 +51,10 @@
             <div class="border-b border-gray-200 bg-gray-50 flex justify-center shrink-0">
                 <nav class="flex space-x-1 px-6">
                     <button @click="activeTab='overview'" :class="activeTab==='overview'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">📊 Overview</button>
+                    <button @click="activeTab='activity'" :class="activeTab==='activity'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                        📡 Activity
+                        <span x-show="sessionHistory.length" class="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-md text-[8px]" x-text="sessionHistory.length"></span>
+                    </button>
                     <button @click="activeTab='timeline'" :class="activeTab==='timeline'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🐛 Timeline</button>
                     <button @click="activeTab='routes'" :class="activeTab==='routes'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🛣️ Routes</button>
                     <button @click="activeTab='queries'" :class="activeTab==='queries'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🗄️ Queries</button>
@@ -62,6 +66,73 @@
             <!-- Content Area -->
             <div class="p-6 overflow-y-auto flex-1">
                 <div x-show="activeTab==='overview'">@include('execution-monitor::tabs.overview')</div>
+                
+                <!-- Session Activity Tab -->
+                <div x-show="activeTab==='activity'" class="space-y-6" x-data="{ activitySearch: '' }">
+                    <div class="text-center">
+                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Session Activity</h3>
+                        <div class="h-1 w-12 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-4">All routes executed in this session</p>
+                    </div>
+
+                    <div class="flex justify-center mb-4">
+                        <div class="relative w-full max-w-md group">
+                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
+                            <input x-model="activitySearch" type="text" placeholder="Filter session routes..." class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-xs focus:ring-2 focus:ring-blue-500 outline-none transition-all shadow-sm" />
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-[2rem] overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Route & Method</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Performance</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Resources</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <template x-for="item in sessionHistory.filter(i => i.request.path.toLowerCase().includes(activitySearch.toLowerCase()))" :key="item.fingerprint">
+                                    <tr class="hover:bg-blue-50/30 transition-colors group">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-[9px] font-black px-2 py-1 rounded bg-gray-100 text-gray-600" x-text="item.request.method"></span>
+                                                <span class="text-xs font-bold text-gray-800 font-mono" x-text="item.request.path"></span>
+                                            </div>
+                                            <div class="mt-1 flex items-center gap-2" x-show="item.view_path">
+                                                <span class="text-[8px] text-blue-500 font-black uppercase">View:</span>
+                                                <span class="text-[9px] text-gray-400 font-mono italic" x-text="item.view_path"></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-2 h-2 rounded-full" :class="item.request.duration > 1 ? 'bg-red-500' : 'bg-green-500'"></span>
+                                                <span class="text-xs font-black text-gray-700" x-text="(item.request.duration * 1000).toFixed(0) + 'ms'"></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex gap-3">
+                                                <div class="flex flex-col">
+                                                    <span class="text-[8px] font-black text-gray-400 uppercase">Queries</span>
+                                                    <span class="text-xs font-bold text-purple-600" x-text="item.total_queries"></span>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="text-[8px] font-black text-gray-400 uppercase">Memory</span>
+                                                    <span class="text-xs font-bold text-emerald-600" x-text="item.memory_peak"></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <button @click="data = item; activeTab = 'overview'" class="px-4 py-2 bg-white border border-gray-200 rounded-xl text-[10px] font-black text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all shadow-sm active:scale-95 uppercase tracking-tighter">Inspect</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div x-show="activeTab==='timeline'">@include('execution-monitor::tabs.timeline')</div>
                 <div x-show="activeTab==='routes'">@include('execution-monitor::tabs.routes')</div>
                 <div x-show="activeTab==='queries'">@include('execution-monitor::tabs.queries')</div>
@@ -593,6 +664,7 @@ window.monitorWidget = function() {
         clientLogWritingEnabled: false,
         activeTab: 'overview',
         data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
+        sessionHistory: [],
         consoleLogs: [],
         hasAlerts: false,
         clipboardHistory: [],
@@ -653,7 +725,16 @@ window.monitorWidget = function() {
                 }
                 const responseText = await r.text();
                 try {
-                    this.data = JSON.parse(responseText);
+                    const freshData = JSON.parse(responseText);
+                    
+                    // Update main data
+                    this.data = freshData;
+
+                    // Add to session history if fingerprint is new
+                    if (freshData.fingerprint && !this.sessionHistory.some(h => h.fingerprint === freshData.fingerprint)) {
+                        this.sessionHistory.unshift(freshData);
+                        if (this.sessionHistory.length > 50) this.sessionHistory.length = 50;
+                    }
                 } catch (jsonErr) {
                     console.error('❌ Lorapok JSON Parse Error:', jsonErr, 'Response was:', responseText);
                     throw new Error('Invalid JSON response from server');
