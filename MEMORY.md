@@ -6,6 +6,7 @@ This file serves as a continuous record of development milestones, fixes, and pu
 
 ### 2026-01-10 - v1.3.11 Professional Toolkit Release
 - **Feature**: **Command Terminal** - integrated CLI for executing monitor commands (audit, heatmap, status) directly from the widget.
+- **Feature**: **Monitor Memory** - added `monitor:memory` CLI command to summarize project status and context for developers/AI.
 - **Feature**: **API Playground** - built-in REST client for testing endpoints without leaving the application.
 - **Feature**: **Advanced Logs** - unified Client/Server log viewer with date filtering, clickable details, and bulk copy/clear actions.
 - **Optimization**: **Smart Polling** - configurable data polling interval (1s-60s) to reduce server load.

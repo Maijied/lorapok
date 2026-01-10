@@ -7,6 +7,8 @@ Route::middleware(['web'])->prefix('execution-monitor')->group(function () {
     Route::post('/api/settings', [MonitorApiController::class, 'saveSettings']);
     Route::post('/api/settings/test', [MonitorApiController::class, 'testSettings']);
     Route::post('/api/client-logs', [MonitorApiController::class, 'storeClientLogs']);
+    Route::post('/api/logs/clear', [MonitorApiController::class, 'clearLogs']);
+    Route::post('/api/command', [MonitorApiController::class, 'runCommand']);
     
     // Test routes for monitoring scenarios
     Route::get('/lorapok/test/slow-route', function () {

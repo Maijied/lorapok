@@ -107,6 +107,7 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 Console\MonitorReplayCommand::class,
                 Console\MonitorExportCommand::class,
                 Console\MonitorAuditCommand::class,
+                Console\MonitorMemoryCommand::class,
             ]);
         }
         // Register custom notification channel for Discord webhooks
