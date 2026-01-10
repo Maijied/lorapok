@@ -6,18 +6,46 @@ use Illuminate\Support\Facades\File;
 
 class ServerLogParser
 {
-    public function getLatest(int $lines = 1000): array
+    public function getLatest(int $lines = 1000, ?string $date = null): array
     {
-        $path = storage_path('logs/laravel.log');
-
-        if (!File::exists($path)) {
+        $logDir = storage_path('logs');
+        $files = glob($logDir . '/*.log');
+        
+        if (empty($files)) {
             return [];
         }
 
-        // Efficiently read last chunks
-        $data = $this->readLastLines($path, $lines);
-        
-        return $this->parseLogs($data);
+        $allLogs = [];
+        $targetDate = $date ?: now()->format('Y-m-d');
+
+        foreach ($files as $file) {
+            $data = $this->readLastLines($file, $lines);
+            $parsed = $this->parseLogs($data);
+            
+            // Filter by date (Default to today)
+            $parsed = array_filter($parsed, function($log) use ($targetDate) {
+                return str_starts_with($log['at'], $targetDate);
+            });
+            
+            $allLogs = array_merge($allLogs, $parsed);
+        }
+
+        usort($allLogs, function($a, $b) {
+            return strcmp($b['at'], $a['at']);
+        });
+
+        return array_slice($allLogs, 0, $lines);
+    }
+
+    public function clearLogs(): bool
+    {
+        $logDir = storage_path('logs');
+        $files = glob($logDir . '/*.log');
+        $success = true;
+        foreach ($files as $file) {
+            if (!unlink($file)) $success = false;
+        }
+        return $success;
     }
 
     protected function readLastLines(string $filename, int $lines): string

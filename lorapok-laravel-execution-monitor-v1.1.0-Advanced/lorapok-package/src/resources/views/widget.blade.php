@@ -98,29 +98,33 @@
                                         <td class="px-6 py-4">
                                             <!-- Route Info -->
                                             <div class="flex items-center gap-3 mb-3">
-                                                <div class="flex items-center gap-1.5">
+                                                <div class="flex items-center gap-1.5 shrink-0">
                                                     <span class="text-[8px] font-black text-gray-400 uppercase tracking-tighter">Route</span>
                                                     <span class="text-[10px] font-black px-2 py-0.5 rounded bg-gray-900 text-white shadow-sm" x-text="item.request.method"></span>
                                                 </div>
-                                                <span class="text-xs font-black text-gray-900 font-mono tracking-tighter bg-white px-2 py-1 rounded-lg border border-gray-100 shadow-inner" x-text="item.request.path"></span>
+                                                <span class="text-xs font-black text-gray-900 font-mono tracking-tighter bg-white px-2 py-1 rounded-lg border border-gray-100 shadow-inner truncate max-w-[250px]" x-text="item.request.path" :title="item.request.path"></span>
                                             </div>
 
                                             <!-- Execution Context -->
                                             <div class="flex flex-col gap-2">
-                                                <!-- Controller / Function Logic -->
+                                                <!-- Action Logic -->
                                                 <div class="flex items-center gap-2" x-show="item.controller_action">
-                                                    <template x-if="item.controller_action.includes('@')">
-                                                        <span class="text-[8px] bg-purple-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Controller</span>
-                                                    </template>
-                                                    <template x-if="!item.controller_action.includes('@')">
-                                                        <span class="text-[8px] bg-indigo-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Function</span>
-                                                    </template>
-                                                    <code class="text-[10px] text-gray-600 font-black font-mono truncate max-w-[300px]" x-text="item.controller_action" :title="item.controller_action"></code>
+                                                    <div class="flex items-center gap-1.5 shrink-0">
+                                                        <template x-if="item.controller_action.includes('@')">
+                                                            <span class="text-[8px] bg-purple-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Controller</span>
+                                                        </template>
+                                                        <template x-if="!item.controller_action.includes('@')">
+                                                            <span class="text-[8px] bg-indigo-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Function</span>
+                                                        </template>
+                                                    </div>
+                                                    <code class="text-[10px] text-purple-700 font-black font-mono truncate max-w-[300px]" x-text="item.controller_action" :title="item.controller_action"></code>
                                                 </div>
 
-                                                <!-- Blade View Path -->
+                                                <!-- View Logic -->
                                                 <div class="flex items-center gap-2" x-show="item.view_path">
-                                                    <span class="text-[8px] bg-blue-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Blade Path</span>
+                                                    <div class="flex items-center gap-1.5 shrink-0">
+                                                        <span class="text-[8px] bg-blue-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Blade Path</span>
+                                                    </div>
                                                     <code class="text-[10px] text-blue-700 font-black font-mono truncate max-w-[300px]" x-text="item.view_path" :title="item.view_path"></code>
                                                 </div>
                                             </div>
@@ -159,64 +163,69 @@
                 <div x-show="activeTab==='middleware'">@include('execution-monitor::tabs.middleware')</div>
                 <div x-show="activeTab==='quests'">@include('execution-monitor::tabs.achievements')</div>
                 
-                                <!-- Logs Tab -->
-                                <div x-show="activeTab==='logs'" class="space-y-6" x-data="{ 
-                                    logMode: 'client',
-                                    logSearch: '',
-                                    logLevel: 'all',
-                                    page: 1,
-                                    perPage: 10,
-                                    get filteredServerLogs() {
-                                        let logs = this.data?.server_logs || [];
-                                        const s = this.logSearch.toLowerCase();
-                                        const l = this.logLevel.toLowerCase();
-                                        
-                                        return logs.filter(log => {
-                                            const matchSearch = (log.msg || '').toLowerCase().includes(s) || (log.level || '').toLowerCase().includes(s);
-                                            const matchLevel = l === 'all' || (log.level || '').toLowerCase() === l;
-                                            return matchSearch && matchLevel;
-                                        });
-                                    },
-                                    get paginatedServerLogs() {
-                                        const start = (this.page - 1) * this.perPage;
-                                        return this.filteredServerLogs.slice(start, start + this.perPage);
-                                    },
-                                    get totalPages() {
-                                        return Math.ceil(this.filteredServerLogs.length / this.perPage) || 1;
-                                    }
-                                }">
-                                    <!-- Centered Title -->
-                                    <div class="text-center">
-                                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Application Logs</h3>
-                                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
-                                    </div>
-                
-                                    <!-- Centered Controls -->
-                                    <div class="flex flex-col items-center gap-4">
-                                        <div class="flex items-center gap-3">
-                                            <!-- Toggle -->
-                                            <div class="flex bg-gray-100 p-1 rounded-2xl border border-gray-200 shadow-inner">
-                                                <button @click="logMode = 'client'; page = 1" :class="logMode === 'client' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Client</button>
-                                                <button @click="logMode = 'server'; page = 1" :class="logMode === 'server' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2">
-                                                    Server
-                                                    <span x-show="(data?.server_logs || []).length" class="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-lg text-[9px]" x-text="(data?.server_logs || []).length"></span>
-                                                </button>
-                                            </div>
-                
-                                            <!-- Level Filter -->
-                                            <div x-show="logMode === 'server'" class="relative">
-                                                <select x-model="logLevel" @change="page = 1" class="appearance-none pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm">
-                                                    <option value="all">All Levels</option>
-                                                    <option value="error">Error</option>
-                                                    <option value="warning">Warning</option>
-                                                    <option value="info">Info</option>
-                                                    <option value="debug">Debug</option>
-                                                </select>
-                                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">▼</span>
-                                            </div>
-                                        </div>
-                
-                                        <div class="flex items-center gap-3 w-full max-w-2xl">
+                                                <!-- Logs Tab -->
+                                                <div x-show="activeTab==='logs'" class="space-y-6" x-data="{ 
+                                                    logMode: 'client',
+                                                    logSearch: '',
+                                                    logLevel: 'all',
+                                                    logDate: '',
+                                                    page: 1,
+                                                    perPage: 10,
+                                                    get filteredServerLogs() {
+                                                        let logs = this.data?.server_logs || [];
+                                                        const s = this.logSearch.toLowerCase();
+                                                        const l = this.logLevel.toLowerCase();
+                                                        
+                                                        return logs.filter(log => {
+                                                            const matchSearch = (log.msg || '').toLowerCase().includes(s) || (log.level || '').toLowerCase().includes(s);
+                                                            const matchLevel = l === 'all' || (log.level || '').toLowerCase() === l;
+                                                            return matchSearch && matchLevel;
+                                                        });
+                                                    },
+                                                    get paginatedServerLogs() {
+                                                        const start = (this.page - 1) * this.perPage;
+                                                        return this.filteredServerLogs.slice(start, start + this.perPage);
+                                                    },
+                                                    get totalPages() {
+                                                        return Math.ceil(this.filteredServerLogs.length / this.perPage) || 1;
+                                                    }
+                                                }">
+                                                    <!-- Centered Title -->
+                                                    <div class="text-center">
+                                                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Application Logs</h3>
+                                                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
+                                                    </div>
+                                
+                                                    <!-- Centered Controls -->
+                                                    <div class="flex flex-col items-center gap-4">
+                                                        <div class="flex flex-wrap items-center justify-center gap-3">
+                                                            <!-- Toggle -->
+                                                            <div class="flex bg-gray-100 p-1 rounded-2xl border border-gray-200 shadow-inner">
+                                                                <button @click="logMode = 'client'; page = 1" :class="logMode === 'client' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Client</button>
+                                                                <button @click="logMode = 'server'; page = 1" :class="logMode === 'server' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2">
+                                                                    Server
+                                                                    <span x-show="(data?.server_logs || []).length" class="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-lg text-[9px]" x-text="(data?.server_logs || []).length"></span>
+                                                                </button>
+                                                            </div>
+                                
+                                                            <!-- Level Filter -->
+                                                            <div x-show="logMode === 'server'" class="relative">
+                                                                <select x-model="logLevel" @change="page = 1" class="appearance-none pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm">
+                                                                    <option value="all">All Levels</option>
+                                                                    <option value="error">Error</option>
+                                                                    <option value="warning">Warning</option>
+                                                                    <option value="info">Info</option>
+                                                                    <option value="debug">Debug</option>
+                                                                </select>
+                                                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">▼</span>
+                                                            </div>
+                                
+                                                            <!-- Date Filter -->
+                                                            <div x-show="logMode === 'server'" class="relative">
+                                                                <input type="date" x-model="logDate" @change="page = 1; fetchData()" class="pl-4 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm" />
+                                                            </div>
+                                                        </div>
+                                                                        <div class="flex items-center gap-3 w-full max-w-2xl">
                                             <!-- Search -->
                                             <div class="relative flex-1 group">
                                                 <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
@@ -639,15 +648,28 @@
 
     var origFetch = window.fetch;
     window.fetch = function() {
-        var url = typeof arguments[0] === 'string' ? arguments[0] : arguments[0].url;
+        var firstArg = arguments[0];
+        var url = "";
+        
+        if (typeof firstArg === 'string') {
+            url = firstArg;
+        } else if (firstArg instanceof URL) {
+            url = firstArg.href;
+        } else if (firstArg && typeof firstArg === 'object' && firstArg.url) {
+            url = firstArg.url;
+        }
+
         var method = (arguments[1] && arguments[1].method) || 'GET';
         return origFetch.apply(this, arguments).then(function(response) {
-            if (!url.includes('execution-monitor/api/data')) {
+            // Check if url exists and is a string before calling includes
+            if (typeof url === 'string' && !url.includes('execution-monitor/api/data')) {
                 pushLog('info', ['📡 ' + method + ' ' + url + ' [' + response.status + ']'], 'network');
             }
             return response;
         }).catch(function(err) {
-            pushLog('error', ['❌ ' + method + ' ' + url + ' failed: ' + err.message], 'network');
+            if (typeof url === 'string') {
+                pushLog('error', ['❌ ' + method + ' ' + url + ' failed: ' + err.message], 'network');
+            }
             throw err;
         });
     };
@@ -739,7 +761,11 @@ window.monitorWidget = function() {
         },
         async fetchData() {
             try {
-                const r = await fetch('/execution-monitor/api/data');
+                const url = new URL('/execution-monitor/api/data', window.location.origin);
+                if (this.activeTab === 'logs' && this.logDate) {
+                    url.searchParams.append('log_date', this.logDate);
+                }
+                const r = await fetch(url);
                 if (!r.ok) {
                     throw new Error(`HTTP Error ${r.status}: ${r.statusText}`);
                 }

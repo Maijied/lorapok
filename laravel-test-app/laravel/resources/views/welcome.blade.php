@@ -60,9 +60,9 @@
         </div>
 
         <!-- Testing Scenarios -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="ajaxStorm()">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="{...ajaxStorm(), ...labState()}">
             
-            <!-- Column 1: Core Latency -->
+            <!-- Column 1: Core Performance -->
             <div class="space-y-6">
                 <h3 class="text-lg font-black flex items-center gap-3 px-2 text-gray-800">
                     <span class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl shadow-sm">⚡</span>
@@ -139,7 +139,7 @@
             </div>
 
             <!-- Column 3: Lab Tools -->
-            <div class="space-y-6" x-data="labState()">
+            <div class="space-y-6">
                 <h3 class="text-lg font-black flex items-center gap-3 px-2 text-gray-800">
                     <span class="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center text-xl shadow-sm">⚙️</span>
                     Advanced Tools
@@ -151,19 +151,9 @@
                         <span class="p-3 bg-red-50 rounded-2xl text-2xl group-hover:bg-red-100 transition-colors">🔥</span>
                         <span class="text-[10px] bg-red-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">Hard</span>
                     </div>
-                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Deep Analysis Tracker</h4>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Deep Analysis Lab</h4>
                     <p class="text-xs text-gray-500 leading-relaxed">Runs expensive stateful queries and multi-service updates to test deep execution tracking.</p>
                 </button>
-
-                <a href="/lorapok/test/middleware" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-indigo-200 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-100 relative overflow-hidden">
-                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🔗</div>
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="p-3 bg-indigo-50 rounded-2xl text-2xl group-hover:bg-indigo-100 transition-colors">🔗</span>
-                        <span class="text-[10px] bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Trait</span>
-                    </div>
-                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Middleware Tracking</h4>
-                    <p class="text-xs text-gray-500 leading-relaxed">Uses the MeasuresMiddleware trait to track execution time of custom middleware stacks.</p>
-                </a>
 
                 <div class="grid grid-cols-2 gap-4">
                     <button @click="openStressLab()" class="test-card group w-full text-left block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-xl hover:shadow-amber-50 relative overflow-hidden">
@@ -174,46 +164,30 @@
                         <span class="text-2xl">🖼️</span>
                         <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Render Lab</h4>
                     </button>
-                    <a href="/lorapok/lab/advanced/batch-db" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-pink-200 transition-all duration-500 hover:shadow-xl hover:shadow-pink-50 relative overflow-hidden">
                     <a href="/lorapok/lab/advanced/heavy-io" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
                         <span class="text-2xl">📁</span>
                         <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">IO Stress</h4>
-                    </a>
-                    <a href="/lorapok/lab/advanced/recursive-loop" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-purple-200 transition-all duration-500 hover:shadow-xl hover:shadow-purple-50 relative overflow-hidden">
-                        <span class="text-2xl">🧬</span>
-                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Deep Logic</h4>
                     </a>
                     <a href="/lorapok/lab/advanced/heavy-auth" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-xl hover:shadow-amber-50 relative overflow-hidden">
                         <span class="text-2xl">🔐</span>
                         <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Auth Stress</h4>
                     </a>
-                    <a href="/lorapok/lab/advanced/cache-flood" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/lorapok/lab/advanced/cache-flood" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-emerald-200 transition-all duration-500 hover:shadow-xl hover:shadow-emerald-50 relative overflow-hidden">
                         <span class="text-2xl">🌊</span>
                         <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Cache Flood</h4>
                     </a>
-                </div>
-
-                <!-- Redesigned Verification Card -->
-                <div class="test-card block glass-card p-6 rounded-[2rem] shadow-sm border border-purple-200 relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 text-7xl opacity-10 group-hover:scale-110 transition-transform">🐛</div>
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="p-3 bg-purple-100 rounded-2xl text-2xl">🧪</span>
-                        <span class="text-[10px] bg-purple-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">Verified</span>
-                    </div>
-                    <h4 class="text-xl font-black text-gray-900 tracking-tight mb-2">Widget Live Sync</h4>
-                    <p class="text-xs text-gray-500 mb-6 leading-relaxed">The floating larvae button is active. All performance metrics are broadcasted in real-time to the dashboard.</p>
-                    <div class="flex items-center gap-3 bg-white bg-opacity-50 p-3 rounded-2xl border border-white/50">
-                        <span class="flex h-3 w-3 relative">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                        </span>
-                        <span class="text-[10px] font-black text-green-700 uppercase tracking-[0.2em]">System Operational</span>
-                    </div>
+                    <a href="/lorapok/lab/advanced/batch-db" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-pink-200 transition-all duration-500 hover:shadow-xl hover:shadow-pink-50 relative overflow-hidden">
+                        <span class="text-2xl">📦</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Batch DB</h4>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Premium Footer Section -->
+        <!-- Professional Footer -->
         <footer class="mt-32 pb-12">
             <div class="glass-card rounded-[3.5rem] p-12 border border-white shadow-2xl relative overflow-hidden">
                 <!-- Decorative background elements -->
@@ -230,6 +204,22 @@
                         <p class="text-base text-gray-500 leading-relaxed mb-10">
                             The premium performance monitoring suite for modern Laravel developers. Zero configuration, absolute visibility, and beautiful execution stories.
                         </p>
+                        
+                        <!-- Relocated Verification Card (Inline in Footer) -->
+                        <div class="bg-white/50 p-6 rounded-3xl border border-white/80 backdrop-blur-sm shadow-inner mb-8">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl">🧪</span>
+                                    <span class="text-[10px] font-black text-gray-900 uppercase tracking-widest">Monitor Sync</span>
+                                </div>
+                                <span class="flex h-3 w-3 relative">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                                </span>
+                            </div>
+                            <p class="text-[10px] text-gray-500 font-medium uppercase tracking-tighter">The floating larvae button is active. All execution metrics are broadcasted in real-time.</p>
+                        </div>
+
                         <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
                             <a href="https://github.com/Maijied/lorapok" target="_blank" class="bg-gray-900 text-white px-8 py-4 rounded-2xl hover:bg-gray-800 transition shadow-2xl flex items-center gap-3 text-sm font-black tracking-wide">
                                 <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -272,7 +262,7 @@
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.3.7-Advanced</span>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.3.11-Advanced</span>
                         </div>
                         <span class="h-4 w-px bg-gray-200"></span>
                         <span class="text-[10px] font-black text-purple-500 uppercase tracking-widest">Full Production Build</span>
@@ -285,7 +275,7 @@
     @include('execution-monitor::widget')
 
     <!-- Database Stress Modal -->
-    <div x-data="stressLab()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+    <div x-data="stressLab()" x-show="isOpen" @open-stress-lab.window="isOpen = true; states = {queries:false, lock:false}" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
         <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
             <div class="bg-gradient-to-r from-amber-600 to-orange-700 p-8 text-white text-center">
@@ -299,7 +289,7 @@
     </div>
 
     <!-- Render Lab Modal -->
-    <div x-data="renderLab()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+    <div x-data="renderLab()" x-show="isOpen" @open-render-lab.window="isOpen = true; renderResult = null" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
         <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
             <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white text-center">
@@ -308,6 +298,49 @@
             </div>
             <div class="p-8">
                 @include('lab.render-stress-modal')
+            </div>
+        </div>
+    </div>
+
+    <!-- Deep Analysis Modal -->
+    <div x-data="labState()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
+            <div class="bg-gradient-to-r from-red-600 to-rose-700 p-8 text-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-black tracking-tight">Deep Analysis Lab</h2>
+                        <p class="text-rose-100 text-xs mt-1 uppercase tracking-widest font-bold">Stateful Execution Testing</p>
+                    </div>
+                    <button @click="isOpen = false" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">×</button>
+                </div>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 1: Resource Stress</h5>
+                    <button @click="runQuery()" :disabled="loading" class="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-800 transition-all active:scale-[0.98]">
+                        <span x-show="!queryDone">⚡ Run Expensive Cross-Join</span>
+                        <span x-show="queryDone" class="text-green-400 font-black">✓ Query Successful</span>
+                    </button>
+                </div>
+
+                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100" :class="!queryDone ? 'opacity-50 grayscale' : ''">
+                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 2: State Persistance</h5>
+                    <button @click="updateState()" :disabled="!queryDone || loading" class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-purple-700 transition-all active:scale-[0.98]">
+                        <span>💾 Update System State</span>
+                    </button>
+                </div>
+
+                <div x-show="loading" class="text-center">
+                    <div class="larvae-wiggle inline-block text-2xl">⚡</div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">Processing Deep Call...</p>
+                </div>
+            </div>
+
+            <div class="p-8 bg-gray-50 border-t border-gray-100 flex flex-col gap-3">
+                <p class="text-[10px] text-gray-400 font-bold uppercase text-center tracking-widest">Inspection Tip</p>
+                <p class="text-xs text-gray-500 text-center leading-relaxed italic">Open the **Lorapok Monitor > Activity** tab after running these to see the specific Controller, Method, and View details for each step.</p>
             </div>
         </div>
     </div>
@@ -364,58 +397,12 @@
         </div>
     </div>
 
-    <!-- Deep Analysis Modal -->
-    <div x-data="labState()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
-        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
-            <div class="bg-gradient-to-r from-red-600 to-rose-700 p-8 text-white">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-2xl font-black tracking-tight">Deep Analysis Lab</h2>
-                        <p class="text-rose-100 text-xs mt-1 uppercase tracking-widest font-bold">Stateful Execution Testing</p>
-                    </div>
-                    <button @click="isOpen = false" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center">×</button>
-                </div>
-            </div>
-
-            <div class="p-8 space-y-6">
-                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
-                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 1: Resource Stress</h5>
-                    <button @click="runQuery()" :disabled="loading" class="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-800 transition-all active:scale-[0.98]">
-                        <span x-show="!queryDone">⚡ Run Expensive Cross-Join</span>
-                        <span x-show="queryDone" class="text-green-400 font-black">✓ Query Successful</span>
-                    </button>
-                </div>
-
-                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100" :class="!queryDone ? 'opacity-50 grayscale' : ''">
-                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 2: State Persistance</h5>
-                    <button @click="updateState()" :disabled="!queryDone || loading" class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-purple-700 transition-all active:scale-[0.98]">
-                        <span>💾 Update System State</span>
-                    </button>
-                </div>
-
-                <div x-show="loading" class="text-center">
-                    <div class="larvae-wiggle inline-block text-2xl">⚡</div>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2 text-animate">Processing Deep Call...</p>
-                </div>
-            </div>
-
-            <div class="p-8 bg-gray-50 border-t border-gray-100 flex flex-col gap-3">
-                <p class="text-[10px] text-gray-400 font-bold uppercase text-center tracking-widest">Inspection Tip</p>
-                <p class="text-xs text-gray-500 text-center leading-relaxed italic">Open the **Lorapok Monitor > Activity** tab after running these to see the specific Controller, Method, and View details for each step.</p>
-            </div>
-        </div>
-    </div>
-
     <script>
         function stressLab() {
             return {
                 isOpen: false,
                 loading: false,
                 states: { queries: false, lock: false },
-                init() {
-                    window.addEventListener('open-stress-lab', () => { this.isOpen = true; this.states = {queries:false, lock:false}; });
-                },
                 async runStress(type) {
                     this.loading = true;
                     try {
@@ -432,9 +419,6 @@
                 isOpen: false,
                 loading: false,
                 renderResult: null,
-                init() {
-                    window.addEventListener('open-render-lab', () => { this.isOpen = true; this.renderResult = null; });
-                },
                 async runRender() {
                     this.loading = true;
                     try {
@@ -445,7 +429,7 @@
             }
         }
 
-        // Global triggers for the main container
+        // Global triggers
         function openStressLab() {
             window.dispatchEvent(new CustomEvent('open-stress-lab'));
         }

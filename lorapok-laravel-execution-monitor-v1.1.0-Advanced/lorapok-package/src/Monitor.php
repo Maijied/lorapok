@@ -57,17 +57,13 @@ class Monitor
         $this->enabled = true;
         $this->timeline = new TimelineReporter();
         $this->masker = new PrivacyMasker();
+    }
 
-        // Listen for view composing to capture path
-        Event::listen('composing:*', function ($view, $data = null) {
-            if ($view instanceof \Illuminate\View\View) {
-                $path = $view->getPath();
-                $base = base_path();
-                // Ensure base ends with a separator for cleaner replacement
-                $base = rtrim($base, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                $this->viewPath = str_replace($base, '', $path);
-            }
-        });
+    public function recordViewPath(string $path)
+    {
+        $base = base_path();
+        $base = rtrim($base, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->viewPath = str_replace($base, '', $path);
     }
 
     public function recordTimeline(string $name)

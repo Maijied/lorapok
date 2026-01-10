@@ -9,7 +9,7 @@ use Lorapok\ExecutionMonitor\Services\ServerLogParser;
 
 class MonitorApiController extends Controller
 {
-    public function getData()
+    public function getData(Request $request)
     {
         // Get stored monitor data from cache
         $report = Cache::get('lorapok_latest_monitor', null);
@@ -39,9 +39,10 @@ class MonitorApiController extends Controller
             ];
         }
         
-        // Add server logs
+        // Add server logs with date filtering
         $logParser = new ServerLogParser();
-        $report['server_logs'] = $logParser->getLatest(100);
+        $date = $request->query('log_date');
+        $report['server_logs'] = $logParser->getLatest(100, $date);
         // Add memory info (always present)
         $report['memory'] = [
             'current' => $this->formatBytes(memory_get_usage(true)),

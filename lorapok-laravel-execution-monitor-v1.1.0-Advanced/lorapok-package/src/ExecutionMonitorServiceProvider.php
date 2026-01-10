@@ -114,25 +114,35 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
             return new \Lorapok\ExecutionMonitor\Notifications\Channels\DiscordWebhookChannel();
         });
 
-        // Record controller entry when route is matched
-        \Illuminate\Support\Facades\Event::listen(\Illuminate\Routing\Events\RouteMatched::class, function ($event) {
-            if (app()->bound('execution-monitor')) {
-                $monitor = app('execution-monitor');
-                $monitor->recordTimeline('controller');
-                
-                $action = $event->route->getActionName();
-                
-                // Better resolution for Closures
-                if ($action === 'Closure') {
-                    $closure = $event->route->getAction('uses');
-                    if ($closure instanceof \Closure) {
-                        $rf = new \ReflectionFunction($closure);
-                        $action = 'Closure at ' . basename($rf->getFileName()) . ':' . $rf->getStartLine();
+        // Deep Execution Tracking
+        $this->app->booted(function () {
+            // Track Blade Views
+            \Illuminate\Support\Facades\Event::listen('composing:*', function ($event, $data = null) {
+                if (app()->bound('execution-monitor')) {
+                    $view = is_array($data) ? ($data[0] ?? null) : $event;
+                    if ($view instanceof \Illuminate\View\View) {
+                        app('execution-monitor')->recordViewPath($view->getPath());
                     }
                 }
-                
-                $monitor->setControllerAction($action);
-            }
+            });
+
+            // Track Controller Actions
+            \Illuminate\Support\Facades\Event::listen(\Illuminate\Routing\Events\RouteMatched::class, function ($event) {
+                if (app()->bound('execution-monitor')) {
+                    $monitor = app('execution-monitor');
+                    $monitor->recordTimeline('controller');
+                    
+                    $action = $event->route->getActionName();
+                    if ($action === 'Closure') {
+                        $closure = $event->route->getAction('uses');
+                        if ($closure instanceof \Closure) {
+                            $rf = new \ReflectionFunction($closure);
+                            $action = 'Closure at ' . basename($rf->getFileName()) . ':' . $rf->getStartLine();
+                        }
+                    }
+                    $monitor->setControllerAction($action);
+                }
+            });
         });
     }
 
