@@ -136,6 +136,25 @@
                     <p class="text-xs text-gray-500 mt-1 leading-relaxed">Uses the MeasuresMiddleware trait to track execution time of custom middleware.</p>
                 </a>
 
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/lorapok/lab/advanced/heavy-json" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-orange-100 group">
+                        <span class="text-xl">📦</span>
+                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Heavy JSON</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/cache-test" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-emerald-100 group">
+                        <span class="text-xl">💾</span>
+                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Cache Sim</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/redirect-loop" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-indigo-100 group">
+                        <span class="text-xl">🔄</span>
+                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Redirects</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/batch-db" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-pink-100 group">
+                        <span class="text-xl">🗄️</span>
+                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Batch DB</h4>
+                    </a>
+                </div>
+
                 <!-- Redesigned Verification Card -->
                 <div class="test-card block glass-card p-6 rounded-3xl shadow-sm border border-purple-200 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 text-7xl opacity-10 group-hover:scale-110 transition-transform">🐛</div>
