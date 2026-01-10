@@ -38,6 +38,9 @@ class Monitor
     protected $requestData = [];
     protected $middlewareData = [];
     protected $views = [];
+    protected $cacheData = ['hits' => 0, 'misses' => 0, 'keys' => []];
+    protected $queueData = [];
+    protected $rateLimitData = [];
     protected $tenantId = null;
     protected $timeline;
     protected $masker;
@@ -95,6 +98,41 @@ class Monitor
         $this->views[] = [
             'name' => $name,
             'duration' => $duration
+        ];
+    }
+
+    public function logCache(string $key, bool $hit)
+    {
+        if (!$this->enabled) return;
+        if ($hit) $this->cacheData['hits']++;
+        else $this->cacheData['misses']++;
+        
+        $this->cacheData['keys'][] = [
+            'key' => $key,
+            'status' => $hit ? 'HIT' : 'MISS',
+            'time' => microtime(true)
+        ];
+    }
+
+    public function logQueueJob(string $job, string $status, float $duration)
+    {
+        if (!$this->enabled) return;
+        $this->queueData[] = [
+            'job' => $job,
+            'status' => $status,
+            'duration' => $duration,
+            'at' => now()->toDateTimeString()
+        ];
+    }
+
+    public function logRateLimit(string $key, bool $allowed, int $remaining)
+    {
+        if (!$this->enabled) return;
+        $this->rateLimitData[] = [
+            'key' => $key,
+            'status' => $allowed ? 'ALLOWED' : 'BLOCKED',
+            'remaining' => $remaining,
+            'at' => now()->toDateTimeString()
         ];
     }
 
@@ -570,6 +608,9 @@ class Monitor
         $this->timers = [];
         $this->queries = [];
         $this->routes = [];
+        $this->cacheData = ['hits' => 0, 'misses' => 0, 'keys' => []];
+        $this->queueData = [];
+        $this->rateLimitData = [];
         $this->currentRoute = null;
         $this->timeline->reset();
     }
@@ -695,6 +736,9 @@ class Monitor
             ] : null,
             "view_path" => $this->viewPath,
             "controller_action" => $this->controllerAction,
+            "cache" => $this->cacheData,
+            "queue" => $this->queueData,
+            "rate_limits" => $this->rateLimitData,
         ];
 
         // Before/After Comparison

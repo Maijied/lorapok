@@ -142,6 +142,31 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
 
         // Deep Execution Tracking
         $this->app->booted(function () {
+            // Track Cache Events
+            \Illuminate\Support\Facades\Event::listen([
+                \Illuminate\Cache\Events\CacheHit::class,
+                \Illuminate\Cache\Events\CacheMiss::class,
+            ], function ($event) {
+                if (app()->bound('execution-monitor')) {
+                    $hit = $event instanceof \Illuminate\Cache\Events\CacheHit;
+                    app('execution-monitor')->logCache($event->key, $hit);
+                }
+            });
+
+            // Track Queue Jobs
+            \Illuminate\Support\Facades\Event::listen(\Illuminate\Queue\Events\JobProcessed::class, function ($event) {
+                if (app()->bound('execution-monitor')) {
+                    $duration = $event->job->getJobId() ? 0 : 0; // Duration logic can be complex, using simple log for now
+                    app('execution-monitor')->logQueueJob($event->job->resolveName(), 'SUCCESS', 0);
+                }
+            });
+
+            \Illuminate\Support\Facades\Event::listen(\Illuminate\Queue\Events\JobFailed::class, function ($event) {
+                if (app()->bound('execution-monitor')) {
+                    app('execution-monitor')->logQueueJob($event->job->resolveName(), 'FAILED', 0);
+                }
+            });
+
             // Track Blade Views
             \Illuminate\Support\Facades\Event::listen('composing:*', function ($event, $data = null) {
                 if (app()->bound('execution-monitor')) {

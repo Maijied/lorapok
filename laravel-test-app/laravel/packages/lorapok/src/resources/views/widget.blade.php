@@ -70,6 +70,8 @@
                     <button @click="activeTab='timeline'" :class="activeTab==='timeline'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🐛 Timeline</button>
                     <button @click="activeTab='routes'" :class="activeTab==='routes'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🛣️ Routes</button>
                     <button @click="activeTab='queries'" :class="activeTab==='queries'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🗄️ Queries</button>
+                    <button @click="activeTab='cache'" :class="activeTab==='cache'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">💾 Cache</button>
+                    <button @click="activeTab='queue'" :class="activeTab==='queue'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">📦 Queue</button>
                     <button @click="activeTab='middleware'" :class="activeTab==='middleware'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🔗 Middleware</button>
                     <button @click="activeTab='logs'" :class="activeTab==='logs'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">📝 Logs</button>
                     <button @click="activeTab='playground'" :class="activeTab==='playground'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🎮 Playground</button>
@@ -173,6 +175,84 @@
                 <div x-show="activeTab==='timeline'">@include('execution-monitor::tabs.timeline')</div>
                 <div x-show="activeTab==='routes'">@include('execution-monitor::tabs.routes')</div>
                 <div x-show="activeTab==='queries'">@include('execution-monitor::tabs.queries')</div>
+                
+                <!-- Cache Tab -->
+                <div x-show="activeTab==='cache'" class="space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Cache Analysis</h3>
+                        <div class="h-1 w-12 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-6 rounded-3xl border border-blue-100 text-center">
+                            <span class="text-3xl block mb-2">🎯</span>
+                            <h4 class="text-2xl font-black text-blue-600" x-text="data.cache?.hits || 0"></h4>
+                            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Cache Hits</p>
+                        </div>
+                        <div class="bg-rose-50 p-6 rounded-3xl border border-rose-100 text-center">
+                            <span class="text-3xl block mb-2">💨</span>
+                            <h4 class="text-2xl font-black text-rose-600" x-text="data.cache?.misses || 0"></h4>
+                            <p class="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Cache Misses</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-[2rem] overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Key</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <template x-for="item in data.cache?.keys || []">
+                                    <tr class="hover:bg-blue-50/30 transition-colors">
+                                        <td class="px-6 py-4 font-mono text-xs text-gray-700" x-text="item.key"></td>
+                                        <td class="px-6 py-4">
+                                            <span :class="item.status === 'HIT' ? 'bg-green-100 text-green-600' : 'bg-rose-100 text-rose-600'" class="px-2 py-0.5 rounded-full text-[10px] font-black" x-text="item.status"></span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Queue Tab -->
+                <div x-show="activeTab==='queue'" class="space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Queue Monitor</h3>
+                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-[2rem] overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Job Name</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Status</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Finished At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <template x-for="item in data.queue || []">
+                                    <tr class="hover:bg-purple-50/30 transition-colors">
+                                        <td class="px-6 py-4 font-mono text-xs text-gray-700" x-text="item.job"></td>
+                                        <td class="px-6 py-4">
+                                            <span :class="item.status === 'SUCCESS' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'" class="px-2 py-0.5 rounded-full text-[10px] font-black" x-text="item.status"></span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs text-gray-500" x-text="item.at"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <div x-show="!data.queue?.length" class="text-center py-12">
+                            <span class="text-4xl block mb-2 opacity-20">📦</span>
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">No jobs processed in this request</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div x-show="activeTab==='middleware'">@include('execution-monitor::tabs.middleware')</div>
                 <div x-show="activeTab==='quests'">@include('execution-monitor::tabs.achievements')</div>
                 
@@ -401,6 +481,24 @@
                             <button @click="navigator.clipboard.writeText(response)" class="text-gray-500 hover:text-white text-xs uppercase font-bold tracking-wider transition-colors">Copy Response</button>
                         </div>
                         <pre class="text-xs font-mono text-purple-300 overflow-x-auto max-h-[400px]" x-text="response"></pre>
+                    </div>
+                </div>
+                <!-- Rate Limits -->
+                <div class="mt-6 border-t border-gray-100 pt-6" x-show="data.rate_limits?.length">
+                    <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Application Throttling</h4>
+                    <div class="space-y-2">
+                        <template x-for="limit in data.rate_limits">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                                <div class="flex items-center gap-3">
+                                    <span :class="limit.status === 'ALLOWED' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'" class="w-2 h-2 rounded-full"></span>
+                                    <span class="text-xs font-mono font-bold text-gray-700" x-text="limit.key"></span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-[10px] font-black text-gray-400" x-text="'REMAINING: ' + limit.remaining"></span>
+                                    <span :class="limit.status === 'ALLOWED' ? 'text-green-600' : 'text-red-600'" class="text-[10px] font-black uppercase" x-text="limit.status"></span>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>
