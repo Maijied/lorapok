@@ -136,6 +136,31 @@
                     <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Memory Master</h4>
                     <p class="text-xs text-gray-500 leading-relaxed">Allocates large data structures to verify peak memory usage tracking and peak detection.</p>
                 </a>
+
+                <!-- Architecture Lab Card -->
+                <div x-data="cacheQueueLab()" class="space-y-4">
+                    <div class="test-card block glass-card p-6 rounded-[2.5rem] border border-gray-100 relative overflow-hidden group">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="p-3 bg-blue-50 rounded-2xl text-2xl group-hover:bg-blue-100 transition-colors">💾</span>
+                            <span class="text-[10px] bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">v1.4</span>
+                        </div>
+                        <h4 class="text-lg font-black text-gray-900 tracking-tight mb-4">Architecture Lab</h4>
+                        <div class="grid grid-cols-1 gap-2">
+                            <button @click="runTest('cache')" :disabled="loading" class="w-full py-3 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition-all flex items-center justify-center gap-2">
+                                <span x-show="!loading">⚡ Cache Hit/Miss</span>
+                                <span x-show="loading" class="animate-spin">⏳</span>
+                            </button>
+                            <button @click="runTest('queue')" :disabled="loading" class="w-full py-3 bg-purple-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-purple-700 transition-all flex items-center justify-center gap-2">
+                                <span x-show="!loading">📦 Dispatch Job</span>
+                                <span x-show="loading" class="animate-spin">⏳</span>
+                            </button>
+                            <button @click="runTest('rate-limit')" :disabled="loading" class="w-full py-3 bg-rose-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-700 transition-all flex items-center justify-center gap-2">
+                                <span x-show="!loading">🛡️ Trigger Rate Limit</span>
+                                <span x-show="loading" class="animate-spin">⏳</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Column 3: Lab Tools -->
@@ -454,13 +479,43 @@
 
                 }
 
-                function openTerminal() {
+                        function openTerminal() {
 
-                    window.dispatchEvent(new CustomEvent('open-terminal'));
+                            window.dispatchEvent(new CustomEvent('open-terminal'));
 
-                }
+                        }
 
-                function labState() {
+                
+
+                        function cacheQueueLab() {
+
+                            return {
+
+                                loading: false,
+
+                                async runTest(type) {
+
+                                    this.loading = true;
+
+                                    try {
+
+                                        await fetch(`/lorapok/test/v1-4/${type}`);
+
+                                    } finally {
+
+                                        this.loading = false;
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                
+
+                        function labState() {
             return {
                 isOpen: false,
                 loading: false,

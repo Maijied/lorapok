@@ -205,3 +205,26 @@ Route::prefix('lorapok/lab/advanced')->group(function() {
         return view('lab.fragment', ['level' => 1, 'max' => 15])->render();
     });
 });
+
+// Architecture v1.4 Test Scenarios
+Route::prefix('lorapok/test/v1-4')->group(function() {
+    Route::get('/cache', function() {
+        cache()->put('test_key', 'Lorapok Value', 10);
+        $val = cache()->get('test_key');
+        $missing = cache()->get('missing_key');
+        return response()->json(['message' => 'Cache test', 'hit' => $val, 'miss' => $missing]);
+    });
+    Route::get('/queue', function() {
+        dispatch(function() { logger()->info('Lorapok Async Job'); });
+        return response()->json(['message' => 'Job dispatched']);
+    });
+    Route::get('/rate-limit', function() {
+        $executed = RateLimiter::remaining('test-limiter', 5) > 0;
+        if ($executed) RateLimiter::hit('test-limiter', 60);
+        $remaining = RateLimiter::remaining('test-limiter', 5);
+        if (app()->bound('execution-monitor')) {
+            app('execution-monitor')->logRateLimit('test-limiter', $executed, $remaining);
+        }
+        return response()->json(['message' => $executed ? 'Allowed' : 'Throttled', 'remaining' => $remaining]);
+    });
+});
