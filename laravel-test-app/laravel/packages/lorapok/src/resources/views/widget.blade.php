@@ -100,7 +100,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <template x-for="item in sessionHistory.filter(i => i.request.path.toLowerCase().includes(activitySearch.toLowerCase()))" :key="item.fingerprint">
+                                <template x-for="item in sessionHistory.filter(i => (i.request?.path || '').toLowerCase().includes(activitySearch.toLowerCase()))" :key="item.fingerprint">
                                     <tr class="hover:bg-blue-50/30 transition-colors group">
                                         <td class="px-6 py-4">
                                             <!-- Route Info -->
