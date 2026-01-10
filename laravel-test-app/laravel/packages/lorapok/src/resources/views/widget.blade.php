@@ -700,20 +700,20 @@
                             <div>
                                 <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Alert Cooldown Period (min)</label>
                                 <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-purple-500 transition-all font-mono" placeholder="30" />
-                                <p class="text-[9px] text-indigo-300 mt-1.5 font-medium ml-1 opacity-70">Avoid notification spam for the same performance issue.</p>
+                                <p class="text-[11px] text-indigo-200 mt-2 font-medium ml-1">Avoid notification spam for the same performance issue.</p>
                             </div>
 
                             <div>
                                 <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Live Data Sync Interval (ms)</label>
                                 <input x-model.number="pollingInterval" type="number" min="1000" step="1000" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-purple-500 transition-all font-mono" placeholder="5000" />
-                                <p class="text-[9px] text-indigo-300 mt-1.5 font-medium ml-1 opacity-70">Refresh rate for the monitor dashboard.</p>
+                                <p class="text-[11px] text-indigo-200 mt-2 font-medium ml-1">Frequency of automatic dashboard refreshes.</p>
                             </div>
 
                             <div class="bg-white/5 p-4 rounded-2xl border border-white/10 transition-all hover:bg-white/10 group">
                                 <label class="flex items-center justify-between cursor-pointer">
                                     <div>
                                         <p class="text-xs font-black text-white uppercase tracking-wider group-hover:text-indigo-300 transition-colors">Mirror Logs to Server</p>
-                                        <p class="text-[9px] text-indigo-300 mt-1 font-medium opacity-70 italic">Stream console logs to /storage/logs/lorapok-client.log</p>
+                                        <p class="text-[11px] text-indigo-200 mt-1 font-medium">Stream console logs to /storage/logs/lorapok-client.log</p>
                                     </div>
                                     <div class="relative">
                                         <input type="checkbox" x-model="clientLogWritingEnabled" class="sr-only peer">
