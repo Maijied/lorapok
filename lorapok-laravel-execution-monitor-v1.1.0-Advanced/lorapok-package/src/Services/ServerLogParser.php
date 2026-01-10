@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\File;
 
 class ServerLogParser
 {
-    public function getLatest(int $lines = 100): array
+    public function getLatest(int $lines = 1000): array
     {
         $path = storage_path('logs/laravel.log');
 
@@ -14,7 +14,7 @@ class ServerLogParser
             return [];
         }
 
-        // Efficiently read last N lines
+        // Efficiently read last chunks
         $data = $this->readLastLines($path, $lines);
         
         return $this->parseLogs($data);
@@ -23,26 +23,22 @@ class ServerLogParser
     protected function readLastLines(string $filename, int $lines): string
     {
         $handle = fopen($filename, "r");
+        if (!$handle) return "";
+        
         $linecount = 0;
         $pos = -2;
         $beginning = false;
-        $text = [];
 
         while ($linecount < $lines) {
-            try {
-                if (fseek($handle, $pos, SEEK_END) == -1) {
-                    $beginning = true;
-                    break;
-                }
-                $t = fgetc($handle);
-                if ($t == "\n") {
-                    $linecount++;
-                }
-                $pos--;
-            } catch (\Exception $e) {
+            if (fseek($handle, $pos, SEEK_END) == -1) {
                 $beginning = true;
                 break;
             }
+            $t = fgetc($handle);
+            if ($t === "\n") {
+                $linecount++;
+            }
+            $pos--;
         }
 
         if ($beginning) {
@@ -68,17 +64,18 @@ class ServerLogParser
                     'env' => $matches[2],
                     'level' => strtolower($matches[3]),
                     'msg' => $matches[4],
-                    'full' => $line, // Keep the original line for details
+                    'full' => $line,
                     'type' => 'server'
                 ];
             } elseif (!empty($logs) && trim($line) !== '') {
-                // Append to previous log (Stack trace or continuation)
+                // Multi-line support (Stack traces)
                 $lastIndex = count($logs) - 1;
                 $logs[$lastIndex]['msg'] .= "\n" . $line;
                 $logs[$lastIndex]['full'] .= "\n" . $line;
             }
         }
 
+        // Return most recent first
         return array_reverse($logs);
     }
 }

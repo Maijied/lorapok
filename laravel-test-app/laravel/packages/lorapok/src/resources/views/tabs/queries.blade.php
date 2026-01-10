@@ -16,11 +16,9 @@
 					<div class="flex-1 font-mono text-sm text-gray-800 break-words" x-text="q.sql || q"></div>
 					<div class="flex items-center gap-3">
 						<div class="text-sm text-gray-500" x-text="(q.time || 0) + ' ms'"></div>
-						<button type="button" class="ml-2 px-3 py-1 border rounded bg-gray-100 text-sm text-gray-700 hover:bg-gray-200" @click.prevent.stop="copyQuery(q.sql || q, idx)">
-							<span x-show="copiedIndex !== idx">Copy</span>
-							<span x-show="copiedIndex === idx">Copied!</span>
-						</button>
-					</div>
+						                                           <button type="button" class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-purple-600 transition-colors" @click.prevent.stop="copyQuery(q.sql || q, idx); $el.innerHTML='✅'; setTimeout(()=>$el.innerHTML='📋', 1000)" title="Copy SQL">
+						                                               📋
+						                                           </button>					</div>
 				</div>
 			</div>
 		</template>
