@@ -68,12 +68,14 @@ class ServerLogParser
                     'env' => $matches[2],
                     'level' => strtolower($matches[3]),
                     'msg' => $matches[4],
+                    'full' => $line, // Keep the original line for details
                     'type' => 'server'
                 ];
             } elseif (!empty($logs) && trim($line) !== '') {
-                // Handle multi-line logs (stack traces)
+                // Append to previous log (Stack trace or continuation)
                 $lastIndex = count($logs) - 1;
                 $logs[$lastIndex]['msg'] .= "\n" . $line;
+                $logs[$lastIndex]['full'] .= "\n" . $line;
             }
         }
 
