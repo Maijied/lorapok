@@ -27,6 +27,12 @@
 - Updated `index.html` with new feature cards.
 - Updated `changelog.html` with [1.3.11] release notes.
 - Updated `docs.html` with Terminal, Playground, and Command documentation.
+- Added `architecture.html` with full system blueprint and Mermaid diagrams.
+
+### 5. ARCHITECTURE.md (New)
+**Changes:**
+- Detailed architectural breakdown from a senior architect's perspective.
+- Included component maps, data lifecycle, and security strategy.
 
 ## Feature Status
 - ✅ **Command Terminal**: Fully operational with service toggles.

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - Lorapok</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+    <style>
+        .docs-container { max-width: 1000px; margin: 4rem auto; padding: 0 2rem; }
+        .docs-content { background: white; padding: 3rem; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+        .mermaid { background: #f8fafc; padding: 2rem; border-radius: 1rem; margin: 2rem 0; border: 1px solid #e2e8f0; }
+        h2 { color: var(--purple-600); margin-top: 3rem; border-bottom: 2px solid var(--gray-100); padding-bottom: 0.5rem; }
+        .tech-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+        .tech-table th, .tech-table td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--gray-100); }
+        .tech-table th { background: var(--gray-50); font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <span class="larvae-icon">🐛</span>
+                <span class="logo-text">Lorapok</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="docs.html">Documentation</a></li>
+                <li><a href="architecture.html">Architecture</a></li>
+                <li><a href="changelog.html">Changelog</a></li>
+                <li><a href="download.html" class="btn-primary">Download</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="docs-container">
+        <div class="docs-content">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <span style="font-size: 3rem;">🏗️</span>
+                <h1 style="font-size: 2.5rem; font-weight: 800; margin: 0;">Lorapok Architecture</h1>
+            </div>
+            <p style="color: var(--gray-500); font-size: 1.125rem;">The blueprint of a zero-config telemetry engine for modern Laravel applications.</p>
+
+            <h2>System Philosophy</h2>
+            <p>Lorapok is engineered as a passive instrumentation suite. It hooks into the Laravel request lifecycle using mid-level proxies and event subscribers to collect telemetry without requiring the developer to modify their core business logic.</p>
+
+            <h2>Core Component Map</h2>
+            <div class="mermaid">
+                graph TD
+                    subgraph "Instrumentation Layer"
+                        MW[Middleware]
+                        EL[Event Listeners]
+                    end
+
+                    subgraph "Core Engine"
+                        MON[Monitor Singleton]
+                        TS[Timeline Service]
+                    end
+
+                    subgraph "Analysis Layer"
+                        QA[Query Analyzer]
+                        AT[Achievement Tracker]
+                    end
+
+                    subgraph "Presentation"
+                        API[JSON API]
+                        WID[Alpine.js Widget]
+                    end
+
+                    MW --> MON
+                    EL --> MON
+                    MON --> TS
+                    MON --> QA
+                    QA --> AT
+                    WID <--> API
+                    API --> MON
+            </div>
+
+            <h2>Module Responsibilities</h2>
+            <table class="tech-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Architectural Responsibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Instrumentation</strong></td>
+                        <td>Automated data capture via Middleware and Service Provider event hooks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Core Engine</strong></td>
+                        <td>Centralized state management and snapshot serialization.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Analyzers</strong></td>
+                        <td>Pattern matching against SQL queries and security health checks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Terminal</strong></td>
+                        <td>A secure browser-to-CLI bridge for remote maintenance.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Security & Privacy</h2>
+            <p>We implement a <strong>Multi-Tier Privacy Strategy</strong>:</p>
+            <ul>
+                <li><strong>PrivacyMasker</strong>: Automatically identifies and redacts literals from SQL statements to prevent data leakage.</li>
+                <li><strong>Environment Guard</strong>: Strict environment whitelisting to prevent the widget from loading in non-authorized contexts.</li>
+                <li><strong>Command Whitelisting</strong>: The terminal feature is restricted to a set of safe commands, preventing arbitrary system access.</li>
+            </ul>
+
+            <div style="margin-top: 4rem; padding: 2rem; background: var(--gray-900); border-radius: 1.5rem; color: white; text-align: center;">
+                <p style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em; color: var(--purple-400);">Authored By</p>
+                <h3 style="margin: 0.5rem 0 0 0;">Mohammad Maizied Hasan Majumder</h3>
+                <p style="color: var(--gray-400); margin-top: 0.25rem;">Senior Software Architect (#MaJHiBhai)</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container" style="text-align: center; padding: 2rem 0;">
+            <p>Built for the Laravel community. <a href="https://github.com/Maijied/lorapok" style="color: var(--purple-600);">View Source</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>
