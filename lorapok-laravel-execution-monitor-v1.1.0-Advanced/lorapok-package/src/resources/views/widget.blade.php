@@ -761,6 +761,16 @@
                     </button>
                 </div>
 
+                <!-- Global Control -->
+                <div class="grid grid-cols-2 gap-2 border-t border-gray-800 pt-4">
+                    <button @click="runCommand('monitor:enable')" class="px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded text-xs font-bold transition-all shadow-lg shadow-green-900/20 uppercase tracking-widest flex items-center justify-center gap-2">
+                        <span>▶️</span> Enable Monitor
+                    </button>
+                    <button @click="runCommand('monitor:disable')" class="px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded text-xs font-bold transition-all shadow-lg shadow-red-900/20 uppercase tracking-widest flex items-center justify-center gap-2">
+                        <span>⏹️</span> Disable Monitor
+                    </button>
+                </div>
+
                 <!-- Output Area -->
                 <div class="flex-1 bg-black rounded-lg p-4 font-mono text-xs overflow-y-auto border border-gray-800 shadow-inner relative group">
                     <div x-show="terminalLoading" class="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
