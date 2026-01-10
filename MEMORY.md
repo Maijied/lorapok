@@ -4,6 +4,12 @@ This file serves as a continuous record of development milestones, fixes, and pu
 
 ## 🟢 Ongoing Development & Milestones
 
+### 2026-01-10 - v1.4.0 Intelligence & ROI Update
+- **Feature**: **Cache ROI Detector** - Automatically suggests caching strategies (Response/Query) with estimated time savings (ms) based on historical patterns.
+- **Feature**: **Architecture v1.4 Suite** - Integrated Cache, Queue, and Rate Limit monitoring into the core engine.
+- **Feature**: **Terminal Lab** - Professional CLI interface for web-based Artisan execution.
+- **Feature**: **Usage Guide** - Interactive in-app documentation for all features.
+
 ### 2026-01-10 - v1.3.11 Professional Toolkit Release
 - **Feature**: **Command Terminal** - integrated CLI for executing monitor commands (audit, heatmap, status) directly from the widget.
 - **Feature**: **Monitor Memory** - added `monitor:memory` CLI command to summarize project status and context for developers/AI.

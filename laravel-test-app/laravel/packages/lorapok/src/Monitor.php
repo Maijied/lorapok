@@ -722,7 +722,7 @@ class Monitor
             "slowest_routes" => $reporter->getSlowestRoutes(5),
             "timeline" => $this->timeline->getTimeline(),
             "suggestions" => $suggestionGenerator->generate($this->queries),
-            "cache_roi" => $cacheROIAnalyzer->analyze($this->queries),
+            "cache_roi" => $cacheROIAnalyzer->analyze(['queries' => $maskedQueries]),
             "achievements" => (new AchievementTracker())->getAchievements(),
             "views" => $this->views,
             "tenant_id" => $this->tenantId,

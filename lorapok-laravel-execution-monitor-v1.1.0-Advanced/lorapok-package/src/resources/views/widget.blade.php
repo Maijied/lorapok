@@ -938,11 +938,11 @@
                     <p class="text-sm text-gray-300 leading-relaxed">
                         Lorapok automatically tracks your Laravel application's performance. The floating <strong>Larvae Button</strong> 🐛 is your gateway to real-time insights.
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                         <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
                             <div class="text-2xl mb-2">📊</div>
                             <h5 class="font-bold text-white text-sm">Overview</h5>
-                            <p class="text-[10px] text-gray-400 mt-1">Instant dashboard of current request performance, memory usage, and alerts.</p>
+                            <p class="text-[10px] text-gray-400 mt-1">Dashboard of current request performance, memory, and <strong>Cache ROI</strong> analysis.</p>
                         </div>
                         <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
                             <div class="text-2xl mb-2">📡</div>
@@ -953,6 +953,11 @@
                             <div class="text-2xl mb-2">🐛</div>
                             <h5 class="font-bold text-white text-sm">Timeline</h5>
                             <p class="text-[10px] text-gray-400 mt-1">Waterfalls visualization of execution flow, queries, and events.</p>
+                        </div>
+                        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                            <div class="text-2xl mb-2">💰</div>
+                            <h5 class="font-bold text-white text-sm">ROI Analysis</h5>
+                            <p class="text-[10px] text-gray-400 mt-1">AI-driven caching suggestions based on historical performance patterns.</p>
                         </div>
                     </div>
                 </div>
