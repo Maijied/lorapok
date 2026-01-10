@@ -169,26 +169,95 @@ class MonitorApiController extends Controller
         return '🔴 Slow';
     }
 
-    public function saveSettings(Request $request)
-    {
-        try {
-            $data = $request->validate([
-                'discord_webhook' => 'nullable|url',
-                'discord_enabled' => 'boolean',
-                'slack_webhook' => 'nullable|string', 
-                'slack_channel' => 'nullable|string',
-                'slack_enabled' => 'boolean',
-                'mail_to' => 'nullable|email',
-                'mail_enabled' => 'boolean',
-                'mail_host' => 'nullable|string',
-                'mail_port' => 'nullable|numeric',
-                'mail_username' => 'nullable|string',
-                'mail_password' => 'nullable|string',
-                'mail_encryption' => 'nullable|string',
-                'mail_from_address' => 'nullable|email',
-                'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        public function storeClientLogs(Request $request)
+
+        {
+
+            $settings = $this->getSettings();
+
+            if (!($settings['client_log_writing_enabled'] ?? false)) {
+
+                return response()->json(['success' => false, 'message' => 'Client log writing disabled'], 403);
+
+            }
+
+    
+
+            $logs = $request->input('logs', []);
+
+            if (empty($logs)) return response()->json(['success' => true]);
+
+    
+
+            $path = storage_path('logs/lorapok-client.log');
+
+            $content = "";
+
+            foreach ($logs as $log) {
+
+                $at = $log['at'] ?? now()->toDateTimeString();
+
+                $level = strtoupper($log['level'] ?? 'INFO');
+
+                $msg = $log['msg'] ?? '';
+
+                $content .= "[{$at}] local.{$level}: {$msg}" . PHP_EOL;
+
+            }
+
+    
+
+            File::append($path, $content);
+
+            return response()->json(['success' => true]);
+
+        }
+
+    
+
+        public function saveSettings(Request $request)
+
+        {
+
+            try {
+
+                $data = $request->validate([
+
+                    'discord_webhook' => 'nullable|url',
+
+                    'discord_enabled' => 'boolean',
+
+                    'slack_webhook' => 'nullable|string',
+
+                    'slack_channel' => 'nullable|string',
+
+                    'slack_enabled' => 'boolean',
+
+                    'mail_to' => 'nullable|email',
+
+                    'mail_enabled' => 'boolean',
+
+                    'mail_host' => 'nullable|string',
+
+                    'mail_port' => 'nullable|numeric',
+
+                    'mail_username' => 'nullable|string',
+
+                    'mail_password' => 'nullable|string',
+
+                    'mail_encryption' => 'nullable|string',
+
+                    'mail_from_address' => 'nullable|email',
+
+                    'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
+
+                    'client_log_writing_enabled' => 'nullable|boolean',
+
+                ]);
+
+            } catch (\Illuminate\Validation\ValidationException $e) {
+
+    
             \Log::error('Lorapok Settings Validation Failed:', $e->errors());
             return response()->json(['success' => false, 'errors' => $e->errors()], 422);
         }
@@ -269,6 +338,7 @@ class MonitorApiController extends Controller
             'mail_to' => config('execution-monitor.notifications.mail.to'),
             'mail_enabled' => config('execution-monitor.notifications.mail.enabled', false),
             'rate_limit_minutes' => 30, // Default to 30 as per user request
+            'client_log_writing_enabled' => false,
         ], $settings);
     }
 

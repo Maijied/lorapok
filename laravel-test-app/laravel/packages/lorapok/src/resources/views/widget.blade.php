@@ -427,18 +427,43 @@
                         </div>
                     </div>
 
-                    <!-- Panel: Advanced -->
                     <div x-show="settingsTab==='advanced'" class="space-y-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" style="display:none">
                         <div class="text-center mb-4">
                              <div class="bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                                 <span class="text-2xl larvae-wiggle">⚙️</span>
                              </div>
                              <h3 class="text-lg font-bold">Advanced Settings</h3>
-                             <p class="text-purple-200 text-xs">Configure rate limiting behavior</p>
+                             <p class="text-purple-200 text-xs">Configure system behavior and persistence</p>
                         </div>
-                        <div>
-                            <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Rate Limit (Minutes)</label>
-                            <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Rate Limit (Minutes)</label>
+                                <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
+                            </div>
+
+                            <div class="bg-white bg-opacity-5 p-4 rounded-2xl border border-white border-opacity-10 transition-all hover:bg-opacity-10">
+                                <label class="flex items-center justify-between cursor-pointer group">
+                                    <div>
+                                        <p class="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">Persist Client Logs</p>
+                                        <p class="text-[10px] text-purple-200 opacity-75">Automatically write browser logs to server file</p>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="checkbox" x-model="clientLogWritingEnabled" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-900 bg-opacity-30 rounded-xl p-4 border border-purple-400 border-opacity-30">
+                            <div class="flex items-start gap-2">
+                                <span class="text-lg">ℹ️</span>
+                                <div class="text-[10px] text-purple-100 leading-relaxed">
+                                    <p class="font-bold mb-1 uppercase tracking-wider">Note on Persistence</p>
+                                    <p>When enabled, client logs will be streamed to <code>storage/logs/lorapok-client.log</code>. Use this for debugging production environments where browser access is limited.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -502,6 +527,15 @@
             window.__lorapok_console_logs.push(entry);
             if(window.__lorapok_console_logs.length>1000) window.__lorapok_console_logs.shift();
             try{ window.dispatchEvent(new CustomEvent('lorapok:console-log', { detail: entry })); }catch(e){}
+
+            // Auto-persist to server if enabled
+            if (window.__lorapok_persist_active) {
+                fetch('/execution-monitor/api/client-logs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
+                    body: JSON.stringify({ logs: [entry] })
+                }).catch(function(e){});
+            }
         }catch(e){}
     }
     ['log','info','warn','error','debug'].forEach(function(level){
@@ -556,6 +590,7 @@ window.monitorWidget = function() {
         mailEncryption: '',
         mailFromAddress: '',
         rateLimitMinutes: 30,
+        clientLogWritingEnabled: false,
         activeTab: 'overview',
         data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
         consoleLogs: [],
@@ -589,6 +624,12 @@ window.monitorWidget = function() {
             window.addEventListener('lorapok:console-log', (ev) => {
                 try { this.consoleLogs.unshift(ev.detail); if (this.consoleLogs.length > 200) this.consoleLogs.length = 200 } catch (e) {}
             });
+
+            this.$watch('clientLogWritingEnabled', value => {
+                window.__lorapok_persist_active = !!value;
+            });
+            // Initial sync
+            window.__lorapok_persist_active = !!this.clientLogWritingEnabled;
         },
         toggleModal() { this.isOpen = !this.isOpen; if (this.isOpen) this.fetchData(); },
         closeModal() { this.isOpen = false; },
@@ -626,6 +667,7 @@ window.monitorWidget = function() {
                     this.mailEncryption = this.data.settings?.mail_encryption || '';
                     this.mailFromAddress = this.data.settings?.mail_from_address || '';
                     this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
+                    this.clientLogWritingEnabled = !!this.data.settings?.client_log_writing_enabled;
                 }
             } catch (e) { console.error('❌ Lorapok Error:', e); }
         },
@@ -642,7 +684,7 @@ window.monitorWidget = function() {
                 if (this.settingsTab === 'discord') payload = { discord_webhook: this.discordWebhook, discord_enabled: this.discordEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'slack') payload = { slack_webhook: this.slackWebhook, slack_channel: this.slackChannel, slack_enabled: this.slackEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'email') payload = { mail_to: this.mailTo, mail_enabled: this.mailEnabled ? 1 : 0, mail_host: this.mailHost, mail_port: this.mailPort, mail_username: this.mailUsername, mail_password: this.mailPassword, mail_encryption: this.mailEncryption, mail_from_address: this.mailFromAddress };
-                else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes };
+                else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes, client_log_writing_enabled: this.clientLogWritingEnabled ? 1 : 0 };
                 
                 const r = await fetch('/execution-monitor/api/settings', {
                     method: 'POST',

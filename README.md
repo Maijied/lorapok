@@ -34,7 +34,7 @@
 
 ### Changelog
 
-**v1.3.4** (2026-01-10)
+**v1.3.5** (2026-01-10)
 - ✅ **UI/UX**: Premium **Optimization Quests** redesign with glassmorphism and animated decorative larvae (🦋).
 - ✅ **Settings**: Fully restored SMTP configuration fields for granular email notification control.
 - ✅ **Logs**: Centered navigation tabs and middle-aligned controls for a standard professional layout.
