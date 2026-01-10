@@ -654,6 +654,12 @@
                                 <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
                             </div>
 
+                            <div>
+                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Polling Interval (ms)</label>
+                                <input x-model.number="pollingInterval" type="number" min="1000" step="1000" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="5000" />
+                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Time between data refreshes. Min: 1000ms.</p>
+                            </div>
+
                             <div class="bg-white bg-opacity-5 p-4 rounded-2xl border border-white border-opacity-10 transition-all hover:bg-opacity-10">
                                 <label class="flex items-center justify-between cursor-pointer group">
                                     <div>
@@ -934,12 +940,15 @@ window.monitorWidget = function() {
         },
 
         scheduleNextPoll() {
+            let interval = parseInt(this.pollingInterval) || 5000;
+            if (interval < 1000) interval = 1000;
+            
             setTimeout(async () => {
                 if (this.isOpen) { // Only poll when open to save resources
                     await this.fetchData();
                 }
                 this.scheduleNextPoll();
-            }, this.pollingInterval || 5000);
+            }, interval);
         },
 
         toggleModal() { this.isOpen = !this.isOpen; if (this.isOpen) this.fetchData(); },
