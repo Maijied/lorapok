@@ -157,4 +157,51 @@ Route::prefix('lorapok/lab/advanced')->group(function() {
         cache()->put('lab_state', now()->toDateTimeString(), 60);
         return response()->json(['type' => 'Stateful', 'detail' => 'System State Updated', 'timestamp' => now()->toDateTimeString()]);
     });
+
+    Route::get('/heavy-io', function() {
+        // Run multiple file system operations
+        for($i=0; $i<50; $i++) {
+            $path = storage_path("logs/test-io-{$i}.tmp");
+            file_put_contents($path, str_repeat('x', 1000));
+            unlink($path);
+        }
+        return response()->json(['type' => 'IO Stress', 'detail' => '50 File Write/Delete Cycles Finished']);
+    });
+
+    Route::get('/recursive-loop', function() {
+        // Simulate deep recursive call chain
+        $fact = function($n, $f) { return $n <= 1 ? 1 : $n * $f($n - 1, $f); };
+        $res = $fact(50, $fact);
+        return response()->json(['type' => 'Logic', 'detail' => 'Factorial 50 calculated recursively']);
+    });
+
+    Route::get('/heavy-auth', function() {
+        // Simulate a heavy hashing or authentication verification process
+        for($i=0; $i<10; $i++) password_hash("lorapok-test-hash-string-{$i}", PASSWORD_BCRYPT, ['cost' => 10]);
+        return response()->json(['type' => 'Security', 'detail' => '10 Heavy BCRYPT Hashes Generated']);
+    });
+
+    Route::get('/cache-flood', function() {
+        // Rapid fire cache operations
+        for($i=0; $i<100; $i++) cache()->put("flood_{$i}", str()->random(100), 5);
+        return response()->json(['type' => 'Cache', 'detail' => '100 Key Cache Flood Completed']);
+    });
+
+    // Extreme Stress Scenarios
+    Route::get('/db-flood', function() {
+        for($i=0; $i<500; $i++) \DB::table('migrations')->count();
+        return response()->json(['success' => true]);
+    });
+
+    Route::get('/db-lock', function() {
+        \DB::transaction(function() {
+            \DB::table('migrations')->lockForUpdate()->get();
+            usleep(500000); // Hold lock for 0.5s
+        });
+        return response()->json(['success' => true]);
+    });
+
+    Route::get('/heavy-render', function() {
+        return view('lab.fragment', ['level' => 1, 'max' => 15])->render();
+    });
 });

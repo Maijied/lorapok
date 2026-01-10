@@ -166,21 +166,30 @@
                 </a>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <a href="/lorapok/lab/advanced/heavy-json" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-orange-200 transition-all duration-500 hover:shadow-xl hover:shadow-orange-50 relative overflow-hidden">
-                        <span class="text-2xl">📦</span>
-                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Heavy JSON</h4>
-                    </a>
-                    <a href="/lorapok/lab/advanced/cache-test" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-emerald-200 transition-all duration-500 hover:shadow-xl hover:shadow-emerald-50 relative overflow-hidden">
-                        <span class="text-2xl">💾</span>
-                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Cache Sim</h4>
-                    </a>
-                    <a href="/lorapok/lab/advanced/redirect-loop" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-indigo-200 transition-all duration-500 hover:shadow-xl hover:shadow-indigo-50 relative overflow-hidden">
-                        <span class="text-2xl">🔄</span>
-                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Redirects</h4>
-                    </a>
+                    <button @click="openStressLab()" class="test-card group w-full text-left block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-xl hover:shadow-amber-50 relative overflow-hidden">
+                        <span class="text-2xl">⚔️</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">DB Stress</h4>
+                    </button>
+                    <button @click="openRenderLab()" class="test-card group w-full text-left block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
+                        <span class="text-2xl">🖼️</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Render Lab</h4>
+                    </button>
                     <a href="/lorapok/lab/advanced/batch-db" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-pink-200 transition-all duration-500 hover:shadow-xl hover:shadow-pink-50 relative overflow-hidden">
-                        <span class="text-2xl">🗄️</span>
-                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Batch DB</h4>
+                    <a href="/lorapok/lab/advanced/heavy-io" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
+                        <span class="text-2xl">📁</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">IO Stress</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/recursive-loop" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-purple-200 transition-all duration-500 hover:shadow-xl hover:shadow-purple-50 relative overflow-hidden">
+                        <span class="text-2xl">🧬</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Deep Logic</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/heavy-auth" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-xl hover:shadow-amber-50 relative overflow-hidden">
+                        <span class="text-2xl">🔐</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Auth Stress</h4>
+                    </a>
+                    <a href="/lorapok/lab/advanced/cache-flood" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-xl hover:shadow-blue-50 relative overflow-hidden">
+                        <span class="text-2xl">🌊</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Cache Flood</h4>
                     </a>
                 </div>
 
@@ -274,6 +283,34 @@
     </div>
 
     @include('execution-monitor::widget')
+
+    <!-- Database Stress Modal -->
+    <div x-data="stressLab()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
+            <div class="bg-gradient-to-r from-amber-600 to-orange-700 p-8 text-white text-center">
+                <h2 class="text-2xl font-black tracking-tight">Database Stress Lab</h2>
+                <p class="text-amber-100 text-[10px] mt-1 uppercase tracking-widest font-black">Performance Limit Testing</p>
+            </div>
+            <div class="p-8">
+                @include('lab.db-stress-modal')
+            </div>
+        </div>
+    </div>
+
+    <!-- Render Lab Modal -->
+    <div x-data="renderLab()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white text-center">
+                <h2 class="text-2xl font-black tracking-tight">Render Engine Lab</h2>
+                <p class="text-blue-100 text-[10px] mt-1 uppercase tracking-widest font-black">View Path & Trace Verification</p>
+            </div>
+            <div class="p-8">
+                @include('lab.render-stress-modal')
+            </div>
+        </div>
+    </div>
 
     <!-- Ajax Storm Modal -->
     <div x-data="ajaxStorm()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
@@ -371,6 +408,51 @@
     </div>
 
     <script>
+        function stressLab() {
+            return {
+                isOpen: false,
+                loading: false,
+                states: { queries: false, lock: false },
+                init() {
+                    window.addEventListener('open-stress-lab', () => { this.isOpen = true; this.states = {queries:false, lock:false}; });
+                },
+                async runStress(type) {
+                    this.loading = true;
+                    try {
+                        const url = type === 'queries' ? '/lorapok/lab/advanced/db-flood' : '/lorapok/lab/advanced/db-lock';
+                        await fetch(url);
+                        this.states[type] = true;
+                    } finally { this.loading = false; }
+                }
+            }
+        }
+
+        function renderLab() {
+            return {
+                isOpen: false,
+                loading: false,
+                renderResult: null,
+                init() {
+                    window.addEventListener('open-render-lab', () => { this.isOpen = true; this.renderResult = null; });
+                },
+                async runRender() {
+                    this.loading = true;
+                    try {
+                        const r = await fetch('/lorapok/lab/advanced/heavy-render');
+                        this.renderResult = await r.text();
+                    } finally { this.loading = false; }
+                }
+            }
+        }
+
+        // Global triggers for the main container
+        function openStressLab() {
+            window.dispatchEvent(new CustomEvent('open-stress-lab'));
+        }
+        function openRenderLab() {
+            window.dispatchEvent(new CustomEvent('open-render-lab'));
+        }
+
         function labState() {
             return {
                 isOpen: false,

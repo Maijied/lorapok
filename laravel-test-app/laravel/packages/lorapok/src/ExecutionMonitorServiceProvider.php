@@ -120,10 +120,18 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 $monitor = app('execution-monitor');
                 $monitor->recordTimeline('controller');
                 
-                // Set the controller/action metadata
-                if ($event->route->getActionName()) {
-                    $monitor->setControllerAction($event->route->getActionName());
+                $action = $event->route->getActionName();
+                
+                // Better resolution for Closures
+                if ($action === 'Closure') {
+                    $closure = $event->route->getAction('uses');
+                    if ($closure instanceof \Closure) {
+                        $rf = new \ReflectionFunction($closure);
+                        $action = 'Closure at ' . basename($rf->getFileName()) . ':' . $rf->getStartLine();
+                    }
                 }
+                
+                $monitor->setControllerAction($action);
             }
         });
     }

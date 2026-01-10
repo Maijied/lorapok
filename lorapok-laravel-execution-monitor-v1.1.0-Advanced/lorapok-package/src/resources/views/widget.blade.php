@@ -96,18 +96,32 @@
                                 <template x-for="item in sessionHistory.filter(i => i.request.path.toLowerCase().includes(activitySearch.toLowerCase()))" :key="item.fingerprint">
                                     <tr class="hover:bg-blue-50/30 transition-colors group">
                                         <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <span class="text-[9px] font-black px-2 py-1 rounded bg-gray-100 text-gray-600" x-text="item.request.method"></span>
-                                                <span class="text-xs font-bold text-gray-800 font-mono" x-text="item.request.path"></span>
-                                            </div>
-                                            <div class="mt-1 flex flex-col gap-1">
-                                                <div class="flex items-center gap-2" x-show="item.controller_action">
-                                                    <span class="text-[8px] text-purple-500 font-black uppercase">Action:</span>
-                                                    <span class="text-[9px] text-gray-400 font-mono truncate max-w-[200px]" x-text="item.controller_action"></span>
+                                            <!-- Route Info -->
+                                            <div class="flex items-center gap-3 mb-3">
+                                                <div class="flex items-center gap-1.5">
+                                                    <span class="text-[8px] font-black text-gray-400 uppercase tracking-tighter">Route</span>
+                                                    <span class="text-[10px] font-black px-2 py-0.5 rounded bg-gray-900 text-white shadow-sm" x-text="item.request.method"></span>
                                                 </div>
+                                                <span class="text-xs font-black text-gray-900 font-mono tracking-tighter bg-white px-2 py-1 rounded-lg border border-gray-100 shadow-inner" x-text="item.request.path"></span>
+                                            </div>
+
+                                            <!-- Execution Context -->
+                                            <div class="flex flex-col gap-2">
+                                                <!-- Controller / Function Logic -->
+                                                <div class="flex items-center gap-2" x-show="item.controller_action">
+                                                    <template x-if="item.controller_action.includes('@')">
+                                                        <span class="text-[8px] bg-purple-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Controller</span>
+                                                    </template>
+                                                    <template x-if="!item.controller_action.includes('@')">
+                                                        <span class="text-[8px] bg-indigo-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Function</span>
+                                                    </template>
+                                                    <code class="text-[10px] text-gray-600 font-black font-mono truncate max-w-[300px]" x-text="item.controller_action" :title="item.controller_action"></code>
+                                                </div>
+
+                                                <!-- Blade View Path -->
                                                 <div class="flex items-center gap-2" x-show="item.view_path">
-                                                    <span class="text-[8px] text-blue-500 font-black uppercase">View:</span>
-                                                    <span class="text-[9px] text-gray-400 font-mono italic" x-text="item.view_path"></span>
+                                                    <span class="text-[8px] bg-blue-600 text-white px-2 py-0.5 rounded-md font-black uppercase tracking-widest shadow-sm">Blade Path</span>
+                                                    <code class="text-[10px] text-blue-700 font-black font-mono truncate max-w-[300px]" x-text="item.view_path" :title="item.view_path"></code>
                                                 </div>
                                             </div>
                                         </td>
