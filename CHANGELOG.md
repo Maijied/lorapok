@@ -2,6 +2,13 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
+## [1.2.9] - 2026-01-09
+
+### Fixed
+- **Settings Widget**: Resolved issue where the "Cancel" button was not closing the modal.
+- **Developer Profile**: Restored the original v1.1.0 style and profile photo for the Developer Info modal.
+- **Workflows**: Corrected and verified all GitHub Actions (`phpunit.yml`, `release.yml`, etc.) after path corruption fixes.
+
 ## [1.2.8] - 2026-01-09
 
 ### Added

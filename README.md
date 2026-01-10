@@ -34,12 +34,15 @@
 
 ### Changelog
 
+**v1.2.9** (2026-01-09)
+- ✅ **Settings**: Fixed "Cancel" button logic in the monitor widget.
+- ✅ **UI/UX**: Restored original Developer Info modal style and premium human icon navigation.
+- ✅ **CI/CD**: Finalized and verified all GitHub Action workflows.
+
 **v1.2.8** (2026-01-09)
 - ✅ **UI/UX**: Unique, professional identities for header action buttons (Quests, Dev, Settings).
 - ✅ **CI/CD Fix**: Resolved `BindingResolutionException` and workflow path drift in GitHub Actions.
 - ✅ **Navigation**: Quests integrated into the top header for a cleaner main layout.
-
-**v1.2.7** (2026-01-09)
 - ✅ **Navigation**: Added floating **Home** button to all test lab pages for easier navigation.
 - ✅ **System Info**: Added PHP and Database (driver + version) information to monitor footer.
 - ✅ **Timeline Complete**: Added missing `queries` and `controller` segments to Larvae Trail.
