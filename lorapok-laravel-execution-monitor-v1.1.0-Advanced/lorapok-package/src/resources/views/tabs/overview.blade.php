@@ -31,12 +31,18 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Current Route Card -->
-        <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-5 border-2 border-blue-200 shadow-sm">
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-2xl">🛣️</span>
-                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Current Route</span>
+        <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-5 border-2 border-blue-200 shadow-sm flex flex-col justify-between">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-2xl">🛣️</span>
+                    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Current Route</span>
+                </div>
+                <p class="text-base font-mono font-semibold text-purple-900 break-all leading-tight"><span x-text="data?.current_route ?? 'N/A'"></span></p>
             </div>
-            <p class="text-base font-mono font-semibold text-purple-900 break-all leading-tight"><span x-text="data?.current_route ?? 'N/A'"></span></p>
+            <div class="mt-3 flex items-center gap-2" x-show="data?.view_path">
+                <span class="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-md font-black uppercase tracking-tighter border border-blue-200">Blade</span>
+                <code class="text-[10px] text-gray-500 font-mono truncate max-w-[150px]" x-text="data.view_path" :title="data.view_path"></code>
+            </div>
         </div>
 
         <!-- Total Queries Card -->

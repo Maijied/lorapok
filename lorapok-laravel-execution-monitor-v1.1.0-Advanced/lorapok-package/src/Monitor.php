@@ -43,6 +43,7 @@ class Monitor
     protected $masker;
     protected $enabled = true;
     protected $currentRoute = null;
+    protected $viewPath = null;
     public $lastException = null;
 
     public function __construct()
@@ -50,6 +51,13 @@ class Monitor
         $this->enabled = true;
         $this->timeline = new TimelineReporter();
         $this->masker = new PrivacyMasker();
+
+        // Listen for view composing to capture path
+        Event::listen('composing:*', function ($view, $data = null) {
+            if ($view instanceof \Illuminate\View\View) {
+                $this->viewPath = str_replace(base_path(), '', $view->getPath());
+            }
+        });
     }
 
     public function recordTimeline(string $name)
@@ -679,6 +687,7 @@ class Monitor
                 'line' => $this->lastException->getLine(),
                 'trace' => array_slice($this->lastException->getTrace(), 0, 5) 
             ] : null,
+            "view_path" => $this->viewPath,
         ];
 
         // Before/After Comparison

@@ -87,3 +87,26 @@ Route::get('/lorapok/test/middleware', function () {
     usleep(100000); // 0.1s simulate work
     return response()->json(['message' => 'Middleware tracking test completed']);
 })->middleware(TrackedMiddleware::class);
+
+// AJAX Storm Endpoints
+Route::prefix('lorapok/lab/ajax')->group(function() {
+    Route::get('/queries', function() {
+        $count = \DB::table('migrations')->count();
+        return response()->json(['type' => 'Database', 'detail' => "Counted {$count} migrations", 'queries' => 1]);
+    });
+    Route::get('/logs', function() {
+        \Log::info('AJAX Storm: Triggering a server-side log entry');
+        return response()->json(['type' => 'Logging', 'detail' => 'Server log entry generated', 'logs' => 1]);
+    });
+    Route::get('/process', function() {
+        usleep(200000); // 0.2s
+        return response()->json(['type' => 'Processing', 'detail' => 'Background task simulated', 'duration' => '200ms']);
+    });
+    Route::get('/meta', function() {
+        return response()->json(['type' => 'Metadata', 'detail' => 'System environment verified', 'env' => app()->environment()]);
+    });
+    Route::get('/view', function() {
+        // This endpoint renders a small fragment to test view path tracking via AJAX
+        return view('welcome')->render(); 
+    });
+});
