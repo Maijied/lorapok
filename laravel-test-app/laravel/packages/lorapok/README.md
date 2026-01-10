@@ -34,12 +34,13 @@
 
 ### Changelog
 
-**v1.3.0** (2026-01-09)
-- ✅ **Settings**: Fixed "Cancel" button logic in the monitor widget.
-- ✅ **UI/UX**: Restored original Developer Info modal style and premium human icon navigation.
-- ✅ **CI/CD**: Finalized and verified all GitHub Action workflows.
+**v1.3.4** (2026-01-10)
+- ✅ **UI/UX**: Premium **Optimization Quests** redesign with glassmorphism and animated decorative larvae (🦋).
+- ✅ **Settings**: Fully restored SMTP configuration fields for granular email notification control.
+- ✅ **Logs**: Centered navigation tabs and middle-aligned controls for a standard professional layout.
+- ✅ **Stability**: Fixed Alpine.js `undefined` errors and stabilized monitor modal positioning.
 
-**v1.2.8** (2026-01-09)
+**v1.3.0** (2026-01-10)
 - ✅ **UI/UX**: Unique, professional identities for header action buttons (Quests, Dev, Settings).
 - ✅ **CI/CD Fix**: Resolved `BindingResolutionException` and workflow path drift in GitHub Actions.
 - ✅ **Navigation**: Quests integrated into the top header for a cleaner main layout.

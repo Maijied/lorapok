@@ -2,14 +2,18 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
-## [1.2.9] - 2026-01-09
+## [1.3.4] - 2026-01-10
+
+### Added
+- **Premium Quests UI**: Redesigned Optimization Quests with glassmorphism, animated 🦋 background larvae, and progress glimmer effects.
+- **Server Log Table**: Integrated search and pagination for backend Laravel logs.
 
 ### Fixed
-- **Settings Widget**: Resolved issue where the "Cancel" button was not closing the modal.
-- **Developer Profile**: Restored the original v1.1.0 style and profile photo for the Developer Info modal.
-- **Workflows**: Corrected and verified all GitHub Actions (`phpunit.yml`, `release.yml`, etc.) after path corruption fixes.
+- **Settings Configuration**: Restored missing SMTP configuration fields (Host, Port, Auth, Encryption) in the Email settings panel.
+- **UI Alignment**: Centered all navigation tabs and unified the control layout for a professional "Standard" aesthetic.
+- **Data Stability**: Fixed Alpine.js `length` error when server logs were undefined during initial fetch.
 
-## [1.2.8] - 2026-01-09
+## [1.3.0] - 2026-01-10
 
 ### Added
 - **UI Enhancements**: Redesigned header action buttons with unique, professional identities (Amber for Quests, Blue for Developer, Indigo for Settings) and improved hover/active states.

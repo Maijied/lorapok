@@ -214,7 +214,7 @@
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.2.7-Advanced</span>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.3.4-Advanced</span>
                         </div>
                         <span class="h-4 w-px bg-gray-200"></span>
                         <span class="text-[10px] font-black text-purple-500 uppercase tracking-widest">Full Production Build</span>
