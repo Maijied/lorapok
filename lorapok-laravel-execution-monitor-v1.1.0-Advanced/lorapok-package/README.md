@@ -19,6 +19,13 @@
 - 💾 **Memory Profiling** - Current and peak memory usage tracking
 - ⏱️ **Execution Timing** - Precise request execution and function timing measurements
 
+### Developer Tools
+- 💻 **Command Terminal** - Execute `php artisan` commands directly from the browser interface
+- 🎮 **API Playground** - Test GET/POST endpoints without leaving the application
+- 📝 **Advanced Logs** - Unified Client/Server log viewer with date filtering and search
+- 📘 **Usage Guide** - Built-in interactive documentation
+- 🎛️ **Service Toggles** - Enable/Disable monitoring services (Routes, Queries) on the fly
+
 ### Query Management
 - 📋 **Clipboard Integration** - Copy queries with one click from the widget
 - ⌨️ **Keyboard Shortcuts** - Press `Ctrl+Shift+C` (or `Cmd+Shift+C` on Mac) to copy selected query
@@ -33,6 +40,14 @@
 - 📊 **Status Check** - Quick view of monitoring state and environment
 
 ### Changelog
+
+**v1.3.11** (2026-01-10)
+- ✅ **Command Terminal**: Integrated CLI for executing monitor commands directly from the widget.
+- ✅ **API Playground**: Built-in REST client for testing endpoints.
+- ✅ **Advanced Logs**: Unified Client/Server log viewer with date filtering.
+- ✅ **Service Toggles**: Dynamic enable/disable of Route/Query monitoring.
+- ✅ **Usage Guide**: Added detailed in-app documentation.
+- ✅ **Dropbox**: Direct feedback channel in Developer Profile.
 
 **v1.3.6** (2026-01-10)
 - ✅ **UI/UX**: Premium **Optimization Quests** redesign with glassmorphism and animated decorative larvae (🦋).

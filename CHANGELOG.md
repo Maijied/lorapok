@@ -2,6 +2,21 @@
 
 All notable changes to the **Lorapok Laravel Execution Monitor** will be documented in this file.
 
+## [1.3.11] - 2026-01-10
+
+### Added
+- **Command Terminal**: Integrated a browser-based CLI for executing `monitor:*` and custom `php artisan` commands directly from the widget.
+- **API Playground**: Built-in REST client for testing application endpoints (GET/POST/PUT/DELETE) with JSON body support.
+- **Usage Guide**: Interactive modal documented core features, keyboard shortcuts (Ctrl+Shift+C), and advanced pro-tips.
+- **Hardcore Achievements**: Added 4 new elite milestones: Zero Gravity, Database Zen, Clean Code Crusader, and Titanium Stability.
+- **The Dropbox**: Integrated a direct feedback system in the Developer Profile for dropping "letters" to the author.
+- **Service Toggles**: Added granular on/off switches for Routes and Queries monitoring within the terminal.
+
+### Fixed
+- **Alpine.js Stability**: Resolved "Cannot read properties of undefined (reading toLowerCase)" error in session activity filtering.
+- **Polling Optimization**: Implemented a configurable polling interval (min 1000ms) to reduce server overhead during monitoring.
+- **Unified Log UI**: Synchronized Client and Server log tables with clickable rows for consistent detailed inspection.
+
 ## [1.3.4] - 2026-01-10
 
 ### Added

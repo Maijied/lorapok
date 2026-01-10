@@ -136,11 +136,20 @@ class UserController extends Controller
             <p>A beautiful floating button appears in your application with:</p>
             <ul>
                 <li>📊 Overview - Performance metrics at a glance</li>
+                <li>📡 Activity - Live request history with detailed inspection</li>
+                <li>🐛 Timeline - Execution flow and waterfalls</li>
                 <li>🛣️ Routes - All tracked routes with execution times</li>
                 <li>🗄️ Queries - Database queries with timing and copy-to-clipboard</li>
-                <li>📝 Logs - Client console logs</li>
+                <li>📝 Logs - Unified Client/Server log viewer</li>
                 <li>🏆 Quests - Achievement system for performance milestones</li>
             </ul>
+
+            <h3>Developer Tools</h3>
+            <h4>💻 Command Terminal</h4>
+            <p>Execute artisan commands directly from the dashboard. Useful for checking migrations, clearing cache, or running monitoring audits without leaving the browser.</p>
+            
+            <h4>🎮 API Playground</h4>
+            <p>A built-in REST client to test your application endpoints. Supports GET, POST, PUT, and DELETE methods with JSON body integration.</p>
 
             <h3>Visual Tour</h3>
             <div class="docs-gallery">
@@ -183,6 +192,9 @@ php artisan monitor:disable
 
 # Run full performance audit
 php artisan monitor:audit
+
+# Summarize project context for AI/Devs
+php artisan monitor:memory
 
 # Generate performance heatmap
 php artisan monitor:heatmap</code></pre>
