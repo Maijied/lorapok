@@ -137,4 +137,24 @@ Route::prefix('lorapok/lab/advanced')->group(function() {
         });
         return response()->json(['message' => 'Batch Update Finished']);
     });
+
+    // Hard/Stateful Scenarios
+    Route::get('/expensive-query', function() {
+        // Run a heavy recursive or cross-join simulation
+        $count = \DB::table('migrations as m1')
+            ->crossJoin('migrations as m2')
+            ->crossJoin('migrations as m3')
+            ->selectRaw('count(*) as total')
+            ->first();
+        
+        \Log::warning("Hard Test: Heavy cross-join completed. Scanned virtual rows: {$count->total}");
+        return response()->json(['type' => 'Stateful', 'detail' => 'Heavy Cross-Join Completed', 'rows' => $count->total]);
+    });
+
+    Route::post('/state-update', function() {
+        // Simulate a stateful multi-service operation
+        usleep(500000); // 0.5s
+        cache()->put('lab_state', now()->toDateTimeString(), 60);
+        return response()->json(['type' => 'Stateful', 'detail' => 'System State Updated', 'timestamp' => now()->toDateTimeString()]);
+    });
 });

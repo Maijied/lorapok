@@ -100,9 +100,15 @@
                                                 <span class="text-[9px] font-black px-2 py-1 rounded bg-gray-100 text-gray-600" x-text="item.request.method"></span>
                                                 <span class="text-xs font-bold text-gray-800 font-mono" x-text="item.request.path"></span>
                                             </div>
-                                            <div class="mt-1 flex items-center gap-2" x-show="item.view_path">
-                                                <span class="text-[8px] text-blue-500 font-black uppercase">View:</span>
-                                                <span class="text-[9px] text-gray-400 font-mono italic" x-text="item.view_path"></span>
+                                            <div class="mt-1 flex flex-col gap-1">
+                                                <div class="flex items-center gap-2" x-show="item.controller_action">
+                                                    <span class="text-[8px] text-purple-500 font-black uppercase">Action:</span>
+                                                    <span class="text-[9px] text-gray-400 font-mono truncate max-w-[200px]" x-text="item.controller_action"></span>
+                                                </div>
+                                                <div class="flex items-center gap-2" x-show="item.view_path">
+                                                    <span class="text-[8px] text-blue-500 font-black uppercase">View:</span>
+                                                    <span class="text-[9px] text-gray-400 font-mono italic" x-text="item.view_path"></span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4">

@@ -17,7 +17,8 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        .test-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .test-card:hover { transform: translateY(-5px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 min-h-screen font-sans antialiased text-gray-900">
@@ -29,134 +30,162 @@
                 <span class="text-7xl larvae-animate">🐛</span>
             </div>
             <h1 class="text-5xl font-extrabold tracking-tight mb-4">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 font-black tracking-tighter">
                     Lorapok Performance Lab
                 </span>
             </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto font-medium">
                 The ultimate testing grounds for Laravel execution monitoring. Identify bottlenecks, earn achievements, and optimize your application.
             </p>
         </header>
 
         <!-- System Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-            <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-blue-500">
-                <p class="text-xs font-bold text-blue-600 uppercase mb-1">Laravel</p>
-                <p class="text-2xl font-bold">{{ app()->version() }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+            <div class="glass-card p-6 rounded-[2rem] shadow-sm border-l-4 border-blue-500">
+                <p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Laravel</p>
+                <p class="text-2xl font-black text-gray-800">{{ app()->version() }}</p>
             </div>
-            <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-purple-500">
-                <p class="text-xs font-bold text-purple-600 uppercase mb-1">PHP Version</p>
-                <p class="text-2xl font-bold">{{ PHP_VERSION }}</p>
+            <div class="glass-card p-6 rounded-[2rem] shadow-sm border-l-4 border-purple-500">
+                <p class="text-[10px] font-black text-purple-600 uppercase tracking-widest mb-1">PHP Version</p>
+                <p class="text-2xl font-black text-gray-800">{{ PHP_VERSION }}</p>
             </div>
-            <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-green-500">
-                <p class="text-xs font-bold text-green-600 uppercase mb-1">Environment</p>
-                <p class="text-2xl font-bold">{{ app()->environment() }}</p>
+            <div class="glass-card p-6 rounded-[2rem] shadow-sm border-l-4 border-green-500">
+                <p class="text-[10px] font-black text-green-600 uppercase tracking-widest mb-1">Environment</p>
+                <p class="text-2xl font-black text-gray-800 uppercase tracking-tighter">{{ app()->environment() }}</p>
             </div>
-            <div class="glass-card p-6 rounded-3xl shadow-sm border-l-4 border-pink-500">
-                <p class="text-xs font-bold text-pink-600 uppercase mb-1">DB Driver</p>
-                <p class="text-2xl font-bold">{{ ucfirst(config('database.default')) }}</p>
+            <div class="glass-card p-6 rounded-[2rem] shadow-sm border-l-4 border-pink-500">
+                <p class="text-[10px] font-black text-pink-600 uppercase tracking-widest mb-1">DB Driver</p>
+                <p class="text-2xl font-black text-gray-800 tracking-tighter">{{ ucfirst(config('database.default')) }}</p>
             </div>
         </div>
 
         <!-- Testing Scenarios -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="ajaxStorm()">
             
-            <!-- Column 1: Core Performance -->
+            <!-- Column 1: Core Latency -->
             <div class="space-y-6">
-                <h3 class="text-lg font-bold flex items-center gap-2 px-2">
-                    <span class="p-2 bg-blue-100 rounded-lg">⚡</span> Core Latency
+                <h3 class="text-lg font-black flex items-center gap-3 px-2 text-gray-800">
+                    <span class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl shadow-sm">⚡</span>
+                    Core Latency
                 </h3>
                 
-                <button @click="triggerStorm()" class="test-card w-full text-left block glass-card p-5 rounded-3xl shadow-sm hover:shadow-xl border border-purple-200 group relative overflow-hidden transition-all">
-                    <div class="absolute -right-2 -top-2 text-5xl opacity-10 group-hover:scale-110 transition-transform">🌪️</div>
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">⚡</span>
-                        <span class="text-[10px] bg-purple-600 text-white px-2 py-1 rounded-full font-bold uppercase tracking-wider">Complex</span>
+                <a href="/lorapok-fast-v2" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-green-200 transition-all duration-500 hover:shadow-2xl hover:shadow-green-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🚀</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-green-50 rounded-2xl text-2xl group-hover:bg-green-100 transition-colors">🚀</span>
+                        <span class="text-[10px] bg-green-100 text-green-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Stable</span>
                     </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-purple-600 transition-colors">Ajax Storm Scenario</h4>
-                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">Triggers 5 simultaneous AJAX calls to test multi-route tracking and view path resolution.</p>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Ultra Fast Route</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Minimal execution time test to verify baseline monitor overhead and precision.</p>
+                </a>
+
+                <a href="/lorapok-test-v2" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-blue-200 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">⚖️</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-blue-50 rounded-2xl text-2xl group-hover:bg-blue-100 transition-colors">⚖️</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Normal</span>
+                    </div>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Standard Execution</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Typical route behavior with standard processing and single database query.</p>
+                </a>
+
+                <a href="/lorapok-slow-v2" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-orange-200 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🐌</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-orange-50 rounded-2xl text-2xl group-hover:bg-orange-100 transition-colors">🐌</span>
+                        <span class="text-[10px] bg-orange-100 text-orange-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">High</span>
+                    </div>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Slow Route Simulation</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Simulates heavy server load (2s delay) to trigger performance alerts and notifications.</p>
+                </a>
+            </div>
+
+            <!-- Column 2: Advanced Analysis -->
+            <div class="space-y-6">
+                <h3 class="text-lg font-black flex items-center gap-3 px-2 text-gray-800">
+                    <span class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-xl shadow-sm">🧪</span>
+                    Complex Quests
+                </h3>
+
+                <button @click="triggerStorm()" class="test-card group w-full text-left block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-purple-200 transition-all duration-500 hover:shadow-2xl hover:shadow-purple-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🌪️</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-purple-50 rounded-2xl text-2xl group-hover:bg-purple-100 transition-colors">🌪️</span>
+                        <span class="text-[10px] bg-purple-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">Complex</span>
+                    </div>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Ajax Storm</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Triggers 5 simultaneous AJAX calls to test session activity tracking and view path resolution.</p>
                 </button>
 
-                <a href="/lorapok-slow-v2" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-red-100 group">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">🐌</span>
-                        <span class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded-full font-bold">ALERT</span>
+                <a href="/lorapok/test/many-queries" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-amber-200 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🗡️</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-amber-50 rounded-2xl text-2xl group-hover:bg-amber-100 transition-colors">🗡️</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Batch</span>
                     </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-red-600 transition-colors">Deliberate Slow Route</h4>
-                    <p class="text-xs text-gray-500 mt-1">Simulates a 2-second delay to trigger performance threshold alerts.</p>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Query Slayer</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Executes 150+ queries to test batch detection and earn the slayer achievement badge.</p>
+                </a>
+
+                <a href="/lorapok/test/high-memory" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-rose-200 transition-all duration-500 hover:shadow-2xl hover:shadow-rose-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🧠</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-rose-50 rounded-2xl text-2xl group-hover:bg-rose-100 transition-colors">🧠</span>
+                        <span class="text-[10px] bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Memory</span>
+                    </div>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Memory Master</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Allocates large data structures to verify peak memory usage tracking and peak detection.</p>
                 </a>
             </div>
 
-            <!-- Column 2: Resource Stress -->
-            <div class="space-y-6">
-                <h3 class="text-lg font-bold flex items-center gap-2 px-2">
-                    <span class="p-2 bg-purple-100 rounded-lg">🗄️</span> Resource Stress
+            <!-- Column 3: Lab Tools -->
+            <div class="space-y-6" x-data="labState()">
+                <h3 class="text-lg font-black flex items-center gap-3 px-2 text-gray-800">
+                    <span class="w-10 h-10 bg-pink-100 rounded-xl flex items-center justify-center text-xl shadow-sm">⚙️</span>
+                    Advanced Tools
                 </h3>
 
-                <a href="/lorapok/test/many-queries" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-orange-100 group">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">⚔️</span>
-                        <span class="text-[10px] bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-bold">N+1 TEST</span>
+                <button @click="openLab()" class="test-card group w-full text-left block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-red-200 transition-all duration-500 hover:shadow-2xl hover:shadow-red-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🔥</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-red-50 rounded-2xl text-2xl group-hover:bg-red-100 transition-colors">🔥</span>
+                        <span class="text-[10px] bg-red-600 text-white px-3 py-1 rounded-full font-black uppercase tracking-widest">Hard</span>
                     </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-orange-600 transition-colors">Query Slayer Quest</h4>
-                    <p class="text-xs text-gray-500 mt-1">Executes 150+ queries to test batch detection and earn the slayer badge.</p>
-                </a>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Deep Analysis Tracker</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Runs expensive stateful queries and multi-service updates to test deep execution tracking.</p>
+                </button>
 
-                <a href="/lorapok/test/high-memory" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-purple-100 group">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">🧠</span>
-                        <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-bold">MEM SPIKE</span>
+                <a href="/lorapok/test/middleware" class="test-card group block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-indigo-200 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">🔗</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-indigo-50 rounded-2xl text-2xl group-hover:bg-indigo-100 transition-colors">🔗</span>
+                        <span class="text-[10px] bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">Trait</span>
                     </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-purple-600 transition-colors">Memory Master Quest</h4>
-                    <p class="text-xs text-gray-500 mt-1">Allocates large data structures to verify memory peak tracking.</p>
-                </a>
-            </div>
-
-            <!-- Column 3: Tools & Verification -->
-            <div class="space-y-6">
-                <h3 class="text-lg font-bold flex items-center gap-2 px-2">
-                    <span class="p-2 bg-pink-100 rounded-lg">⚙️</span> Lab Tools
-                </h3>
-
-                <a href="/lorapok/test/exception" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-red-200 group">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">💥</span>
-                        <span class="text-[10px] bg-red-600 text-white px-2 py-1 rounded-full font-bold">CRASH</span>
-                    </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-red-700 transition-colors">Exception Capture</h4>
-                    <p class="text-xs text-gray-500 mt-1">Triggers a hard exception to verify stack trace and alert logging.</p>
-                </a>
-
-                <a href="/lorapok/test/middleware" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-blue-200 group">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">🔗</span>
-                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-bold uppercase tracking-wider">Trait</span>
-                    </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">Middleware Tracking</h4>
-                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">Uses the MeasuresMiddleware trait to track execution time of custom middleware.</p>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Middleware Tracking</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Uses the MeasuresMiddleware trait to track execution time of custom middleware stacks.</p>
                 </a>
 
                 <div class="grid grid-cols-2 gap-4">
-                    <a href="/lorapok/lab/advanced/heavy-json" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-orange-100 group">
-                        <span class="text-xl">📦</span>
-                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Heavy JSON</h4>
+                    <a href="/lorapok/lab/advanced/heavy-json" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-orange-200 transition-all duration-500 hover:shadow-xl hover:shadow-orange-50 relative overflow-hidden">
+                        <span class="text-2xl">📦</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Heavy JSON</h4>
                     </a>
-                    <a href="/lorapok/lab/advanced/cache-test" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-emerald-100 group">
-                        <span class="text-xl">💾</span>
-                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Cache Sim</h4>
+                    <a href="/lorapok/lab/advanced/cache-test" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-emerald-200 transition-all duration-500 hover:shadow-xl hover:shadow-emerald-50 relative overflow-hidden">
+                        <span class="text-2xl">💾</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Cache Sim</h4>
                     </a>
-                    <a href="/lorapok/lab/advanced/redirect-loop" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-indigo-100 group">
-                        <span class="text-xl">🔄</span>
-                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Redirects</h4>
+                    <a href="/lorapok/lab/advanced/redirect-loop" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-indigo-200 transition-all duration-500 hover:shadow-xl hover:shadow-indigo-50 relative overflow-hidden">
+                        <span class="text-2xl">🔄</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Redirects</h4>
                     </a>
-                    <a href="/lorapok/lab/advanced/batch-db" class="test-card block glass-card p-4 rounded-2xl shadow-sm hover:shadow-md border border-pink-100 group">
-                        <span class="text-xl">🗄️</span>
-                        <h4 class="text-[11px] font-black text-gray-800 mt-2 uppercase">Batch DB</h4>
+                    <a href="/lorapok/lab/advanced/batch-db" class="test-card group block glass-card p-5 rounded-[1.5rem] border border-gray-100 hover:border-pink-200 transition-all duration-500 hover:shadow-xl hover:shadow-pink-50 relative overflow-hidden">
+                        <span class="text-2xl">🗄️</span>
+                        <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Batch DB</h4>
                     </a>
                 </div>
 
                 <!-- Redesigned Verification Card -->
-                <div class="test-card block glass-card p-6 rounded-3xl shadow-sm border border-purple-200 relative overflow-hidden group">
+                <div class="test-card block glass-card p-6 rounded-[2rem] shadow-sm border border-purple-200 relative overflow-hidden group">
                     <div class="absolute -right-4 -top-4 text-7xl opacity-10 group-hover:scale-110 transition-transform">🐛</div>
                     <div class="flex justify-between items-start mb-4">
                         <span class="p-3 bg-purple-100 rounded-2xl text-2xl">🧪</span>
@@ -234,7 +263,7 @@
                     <div class="flex items-center gap-4">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.3.4-Advanced</span>
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">v1.3.7-Advanced</span>
                         </div>
                         <span class="h-4 w-px bg-gray-200"></span>
                         <span class="text-[10px] font-black text-purple-500 uppercase tracking-widest">Full Production Build</span>
@@ -298,7 +327,76 @@
         </div>
     </div>
 
+    <!-- Deep Analysis Modal -->
+    <div x-data="labState()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col">
+            <div class="bg-gradient-to-r from-red-600 to-rose-700 p-8 text-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-black tracking-tight">Deep Analysis Lab</h2>
+                        <p class="text-rose-100 text-xs mt-1 uppercase tracking-widest font-bold">Stateful Execution Testing</p>
+                    </div>
+                    <button @click="isOpen = false" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center">×</button>
+                </div>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 1: Resource Stress</h5>
+                    <button @click="runQuery()" :disabled="loading" class="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-gray-800 transition-all active:scale-[0.98]">
+                        <span x-show="!queryDone">⚡ Run Expensive Cross-Join</span>
+                        <span x-show="queryDone" class="text-green-400 font-black">✓ Query Successful</span>
+                    </button>
+                </div>
+
+                <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100" :class="!queryDone ? 'opacity-50 grayscale' : ''">
+                    <h5 class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Step 2: State Persistance</h5>
+                    <button @click="updateState()" :disabled="!queryDone || loading" class="w-full py-4 bg-purple-600 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-purple-700 transition-all active:scale-[0.98]">
+                        <span>💾 Update System State</span>
+                    </button>
+                </div>
+
+                <div x-show="loading" class="text-center">
+                    <div class="larvae-wiggle inline-block text-2xl">⚡</div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2 text-animate">Processing Deep Call...</p>
+                </div>
+            </div>
+
+            <div class="p-8 bg-gray-50 border-t border-gray-100 flex flex-col gap-3">
+                <p class="text-[10px] text-gray-400 font-bold uppercase text-center tracking-widest">Inspection Tip</p>
+                <p class="text-xs text-gray-500 text-center leading-relaxed italic">Open the **Lorapok Monitor > Activity** tab after running these to see the specific Controller, Method, and View details for each step.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function labState() {
+            return {
+                isOpen: false,
+                loading: false,
+                queryDone: false,
+                openLab() { this.isOpen = true; this.queryDone = false; },
+                async runQuery() {
+                    this.loading = true;
+                    try {
+                        await fetch('/lorapok/lab/advanced/expensive-query');
+                        this.queryDone = true;
+                    } finally { this.loading = false; }
+                },
+                async updateState() {
+                    this.loading = true;
+                    try {
+                        await fetch('/lorapok/lab/advanced/state-update', {
+                            method: 'POST',
+                            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+                        });
+                        this.isOpen = false;
+                    } finally { this.loading = false; }
+                }
+            }
+        }
+
         function ajaxStorm() {
             return {
                 isOpen: false,

@@ -44,7 +44,13 @@ class Monitor
     protected $enabled = true;
     protected $currentRoute = null;
     protected $viewPath = null;
+    protected $controllerAction = null;
     public $lastException = null;
+
+    public function setControllerAction(string $action)
+    {
+        $this->controllerAction = $action;
+    }
 
     public function __construct()
     {
@@ -688,6 +694,7 @@ class Monitor
                 'trace' => array_slice($this->lastException->getTrace(), 0, 5) 
             ] : null,
             "view_path" => $this->viewPath,
+            "controller_action" => $this->controllerAction,
         ];
 
         // Before/After Comparison

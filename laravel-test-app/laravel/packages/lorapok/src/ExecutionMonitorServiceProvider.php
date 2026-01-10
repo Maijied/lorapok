@@ -117,7 +117,13 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
         // Record controller entry when route is matched
         \Illuminate\Support\Facades\Event::listen(\Illuminate\Routing\Events\RouteMatched::class, function ($event) {
             if (app()->bound('execution-monitor')) {
-                app('execution-monitor')->recordTimeline('controller');
+                $monitor = app('execution-monitor');
+                $monitor->recordTimeline('controller');
+                
+                // Set the controller/action metadata
+                if ($event->route->getActionName()) {
+                    $monitor->setControllerAction($event->route->getActionName());
+                }
             }
         });
     }

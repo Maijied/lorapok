@@ -39,9 +39,15 @@
                 </div>
                 <p class="text-base font-mono font-semibold text-purple-900 break-all leading-tight"><span x-text="data?.current_route ?? 'N/A'"></span></p>
             </div>
-            <div class="mt-3 flex items-center gap-2" x-show="data?.view_path">
-                <span class="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-md font-black uppercase tracking-tighter border border-blue-200">Blade</span>
-                <code class="text-[10px] text-gray-500 font-mono truncate max-w-[150px]" x-text="data.view_path" :title="data.view_path"></code>
+            <div class="mt-3 flex flex-col gap-2">
+                <div class="flex items-center gap-2" x-show="data?.controller_action">
+                    <span class="text-[9px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-md font-black uppercase tracking-tighter border border-purple-200">Action</span>
+                    <code class="text-[10px] text-gray-500 font-mono truncate max-w-[150px]" x-text="data.controller_action" :title="data.controller_action"></code>
+                </div>
+                <div class="flex items-center gap-2" x-show="data?.view_path">
+                    <span class="text-[9px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-md font-black uppercase tracking-tighter border border-blue-200">Blade</span>
+                    <code class="text-[10px] text-gray-500 font-mono truncate max-w-[150px]" x-text="data.view_path" :title="data.view_path"></code>
+                </div>
             </div>
         </div>
 
