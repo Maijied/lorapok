@@ -49,6 +49,12 @@
                         <span class="text-xl">💻</span>
                     </button>
 
+                    <button title="Usage Guide" @click.stop="toggleUsage()" 
+                        :class="showUsage ? 'bg-pink-500/30 ring-2 ring-pink-400/50 scale-105' : 'bg-white/10 hover:bg-pink-500/20'" 
+                        class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span class="text-xl">📘</span>
+                    </button>
+
                     <button @click="closeModal()" class="text-white hover:text-purple-200 text-3xl ml-2 transition-colors" style="background:transparent;border:none;padding:0 6px">×</button>
                 </div>
             </div>
@@ -771,6 +777,113 @@
             </div>
         </div>
     </div>
+    <!-- Usage Guide Modal -->
+    <div x-show="showUsage" x-transition class="fixed inset-0 z-[11000] flex items-center justify-center p-4" style="display:none;pointer-events:auto">
+        <div class="absolute inset-0 bg-gray-900/90 backdrop-blur-sm" @click="showUsage = false"></div>
+        <div class="relative bg-gray-900 border border-gray-700 text-white rounded-xl shadow-2xl p-0 w-full max-w-4xl flex flex-col max-h-[85vh] overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-pink-600 to-purple-600 px-6 py-4 flex items-center justify-between shrink-0">
+                <h3 class="text-lg font-black text-white flex items-center gap-2">
+                    <span class="text-2xl">📘</span> Lorapok Usage Guide
+                </h3>
+                <button @click="showUsage = false" class="text-white/80 hover:text-white transition text-2xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">×</button>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-8 space-y-8">
+                <!-- Section: Overview -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-pink-400 border-b border-gray-800 pb-2">🚀 Getting Started</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Lorapok automatically tracks your Laravel application's performance. The floating <strong>Larvae Button</strong> 🐛 is your gateway to real-time insights.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                            <div class="text-2xl mb-2">📊</div>
+                            <h5 class="font-bold text-white text-sm">Overview</h5>
+                            <p class="text-[10px] text-gray-400 mt-1">Instant dashboard of current request performance, memory usage, and alerts.</p>
+                        </div>
+                        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                            <div class="text-2xl mb-2">📡</div>
+                            <h5 class="font-bold text-white text-sm">Activity</h5>
+                            <p class="text-[10px] text-gray-400 mt-1">Live feed of all requests in the current session. Click to inspect details.</p>
+                        </div>
+                        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                            <div class="text-2xl mb-2">🐛</div>
+                            <h5 class="font-bold text-white text-sm">Timeline</h5>
+                            <p class="text-[10px] text-gray-400 mt-1">Waterfalls visualization of execution flow, queries, and events.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Terminal & Commands -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-green-400 border-b border-gray-800 pb-2">💻 Terminal & Commands</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Execute Artisan commands directly from the browser using the <strong>Lorapok Terminal</strong>.
+                    </p>
+                    <ul class="list-disc list-inside text-sm text-gray-400 space-y-2 ml-2">
+                        <li>Open Terminal via the <span class="bg-gray-700 px-1 rounded text-white text-xs">💻</span> icon in the header.</li>
+                        <li>Type commands like <code>migrate:status</code> or <code>cache:clear</code> in the input field.</li>
+                        <li>Use quick buttons for common tasks like <span class="text-yellow-400">audit</span> and <span class="text-purple-400">heatmap</span>.</li>
+                        <li><strong>Service Toggles:</strong> Enable/Disable monitoring for Routes/Queries on the fly.</li>
+                    </ul>
+                </div>
+
+                <!-- Section: Playground -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-blue-400 border-b border-gray-800 pb-2">🎮 API Playground</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Test your API endpoints without leaving the interface.
+                    </p>
+                    <div class="bg-gray-800/50 p-4 rounded-xl border border-gray-700">
+                        <code class="text-xs text-blue-300 font-mono block mb-2">// Example Workflow</code>
+                        <ol class="list-decimal list-inside text-xs text-gray-400 space-y-1">
+                            <li>Go to <strong>Playground</strong> tab.</li>
+                            <li>Select Method (GET, POST, etc.) and enter URL.</li>
+                            <li>Add JSON body if needed.</li>
+                            <li>Click <strong>Send</strong> to view response status and payload.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Section: Shortcuts & Tips -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-yellow-400 border-b border-gray-800 pb-2">⚡ Pro Tips</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-gray-700 text-white px-2 py-1 rounded text-xs font-mono">Ctrl+Shift+C</span>
+                            <div>
+                                <p class="text-sm font-bold text-white">Copy Query</p>
+                                <p class="text-[10px] text-gray-400">Hover over any SQL query and press to copy.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-gray-700 text-white px-2 py-1 rounded text-xs font-mono">Filter Logs</span>
+                            <div>
+                                <p class="text-sm font-bold text-white">Advanced Search</p>
+                                <p class="text-[10px] text-gray-400">Use the search bar in Logs tab to filter by level (error, info) or message content.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-gray-700 text-white px-2 py-1 rounded text-xs font-mono">Polling</span>
+                            <div>
+                                <p class="text-sm font-bold text-white">Control Data Rate</p>
+                                <p class="text-[10px] text-gray-400">Adjust refresh rate in <strong>Settings > Advanced</strong> to save resources.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-gray-700 text-white px-2 py-1 rounded text-xs font-mono">The Dropbox</span>
+                            <div>
+                                <p class="text-sm font-bold text-white">Feedback</p>
+                                <p class="text-[10px] text-gray-400">Click the Developer icon <span class="grayscale">👨‍💻</span> to drop a direct letter/email to the author.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -868,6 +981,7 @@ window.monitorWidget = function() {
     return {
         isOpen: false,
         showDevInfo: false,
+        showUsage: false,
         openSettings: false,
         openTerminal: false,
         settingsTab: 'discord',
@@ -953,9 +1067,10 @@ window.monitorWidget = function() {
 
         toggleModal() { this.isOpen = !this.isOpen; if (this.isOpen) this.fetchData(); },
         closeModal() { this.isOpen = false; },
-        toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) { this.showDevInfo = false; this.openTerminal = false; } },
-        toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) { this.openSettings = false; this.openTerminal = false; } },
-        toggleTerminal() { this.openTerminal = !this.openTerminal; if(this.openTerminal) { this.openSettings = false; this.showDevInfo = false; } },
+        toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) { this.showDevInfo = false; this.openTerminal = false; this.showUsage = false; } },
+        toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) { this.openSettings = false; this.openTerminal = false; this.showUsage = false; } },
+        toggleTerminal() { this.openTerminal = !this.openTerminal; if(this.openTerminal) { this.openSettings = false; this.showDevInfo = false; this.showUsage = false; } },
+        toggleUsage() { this.showUsage = !this.showUsage; if(this.showUsage) { this.openSettings = false; this.showDevInfo = false; this.openTerminal = false; } },
         
         copyAllLogs(mode = 'client') {
             try {
