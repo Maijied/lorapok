@@ -697,21 +697,22 @@
                         
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Rate Limit (Minutes)</label>
+                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Alert Cooldown Period (min)</label>
                                 <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
+                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Minutes to wait before sending duplicate alerts.</p>
                             </div>
 
                             <div>
-                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Polling Interval (ms)</label>
+                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Live Data Sync Interval (ms)</label>
                                 <input x-model.number="pollingInterval" type="number" min="1000" step="1000" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="5000" />
-                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Time between data refreshes. Min: 1000ms.</p>
+                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Frequency of automatic dashboard updates. (Min: 1000ms)</p>
                             </div>
 
                             <div class="bg-white bg-opacity-5 p-4 rounded-2xl border border-white border-opacity-10 transition-all hover:bg-opacity-10">
                                 <label class="flex items-center justify-between cursor-pointer group">
                                     <div>
-                                        <p class="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">Persist Client Logs</p>
-                                        <p class="text-[10px] text-purple-200 opacity-75">Automatically write browser logs to server file</p>
+                                        <p class="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">Mirror Browser Logs to Server</p>
+                                        <p class="text-[10px] text-purple-200 opacity-75">Stream client-side console logs to storage/logs/lorapok-client.log</p>
                                     </div>
                                     <div class="relative">
                                         <input type="checkbox" x-model="clientLogWritingEnabled" class="sr-only peer">
