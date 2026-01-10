@@ -184,6 +184,17 @@
                         <h4 class="text-[10px] font-black text-gray-800 mt-3 uppercase tracking-wider">Batch DB</h4>
                     </a>
                 </div>
+
+                <!-- Terminal Lab Card -->
+                <button @click="openTerminal()" class="test-card group w-full text-left block glass-card p-6 rounded-[2rem] border border-gray-100 hover:border-green-200 transition-all duration-500 hover:shadow-2xl hover:shadow-green-100 relative overflow-hidden">
+                    <div class="absolute -right-2 -top-2 text-6xl opacity-[0.03] group-hover:scale-110 transition-transform select-none">💻</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="p-3 bg-green-50 rounded-2xl text-2xl group-hover:bg-green-100 transition-colors">💻</span>
+                        <span class="text-[10px] bg-green-100 text-green-700 px-3 py-1 rounded-full font-black uppercase tracking-widest">New</span>
+                    </div>
+                    <h4 class="text-lg font-black text-gray-900 tracking-tight mb-1">Terminal Lab</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Execute Artisan commands directly from the browser. Test migrations, cache clearing, and more.</p>
+                </button>
             </div>
         </div>
 
@@ -429,15 +440,27 @@
             }
         }
 
-        // Global triggers
-        function openStressLab() {
-            window.dispatchEvent(new CustomEvent('open-stress-lab'));
-        }
-        function openRenderLab() {
-            window.dispatchEvent(new CustomEvent('open-render-lab'));
-        }
+                // Global triggers
 
-        function labState() {
+                function openStressLab() {
+
+                    window.dispatchEvent(new CustomEvent('open-stress-lab'));
+
+                }
+
+                function openRenderLab() {
+
+                    window.dispatchEvent(new CustomEvent('open-render-lab'));
+
+                }
+
+                function openTerminal() {
+
+                    window.dispatchEvent(new CustomEvent('open-terminal'));
+
+                }
+
+                function labState() {
             return {
                 isOpen: false,
                 loading: false,

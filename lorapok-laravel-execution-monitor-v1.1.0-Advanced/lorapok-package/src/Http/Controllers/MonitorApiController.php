@@ -340,7 +340,7 @@ class MonitorApiController extends Controller
     public function runCommand(Request $request)
     {
         $request->validate([
-            'command' => 'required|string|starts_with:monitor:',
+            'command' => 'required|string',
             'args' => 'nullable|array'
         ]);
 
@@ -354,11 +354,16 @@ class MonitorApiController extends Controller
             'monitor:status', 
             'monitor:export',
             'monitor:disable',
-            'monitor:enable'
+            'monitor:enable',
+            'monitor:memory'
         ];
 
-        if (!in_array($command, $allowed)) {
-            return response()->json(['success' => false, 'message' => 'Command not allowed'], 403);
+        // Allow arbitrary commands ONLY in local/testing environments
+        $isSafeEnv = app()->environment(['local', 'testing']);
+        $isWhitelisted = in_array($command, $allowed) || str_starts_with($command, 'monitor:');
+
+        if (!$isSafeEnv && !$isWhitelisted) {
+            return response()->json(['success' => false, 'message' => 'Command not allowed in this environment'], 403);
         }
 
         try {

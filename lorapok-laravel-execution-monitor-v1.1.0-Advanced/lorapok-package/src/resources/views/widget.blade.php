@@ -699,7 +699,7 @@
     </div>
 
     <!-- Command Terminal Modal -->
-    <div x-show="openTerminal" x-transition class="fixed inset-0 z-[11000] flex items-center justify-center p-4" style="display:none;pointer-events:auto">
+    <div x-show="openTerminal" @open-terminal.window="openTerminal = true; openSettings = false; showDevInfo = false" x-transition class="fixed inset-0 z-[11000] flex items-center justify-center p-4" style="display:none;pointer-events:auto">
         <div class="absolute inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm" @click="openTerminal = false"></div>
         <div class="relative bg-gray-900 border border-gray-700 text-white rounded-xl shadow-2xl p-6 w-full max-w-3xl flex flex-col max-h-[80vh]">
             <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-4">
@@ -710,6 +710,13 @@
             </div>
             
             <div class="flex-1 overflow-hidden flex flex-col gap-4">
+                <!-- Custom Command Input -->
+                <div class="flex gap-2" x-data="{ customCmd: '' }">
+                    <span class="text-green-400 font-mono py-2 select-none">$</span>
+                    <input type="text" x-model="customCmd" @keydown.enter="if(customCmd) { runCommand(customCmd); customCmd=''; }" placeholder="Type artisan command (e.g. migrate:status)..." class="flex-1 bg-black border border-gray-700 rounded px-3 py-2 text-xs font-mono text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all placeholder-gray-600">
+                    <button @click="if(customCmd) { runCommand(customCmd); customCmd=''; }" class="px-4 py-2 bg-green-600 text-white rounded text-xs font-bold hover:bg-green-500 transition-colors uppercase tracking-wider">Run</button>
+                </div>
+
                 <!-- Command List -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <button @click="runCommand('monitor:status')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
@@ -721,8 +728,8 @@
                     <button @click="runCommand('monitor:heatmap')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
                         <span class="w-2 h-2 rounded-full bg-purple-500 group-hover:animate-pulse"></span> heatmap
                     </button>
-                    <button @click="runCommand('monitor:export')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 group-hover:animate-pulse"></span> export
+                    <button @click="runCommand('monitor:memory')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
+                        <span class="w-2 h-2 rounded-full bg-pink-500 group-hover:animate-pulse"></span> memory
                     </button>
                 </div>
 
