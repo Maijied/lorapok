@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Lorapok\ExecutionMonitor\Http\Controllers\MonitorApiController;
 
-Route::middleware(['web'])->group(function () {
+Route::middleware(['web'])->prefix('execution-monitor')->group(function () {
     Route::get('/api/data', [MonitorApiController::class, 'getData']);
     Route::post('/api/settings', [MonitorApiController::class, 'saveSettings']);
     Route::post('/api/settings/test', [MonitorApiController::class, 'testSettings']);

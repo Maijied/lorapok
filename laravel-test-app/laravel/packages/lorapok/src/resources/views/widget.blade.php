@@ -648,7 +648,17 @@ window.monitorWidget = function() {
         async fetchData() {
             try {
                 const r = await fetch('/execution-monitor/api/data');
-                this.data = await r.json();
+                if (!r.ok) {
+                    throw new Error(`HTTP Error ${r.status}: ${r.statusText}`);
+                }
+                const responseText = await r.text();
+                try {
+                    this.data = JSON.parse(responseText);
+                } catch (jsonErr) {
+                    console.error('❌ Lorapok JSON Parse Error:', jsonErr, 'Response was:', responseText);
+                    throw new Error('Invalid JSON response from server');
+                }
+                
                 console.log('📊 Lorapok Data:', this.data);
                 this.hasAlerts = this.data.alerts && this.data.alerts.length > 0;
                 this.lastException = this.data.last_exception || null;
@@ -669,7 +679,9 @@ window.monitorWidget = function() {
                     this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
                     this.clientLogWritingEnabled = !!this.data.settings?.client_log_writing_enabled;
                 }
-            } catch (e) { console.error('❌ Lorapok Error:', e); }
+            } catch (e) { 
+                console.error('❌ Lorapok Fetch Error:', e.message, e); 
+            }
         },
         async saveSettings() {
             if (this.slackEnabled && !this.slackWebhook) {
