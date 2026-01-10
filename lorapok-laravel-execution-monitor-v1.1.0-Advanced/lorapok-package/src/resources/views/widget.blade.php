@@ -69,25 +69,31 @@
                 <div x-show="activeTab==='quests'">@include('execution-monitor::tabs.achievements')</div>
                 
                 <!-- Logs Tab -->
-                <div x-show="activeTab==='logs'" class="space-y-4">
+                <div x-show="activeTab==='logs'" class="space-y-4" x-data="{ logMode: 'client' }">
                     <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h3 class="text-sm font-bold text-gray-800">Client Console & Network Logs</h3>
-                            <p class="text-[10px] text-gray-400 uppercase font-bold">Real-time application activity</p>
+                        <div class="flex flex-col gap-1">
+                            <h3 class="text-sm font-bold text-gray-800">Application Activity</h3>
+                            <div class="flex bg-gray-100 p-1 rounded-xl w-fit border border-gray-200">
+                                <button @click="logMode = 'client'" :class="logMode === 'client' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'" class="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all">Client</button>
+                                <button @click="logMode = 'server'" :class="logMode === 'server' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'" class="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all flex items-center gap-1.5">
+                                    Server
+                                    <span x-show="data?.server_logs?.length" class="bg-purple-100 text-purple-600 px-1.5 py-0.5 rounded-md text-[8px]" x-text="data.server_logs.length"></span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex gap-2">
-                            <button @click="copyAllLogs()" class="px-3 py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold shadow-sm hover:bg-purple-700 transition flex items-center gap-1.5">
+                        <div class="flex gap-2 self-end">
+                            <button @click="copyAllLogs(logMode)" class="px-3 py-1.5 bg-purple-600 text-white rounded-lg text-xs font-bold shadow-sm hover:bg-purple-700 transition flex items-center gap-1.5">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
                                 Copy All
                             </button>
-                            <button @click="clearLogs()" class="px-3 py-1.5 bg-white text-red-600 border border-red-100 rounded-lg text-xs font-bold shadow-sm hover:bg-red-50 transition">Clear</button>
+                            <button x-show="logMode==='client'" @click="clearLogs()" class="px-3 py-1.5 bg-white text-red-600 border border-red-100 rounded-lg text-xs font-bold shadow-sm hover:bg-red-50 transition">Clear</button>
                         </div>
                     </div>
 
-                    <div class="space-y-2 overflow-y-auto pr-2" style="max-height:50vh;">
+                    <!-- Client Logs -->
+                    <div x-show="logMode === 'client'" class="space-y-2 overflow-y-auto pr-2" style="max-height:50vh;">
                         <template x-for="(log, idx) in consoleLogs" :key="idx">
                             <div class="bg-gray-50 border border-gray-100 rounded-xl overflow-hidden transition-all hover:border-purple-200" x-data="{ expanded: false }">
-                                <!-- Log Header -->
                                 <div @click="expanded = !expanded" class="flex items-center justify-between p-3 cursor-pointer hover:bg-white transition-colors">
                                     <div class="flex items-center gap-3">
                                         <div class="flex items-center justify-center w-6 h-6 rounded-lg shadow-sm" :class="{
@@ -117,23 +123,62 @@
                                         <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                     </div>
                                 </div>
-                                <!-- Expanded Content -->
                                 <div x-show="expanded" x-collapse x-cloak class="border-t border-gray-100 bg-white p-4">
-                                    <div class="relative group">
-                                        <div class="bg-gray-900 rounded-lg p-4 font-mono text-[11px] leading-relaxed overflow-x-auto text-emerald-400 shadow-inner" x-html="formatMsgHtml(log.msg)"></div>
-                                        <button @click="navigator.clipboard.writeText(log.msg)" class="absolute top-2 right-2 p-2 bg-white/10 hover:bg-white/20 rounded-md text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                                        </button>
-                                    </div>
+                                    <div class="bg-gray-900 rounded-lg p-4 font-mono text-[11px] leading-relaxed overflow-x-auto text-emerald-400 shadow-inner" x-html="formatMsgHtml(log.msg)"></div>
                                 </div>
                             </div>
                         </template>
                         <div x-show="consoleLogs.length===0" class="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                             <span class="text-4xl block mb-2 opacity-20">📝</span>
-                            <p class="text-sm text-gray-400 font-bold uppercase tracking-widest">No logs captured</p>
+                            <p class="text-sm text-gray-400 font-bold uppercase tracking-widest">No client logs captured</p>
+                        </div>
+                    </div>
+
+                    <!-- Server Logs -->
+                    <div x-show="logMode === 'server'" class="space-y-2 overflow-y-auto pr-2" style="max-height:50vh;">
+                        <template x-for="(log, idx) in (data?.server_logs || [])" :key="idx">
+                            <div class="bg-gray-50 border border-gray-100 rounded-xl overflow-hidden transition-all hover:border-purple-200" x-data="{ expanded: false }">
+                                <div @click="expanded = !expanded" class="flex items-center justify-between p-3 cursor-pointer hover:bg-white transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center justify-center w-6 h-6 rounded-lg shadow-sm" :class="{
+                                            'bg-red-100 text-red-600': log.level === 'error' || log.level === 'critical' || log.level === 'alert' || log.level === 'emergency',
+                                            'bg-orange-100 text-orange-600': log.level === 'warning' || log.level === 'notice',
+                                            'bg-blue-100 text-blue-600': log.level === 'info',
+                                            'bg-gray-100 text-gray-600': log.level === 'debug'
+                                        }">
+                                            <template x-if="['error','critical','alert','emergency'].includes(log.level)"><span class="text-[10px]">🔥</span></template>
+                                            <template x-if="['warning','notice'].includes(log.level)"><span class="text-[10px]">⚠️</span></template>
+                                            <template x-if="log.level === 'info'"><span class="text-[10px]">ℹ️</span></template>
+                                            <template x-if="log.level === 'debug'"><span class="text-[10px]">🛠️</span></template>
+                                        </div>
+                                        <span class="text-[10px] font-mono text-gray-400" x-text="log.at"></span>
+                                        <span class="text-xs font-bold uppercase tracking-wider" :class="{
+                                            'text-red-600': ['error','critical','alert','emergency'].includes(log.level),
+                                            'text-orange-600': ['warning','notice'].includes(log.level),
+                                            'text-blue-600': log.level === 'info',
+                                            'text-gray-600': log.level === 'debug'
+                                        }" x-text="log.level"></span>
+                                        <span class="text-xs text-gray-700 truncate max-w-[300px] font-medium" x-text="log.msg"></span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button @click.stop="navigator.clipboard.writeText(log.msg); $el.innerHTML='✅'; setTimeout(()=>$el.innerHTML='📋', 1000)" class="p-1 hover:bg-gray-100 rounded transition text-gray-400 hover:text-purple-600" title="Copy Log">
+                                            📋
+                                        </button>
+                                        <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                    </div>
+                                </div>
+                                <div x-show="expanded" x-collapse x-cloak class="border-t border-gray-100 bg-white p-4">
+                                    <div class="bg-gray-900 rounded-lg p-4 font-mono text-[11px] leading-relaxed overflow-x-auto text-rose-400 shadow-inner" x-text="log.msg"></div>
+                                </div>
+                            </div>
+                        </template>
+                        <div x-show="!data?.server_logs?.length" class="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                            <span class="text-4xl block mb-2 opacity-20">📂</span>
+                            <p class="text-sm text-gray-400 font-bold uppercase tracking-widest">No server logs found</p>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
 
             <!-- Professional Footer -->
@@ -489,9 +534,10 @@ window.monitorWidget = function() {
         closeModal() { this.isOpen = false; },
         toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) this.showDevInfo = false; },
         toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) this.openSettings = false; },
-        copyAllLogs() {
+        copyAllLogs(mode = 'client') {
             try {
-                var txt = this.consoleLogs.map(l => `[${l.at}] [${l.level}] ${l.msg}`).join('\n');
+                let logs = mode === 'client' ? this.consoleLogs : (this.data?.server_logs || []);
+                var txt = logs.map(l => `[${l.at}] [${l.level}] ${l.msg}`).join('\n');
                 navigator.clipboard.writeText(txt);
             } catch (e) {}
         },

@@ -5,6 +5,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Lorapok\ExecutionMonitor\Services\ServerLogParser;
 
 class MonitorApiController extends Controller
 {
@@ -38,6 +39,9 @@ class MonitorApiController extends Controller
             ];
         }
         
+        // Add server logs
+        $logParser = new ServerLogParser();
+        $report['server_logs'] = $logParser->getLatest(100);
         // Add memory info (always present)
         $report['memory'] = [
             'current' => $this->formatBytes(memory_get_usage(true)),

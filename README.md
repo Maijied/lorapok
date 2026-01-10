@@ -34,7 +34,7 @@
 
 ### Changelog
 
-**v1.2.9** (2026-01-09)
+**v1.3.0** (2026-01-09)
 - ✅ **Settings**: Fixed "Cancel" button logic in the monitor widget.
 - ✅ **UI/UX**: Restored original Developer Info modal style and premium human icon navigation.
 - ✅ **CI/CD**: Finalized and verified all GitHub Action workflows.
