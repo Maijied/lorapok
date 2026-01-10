@@ -724,7 +724,16 @@ class Monitor
 
     public function isEnabled(): bool
     {
-        return $this->enabled;
+        // Check if explicitly disabled via this instance
+        if ($this->enabled === false) {
+            return false;
+        }
+
+        // Otherwise check global config (which includes settings.json overrides)
+        $env = app()->environment();
+        return config('execution-monitor.auto_detect', true) ? 
+            in_array($env, config('execution-monitor.allowed_environments', [])) : 
+            config('execution-monitor.enabled', false);
     }
 
     /**

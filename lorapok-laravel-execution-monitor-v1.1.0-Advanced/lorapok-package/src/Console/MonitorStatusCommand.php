@@ -15,9 +15,16 @@ class MonitorStatusCommand extends Command
         $this->line('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $env = App::environment();
         $this->line("🌍 Environment: <fg=green>{$env}</>");
-        $enabled = config('execution-monitor.auto_detect', true) ? 
-            in_array($env, config('execution-monitor.allowed_environments', [])) : 
-            config('execution-monitor.enabled', false);
+        
+        // Use the bound monitor instance if possible to reflect dynamic changes
+        if (app()->bound('execution-monitor')) {
+            $enabled = app('execution-monitor')->isEnabled();
+        } else {
+            $enabled = config('execution-monitor.auto_detect', true) ? 
+                in_array($env, config('execution-monitor.allowed_environments', [])) : 
+                config('execution-monitor.enabled', false);
+        }
+
         $status = $enabled ? '<fg=green>✓ ENABLED</>' : '<fg=red>✗ DISABLED</>';
         $this->line("📈 Status: {$status}");
         return 0;
