@@ -704,7 +704,7 @@
         <div class="relative bg-gray-900 border border-gray-700 text-white rounded-xl shadow-2xl p-6 w-full max-w-3xl flex flex-col max-h-[80vh]">
             <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-4">
                 <h3 class="text-lg font-mono font-bold flex items-center gap-2 text-green-400">
-                    <span>>_</span> Terminal
+                    <span>>_</span> Lorapok Terminal
                 </h3>
                 <button @click="openTerminal = false" class="text-gray-500 hover:text-white">×</button>
             </div>
