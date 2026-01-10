@@ -96,20 +96,19 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
             $this->registerMiddleware();
         }
         
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\MonitorStatusCommand::class,
-                Console\MonitorEnableCommand::class,
-                Console\MonitorDisableCommand::class,
-                Console\MonitorInstallCommand::class,
-                Console\MonitorFindCommand::class,
-                Console\MonitorHeatmapCommand::class,
-                Console\MonitorReplayCommand::class,
-                Console\MonitorExportCommand::class,
-                Console\MonitorAuditCommand::class,
-                Console\MonitorMemoryCommand::class,
-            ]);
-        }
+        $this->commands([
+            Console\MonitorStatusCommand::class,
+            Console\MonitorEnableCommand::class,
+            Console\MonitorDisableCommand::class,
+            Console\MonitorInstallCommand::class,
+            Console\MonitorFindCommand::class,
+            Console\MonitorHeatmapCommand::class,
+            Console\MonitorReplayCommand::class,
+            Console\MonitorExportCommand::class,
+            Console\MonitorAuditCommand::class,
+            Console\MonitorMemoryCommand::class,
+        ]);
+        
         // Register custom notification channel for Discord webhooks
         Notification::extend('discord', function ($app) {
             return new \Lorapok\ExecutionMonitor\Notifications\Channels\DiscordWebhookChannel();
