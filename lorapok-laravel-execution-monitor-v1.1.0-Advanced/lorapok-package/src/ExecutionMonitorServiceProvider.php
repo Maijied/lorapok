@@ -96,6 +96,12 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                     config(['execution-monitor.rate_limiting.max_per_hour' => 60 / $settings['rate_limit_minutes']]); // Rough conversion if needed
                 }
 
+                // Merge Thresholds
+                if (isset($settings['route_threshold'])) config(['execution-monitor.thresholds.route' => $settings['route_threshold']]);
+                if (isset($settings['query_threshold'])) config(['execution-monitor.thresholds.query' => $settings['query_threshold']]);
+                if (isset($settings['query_count_threshold'])) config(['execution-monitor.thresholds.query_count' => $settings['query_count_threshold']]);
+                if (isset($settings['memory_threshold'])) config(['execution-monitor.thresholds.memory' => $settings['memory_threshold']]);
+
                 // Override Mail Server Config if provided
                 if (!empty($settings['mail_host'])) {
                     config([

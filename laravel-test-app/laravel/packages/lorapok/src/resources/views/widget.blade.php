@@ -542,6 +542,7 @@
                         <button @click="settingsTab='discord'" :class="settingsTab==='discord'?'bg-white text-purple-700 shadow':'text-purple-200 hover:bg-white hover:bg-opacity-10'" class="flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-md transition flex items-center justify-center gap-2">Discord</button>
                         <button @click="settingsTab='slack'" :class="settingsTab==='slack'?'bg-white text-purple-700 shadow':'text-purple-200 hover:bg-white hover:bg-opacity-10'" class="flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-md transition flex items-center justify-center gap-2">Slack</button>
                         <button @click="settingsTab='email'" :class="settingsTab==='email'?'bg-white text-purple-700 shadow':'text-purple-200 hover:bg-white hover:bg-opacity-10'" class="flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-md transition flex items-center justify-center gap-2">Email</button>
+                        <button @click="settingsTab='alerts'" :class="settingsTab==='alerts'?'bg-white text-purple-700 shadow':'text-purple-200 hover:bg-white hover:bg-opacity-10'" class="flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-md transition flex items-center justify-center gap-2">Alerts</button>
                         <button @click="settingsTab='advanced'" :class="settingsTab==='advanced'?'bg-white text-purple-700 shadow':'text-purple-200 hover:bg-white hover:bg-opacity-10'" class="flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-md transition flex items-center justify-center gap-2">Advanced</button>
                     </div>
 
@@ -642,6 +643,46 @@
                                     <input type="text" x-model="mailFromAddress" placeholder="monitor@lorapok.com" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel: Alerts (Thresholds) -->
+                    <div x-show="settingsTab==='alerts'" class="space-y-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" style="display:none">
+                        <div class="text-center mb-4">
+                             <div class="bg-amber-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                <span class="text-2xl">🚨</span>
+                             </div>
+                             <h3 class="text-lg font-bold">Alert Thresholds</h3>
+                             <p class="text-purple-200 text-xs">Configure when performance notifications are triggered.</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Slow Route (ms)</label>
+                                <input type="number" x-model.number="routeThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="1000" />
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Slow Query (ms)</label>
+                                <input type="number" x-model.number="queryThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="100" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Query Count Limit</label>
+                                <input type="number" x-model.number="queryCountThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="50" />
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Memory Limit (MB)</label>
+                                <input type="number" x-model.number="memoryThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="128" />
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-900 bg-opacity-30 rounded-xl p-4 border border-amber-400 border-opacity-30">
+                            <p class="text-[10px] text-amber-100 leading-tight">
+                                <span class="font-bold uppercase tracking-widest block mb-1">Architect's Note</span>
+                                Lower thresholds provide higher visibility but may increase notification volume. Use these to maintain your application's <strong>Performance Budget</strong>.
+                            </p>
                         </div>
                     </div>
 
@@ -857,6 +898,34 @@
                     </div>
                 </div>
 
+                <!-- Section: Notifications & Thresholds -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-bold text-red-400 border-b border-gray-800 pb-2">🔔 Notifications & Thresholds</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Lorapok keeps you informed when your app deviates from performance standards.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <h5 class="text-xs font-black uppercase text-gray-500 tracking-widest">Supported Channels</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded text-[10px] font-bold border border-indigo-700/50">Discord</span>
+                                <span class="bg-rose-900/50 text-rose-300 px-2 py-1 rounded text-[10px] font-bold border border-rose-700/50">Slack</span>
+                                <span class="bg-blue-900/50 text-blue-300 px-2 py-1 rounded text-[10px] font-bold border border-blue-700/50">Email</span>
+                            </div>
+                            <p class="text-[10px] text-gray-400">Configure these in the <strong>Settings</strong> modal using webhooks or SMTP.</p>
+                        </div>
+                        <div class="space-y-2">
+                            <h5 class="text-xs font-black uppercase text-gray-500 tracking-widest">What triggers an alert?</h5>
+                            <ul class="text-[10px] text-gray-400 space-y-1">
+                                <li>• <span class="text-white">Slow Routes:</span> Request duration exceeds threshold.</li>
+                                <li>• <span class="text-white">Slow Queries:</span> Individual SQL takes too long.</li>
+                                <li>• <span class="text-white">Query Spam:</span> Single request runs too many queries.</li>
+                                <li>• <span class="text-white">Memory Spike:</span> Peak usage exceeds MB limit.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section: Shortcuts & Tips -->
                 <div class="space-y-4">
                     <h4 class="text-xl font-bold text-yellow-400 border-b border-gray-800 pb-2">⚡ Pro Tips</h4>
@@ -1015,6 +1084,10 @@ window.monitorWidget = function() {
         mailFromAddress: '',
         rateLimitMinutes: 30,
         pollingInterval: 5000,
+        routeThreshold: 1000,
+        queryThreshold: 100,
+        queryCountThreshold: 50,
+        memoryThreshold: 128,
         clientLogWritingEnabled: false,
         activeTab: 'overview',
         data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
@@ -1179,6 +1252,10 @@ window.monitorWidget = function() {
                     this.mailFromAddress = this.data.settings?.mail_from_address || '';
                     this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
                     this.pollingInterval = this.data.settings?.polling_interval || 5000;
+                    this.routeThreshold = this.data.settings?.route_threshold || 1000;
+                    this.queryThreshold = this.data.settings?.query_threshold || 100;
+                    this.queryCountThreshold = this.data.settings?.query_count_threshold || 50;
+                    this.memoryThreshold = this.data.settings?.memory_threshold || 128;
                     this.clientLogWritingEnabled = !!this.data.settings?.client_log_writing_enabled;
                 }
             } catch (e) { 
@@ -1198,6 +1275,7 @@ window.monitorWidget = function() {
                 if (this.settingsTab === 'discord') payload = { discord_webhook: this.discordWebhook, discord_enabled: this.discordEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'slack') payload = { slack_webhook: this.slackWebhook, slack_channel: this.slackChannel, slack_enabled: this.slackEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'email') payload = { mail_to: this.mailTo, mail_enabled: this.mailEnabled ? 1 : 0, mail_host: this.mailHost, mail_port: this.mailPort, mail_username: this.mailUsername, mail_password: this.mailPassword, mail_encryption: this.mailEncryption, mail_from_address: this.mailFromAddress };
+                else if (this.settingsTab === 'alerts') payload = { route_threshold: this.routeThreshold, query_threshold: this.queryThreshold, query_count_threshold: this.queryCountThreshold, memory_threshold: this.memoryThreshold };
                 else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes, client_log_writing_enabled: this.clientLogWritingEnabled ? 1 : 0, polling_interval: this.pollingInterval };
                 
                 const r = await fetch('/execution-monitor/api/settings', {

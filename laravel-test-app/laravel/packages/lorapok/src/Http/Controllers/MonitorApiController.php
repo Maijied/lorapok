@@ -256,6 +256,11 @@ class MonitorApiController extends Controller
                     
                     'polling_interval' => 'nullable|numeric|min:1000|max:60000', // 1s to 60s
 
+                    'route_threshold' => 'nullable|numeric|min:1',
+                    'query_threshold' => 'nullable|numeric|min:1',
+                    'query_count_threshold' => 'nullable|numeric|min:1',
+                    'memory_threshold' => 'nullable|numeric|min:1',
+
                 ]);
 
             } catch (\Illuminate\Validation\ValidationException $e) {
@@ -394,6 +399,10 @@ class MonitorApiController extends Controller
             'rate_limit_minutes' => 30, // Default to 30 as per user request
             'client_log_writing_enabled' => false,
             'polling_interval' => 5000,
+            'route_threshold' => config('execution-monitor.thresholds.route', 1000),
+            'query_threshold' => config('execution-monitor.thresholds.query', 100),
+            'query_count_threshold' => config('execution-monitor.thresholds.query_count', 50),
+            'memory_threshold' => config('execution-monitor.thresholds.memory', 128),
         ], $settings);
     }
 
