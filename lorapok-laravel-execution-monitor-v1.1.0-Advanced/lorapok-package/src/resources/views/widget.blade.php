@@ -267,7 +267,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-100">
                                     <template x-for="(log, idx) in paginatedLogs" :key="idx">
-                                        <tr @click="log.expanded = !log.expanded" class="hover:bg-gray-50/50 transition-colors group cursor-pointer" x-data="{ expanded: false }">
+                                        <tr @click="expanded = !expanded" class="hover:bg-gray-50/50 transition-colors group cursor-pointer" x-data="{ expanded: false }">
                                             <td class="px-4 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap" x-text="new Date(log.at).toLocaleString()"></td>
                                             <td class="px-4 py-3">
                                                 <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter" :class="{
