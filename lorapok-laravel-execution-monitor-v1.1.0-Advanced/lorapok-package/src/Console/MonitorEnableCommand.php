@@ -30,6 +30,12 @@ class MonitorEnableCommand extends Command
             $this->info('✅ Monitor enabled globally.');
         }
 
+        config(['execution-monitor.enabled' => true]);
+        config(['execution-monitor.auto_detect' => false]);
+        if (app()->bound('execution-monitor')) {
+            app('execution-monitor')->enable();
+        }
+
         if (!file_exists(dirname($settingsPath))) mkdir(dirname($settingsPath), 0755, true);
         file_put_contents($settingsPath, json_encode($settings, JSON_PRETTY_PRINT));
         

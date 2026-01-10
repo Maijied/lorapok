@@ -77,6 +77,7 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 // Merge global enabled
                 if (isset($settings['enabled'])) {
                     config(['execution-monitor.enabled' => $settings['enabled']]);
+                    config(['execution-monitor.auto_detect' => false]);
                 }
 
                 config(['execution-monitor.notifications' => array_replace_recursive(

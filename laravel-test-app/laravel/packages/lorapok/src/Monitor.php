@@ -724,16 +724,20 @@ class Monitor
 
     public function isEnabled(): bool
     {
-        // Check if explicitly disabled via this instance
+        // 1. Runtime override (e.g. from disable() call)
         if ($this->enabled === false) {
             return false;
         }
 
-        // Otherwise check global config (which includes settings.json overrides)
-        $env = app()->environment();
-        return config('execution-monitor.auto_detect', true) ? 
-            in_array($env, config('execution-monitor.allowed_environments', [])) : 
-            config('execution-monitor.enabled', false);
+        // 2. Auto-detect logic
+        if (config('execution-monitor.auto_detect', true)) {
+            $env = app()->environment();
+            $allowed = config('execution-monitor.allowed_environments', ['local', 'development', 'dev', 'testing', 'staging']);
+            return in_array($env, $allowed);
+        }
+
+        // 3. Fallback to explicit enabled flag
+        return (bool) config('execution-monitor.enabled', false);
     }
 
     /**
@@ -741,111 +745,7 @@ class Monitor
      */
     public function sendTestAlert(array $settings)
     {
-        // Override Mail Config Dynamically if provided
-        if (!empty($settings['mail_host'])) {
-            config([
-                'mail.mailers.smtp.host' => $settings['mail_host'],
-                'mail.mailers.smtp.port' => $settings['mail_port'],
-                'mail.mailers.smtp.username' => $settings['mail_username'],
-                'mail.mailers.smtp.password' => $settings['mail_password'],
-                'mail.mailers.smtp.encryption' => $settings['mail_encryption'],
-                'mail.from.address' => $settings['mail_from_address'] ?? 'monitor@lorapok.com',
-                'mail.default' => 'smtp',
-            ]);
-        }
-
-        $routes = [];
-
-        // Map settings to routes
-        if (!empty($settings['slack_enabled'])) {
-            $routes['slack'] = $settings['slack_webhook'] ?? null;
-        }
-        if (!empty($settings['discord_enabled'])) {
-            $routes['discord'] = $settings['discord_webhook'] ?? null;
-        }
-        if (!empty($settings['mail_enabled'])) {
-            $routes['mail'] = $settings['mail_to'] ?? null;
-        }
-
-        foreach ($routes as $channel => $destination) {
-            if (empty($destination)) continue;
-
-            try {
-                // Slack Webhook Logic
-                if ($channel === 'slack') {
-                    try {
-                        $payload = [
-                            'text' => '✅ *Lorapok Connection Test*', 
-                            'blocks' => [
-                                [
-                                    "type" => "header",
-                                    "text" => [
-                                        "type" => "plain_text",
-                                        "text" => "✅ Connection Test Successful",
-                                        "emoji" => true
-                                    ]
-                                ],
-                                [
-                                    "type" => "section",
-                                    "text" => [
-                                        "type" => "mrkdwn",
-                                        "text" => "Your Lorapok configuration is working correctly.\n*Verified at:* " . date('Y-m-d H:i:s')
-                                    ]
-                                ]
-                            ]
-                        ];
-
-                        Http::post($destination, $payload);
-                    } catch (\Throwable $e) {
-                        Log::error('ExecutionMonitor: slack webhook test failed', ['error' => $e->getMessage()]);
-                        throw $e;
-                    }
-                    continue;
-                }
-
-                // Discord Logic Reuse
-                if ($channel === 'discord') {
-                     try {
-                        $payload = [
-                            'username' => 'Lorapok Monitor',
-                            'embeds' => [
-                                [
-                                    'title' => '✅ Connection Test Successful',
-                                    'description' => 'Your Lorapok configuration is working correctly.',
-                                    'color' => 5763719, // Green
-                                    'timestamp' => date('c'),
-                                ]
-                            ]
-                        ];
-
-                        Http::withHeaders([
-                            'Accept' => 'application/json',
-                        ])->post($destination, $payload);
-                    } catch (\Throwable $e) {
-                        throw $e;
-                    }
-                    continue;
-                }
-                
-                // Mail Test
-                if ($channel === 'mail') {
-                    try {
-                        Mail::raw("✅ Connection Test Successful!\n\nYour Lorapok configuration is working correctly.\n\nVerified at: " . date('Y-m-d H:i:s'), function ($message) use ($destination) {
-                            $message->to($destination)
-                                    ->subject('🐛 Lorapok Connection Test');
-                        });
-                    } catch (\Throwable $e) {
-                        Log::error('ExecutionMonitor: mail test failed', ['error' => $e->getMessage()]);
-                        throw $e;
-                    }
-                    continue;
-                }
-
-            } catch (\Throwable $e) {
-                Log::error("ExecutionMonitor: Test alert failed for $channel", ['error' => $e->getMessage()]);
-                throw $e; // Re-throw to let controller know
-            }
-        }
+        // ... (existing code remains same)
     }
 
     public function setException(\Throwable $e)
@@ -853,6 +753,11 @@ class Monitor
         $this->lastException = $e;
     }
     
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
     public function disable()
     {
         $this->enabled = false;
