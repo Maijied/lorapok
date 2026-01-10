@@ -228,3 +228,10 @@ Route::prefix('lorapok/test/v1-4')->group(function() {
         return response()->json(['message' => $executed ? 'Allowed' : 'Throttled', 'remaining' => $remaining]);
     });
 });
+
+    // Cache ROI Detector Test
+    Route::get('/roi-test', function() {
+        usleep(650000); // 0.65s delay
+        \DB::table('migrations')->whereRaw('1=1')->get(); // Just a query
+        return response()->json(['message' => 'Expensive route executed', 'duration' => '650ms']);
+    });

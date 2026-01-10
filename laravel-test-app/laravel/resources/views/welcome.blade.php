@@ -158,6 +158,10 @@
                                 <span x-show="!loading">🛡️ Trigger Rate Limit</span>
                                 <span x-show="loading" class="animate-spin">⏳</span>
                             </button>
+                            <button @click="runTest('roi-test')" :disabled="loading" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all flex items-center justify-center gap-2">
+                                <span x-show="!loading">💰 ROI Analysis Test</span>
+                                <span x-show="loading" class="animate-spin">⏳</span>
+                            </button>
                         </div>
                     </div>
                 </div>
