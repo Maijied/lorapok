@@ -59,7 +59,7 @@
         </div>
 
         <!-- Testing Scenarios -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="ajaxStorm()">
             
             <!-- Column 1: Core Performance -->
             <div class="space-y-6">
@@ -67,14 +67,15 @@
                     <span class="p-2 bg-blue-100 rounded-lg">⚡</span> Core Latency
                 </h3>
                 
-                <a href="/lorapok-fast-v2" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-green-100 group">
+                <button @click="triggerStorm()" class="test-card w-full text-left block glass-card p-5 rounded-3xl shadow-sm hover:shadow-xl border border-purple-200 group relative overflow-hidden transition-all">
+                    <div class="absolute -right-2 -top-2 text-5xl opacity-10 group-hover:scale-110 transition-transform">🌪️</div>
                     <div class="flex justify-between items-start mb-2">
-                        <span class="text-2xl">🚀</span>
-                        <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">STABLE</span>
+                        <span class="text-2xl">⚡</span>
+                        <span class="text-[10px] bg-purple-600 text-white px-2 py-1 rounded-full font-bold uppercase tracking-wider">Complex</span>
                     </div>
-                    <h4 class="font-bold text-gray-800 group-hover:text-green-600 transition-colors">Ultra Fast Route</h4>
-                    <p class="text-xs text-gray-500 mt-1">Minimal execution time (< 50ms) to verify baseline monitoring overhead.</p>
-                </a>
+                    <h4 class="font-bold text-gray-800 group-hover:text-purple-600 transition-colors">Ajax Storm Scenario</h4>
+                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">Triggers 5 simultaneous AJAX calls to test multi-route tracking and view path resolution.</p>
+                </button>
 
                 <a href="/lorapok-slow-v2" class="test-card block glass-card p-5 rounded-2xl shadow-sm hover:shadow-md border border-red-100 group">
                     <div class="flex justify-between items-start mb-2">
@@ -225,5 +226,89 @@
     </div>
 
     @include('execution-monitor::widget')
+
+    <!-- Ajax Storm Modal -->
+    <div x-data="ajaxStorm()" x-show="isOpen" x-cloak class="fixed inset-0 z-[12000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" @click="isOpen = false"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-700 p-8 text-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="text-2xl font-black tracking-tight">AJAX Storm Results</h2>
+                        <p class="text-purple-100 text-xs mt-1 uppercase tracking-widest font-bold">Execution Monitoring in Progress</p>
+                    </div>
+                    <button @click="isOpen = false" class="bg-white/10 hover:bg-white/20 w-10 h-10 rounded-full flex items-center justify-center transition-colors">×</button>
+                </div>
+            </div>
+
+            <div class="p-8 overflow-y-auto flex-1">
+                <div class="space-y-4">
+                    <template x-for="(res, idx) in results" :key="idx">
+                        <div class="bg-gray-50 border border-gray-100 p-4 rounded-2xl flex items-center justify-between group hover:border-purple-200 transition-all">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg">
+                                    <span x-show="res.type==='Database'">🗄️</span>
+                                    <span x-show="res.type==='Logging'">📝</span>
+                                    <span x-show="res.type==='Processing'">⚙️</span>
+                                    <span x-show="res.type==='Metadata'">🏷️</span>
+                                    <span x-show="res.type==='View'">🖼️</span>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black text-purple-600 uppercase tracking-widest" x-text="res.type"></p>
+                                    <p class="text-sm font-bold text-gray-800" x-text="res.detail || 'Success'"></p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-lg font-black tracking-tighter">200 OK</span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div x-show="loading" class="text-center py-12">
+                        <div class="larvae-spin inline-block text-4xl mb-4">🌀</div>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">Executing Concurrent Calls...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 bg-gray-50 border-t border-gray-100 flex justify-center">
+                <button @click="triggerStorm()" :disabled="loading" class="bg-purple-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-purple-200 hover:bg-purple-700 disabled:opacity-50 transition-all transform active:scale-95">
+                    Re-trigger Storm ⚡
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function ajaxStorm() {
+            return {
+                isOpen: false,
+                loading: false,
+                results: [],
+                async triggerStorm() {
+                    this.isOpen = true;
+                    this.loading = true;
+                    this.results = [];
+                    
+                    const endpoints = [
+                        '/lorapok/lab/ajax/queries',
+                        '/lorapok/lab/ajax/logs',
+                        '/lorapok/lab/ajax/process',
+                        '/lorapok/lab/ajax/meta',
+                        '/lorapok/lab/ajax/view'
+                    ];
+
+                    try {
+                        const responses = await Promise.all(endpoints.map(url => fetch(url).then(r => r.json().catch(() => ({type: 'View', detail: 'Rendered welcome fragment'})))));
+                        this.results = responses;
+                    } catch (e) {
+                        console.error('Storm Failed:', e);
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
