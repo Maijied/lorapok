@@ -458,8 +458,8 @@
                     <img src="{{ asset('vendor/lorapok/images/author.jpg') }}" class="relative w-24 h-24 rounded-full border-4 border-gray-900 shadow-xl mx-auto object-cover">
                 </div>
                 
-                <h2 class="text-2xl font-black tracking-tight mt-4">MaJHiBhai</h2>
-                <p class="text-indigo-200 text-xs font-bold uppercase tracking-widest mt-1">Full Stack Artisan</p>
+                <h2 class="text-2xl font-black tracking-tight mt-4">Maizied Hasan</h2>
+                <p class="text-indigo-200 text-xs font-bold uppercase tracking-widest mt-1">#MaJHiBhai - Your friendly Laravel performance companion 🐛</p>
                 
                 <div class="flex justify-center gap-3 mt-6">
                     <a href="https://github.com/Maijied" target="_blank" title="GitHub" class="p-2 bg-white/10 rounded-xl hover:bg-white/20 transition backdrop-blur-sm hover:scale-110">
