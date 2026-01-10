@@ -551,14 +551,14 @@
                              <div class="bg-indigo-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                                 <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.085 2.157 2.419 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.085 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z"/></svg>
                              </div>
-                             <h3 class="text-lg font-bold">Discord Integration</h3>
-                             <p class="text-purple-200 text-xs">Send notifications to your Discord server channel.</p>
+                             <h3 class="text-lg font-black text-white">Discord Integration</h3>
+                             <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-wider mt-1">Direct performance alerts to your server</p>
                         </div>
                         <div>
-                            <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Discord Webhook URL</label>
-                            <input x-model="discordWebhook" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="https://discordapp.com/api/webhooks/..." />
-                            <label class="inline-flex items-center mt-3 text-white text-sm cursor-pointer hover:text-purple-200 transition bg-white bg-opacity-5 rounded-lg p-2 w-full">
-                                <input type="checkbox" x-model="discordEnabled" class="mr-3 rounded text-purple-600 focus:ring-purple-500 w-5 h-5 bg-white bg-opacity-20 border-transparent"/> 
+                            <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Discord Webhook URL</label>
+                            <input x-model="discordWebhook" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 placeholder-indigo-300/30 focus:ring-2 focus:ring-indigo-500 focus:bg-black/40 transition-all font-mono" placeholder="https://discordapp.com/api/webhooks/..." />
+                            <label class="inline-flex items-center mt-4 text-white text-xs font-bold cursor-pointer hover:text-indigo-200 transition bg-white/5 rounded-xl p-3 w-full border border-white/5">
+                                <input type="checkbox" x-model="discordEnabled" class="mr-3 rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 bg-black/20 border-white/10"/> 
                                 Enable Discord Alerts
                             </label>
                         </div>
@@ -570,77 +570,78 @@
                              <div class="bg-rose-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                                 <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.522 2.521 2.527 2.527 0 0 1-2.522-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.522-2.522v-2.522h2.522zM15.165 17.688a2.527 2.527 0 0 1-2.522-2.522 2.527 2.527 0 0 1 2.522-2.521h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.522h-6.313z"/></svg>
                              </div>
-                             <h3 class="text-lg font-bold">Slack Integration</h3>
-                             <p class="text-purple-200 text-xs">Send notifications to a Slack channel.</p>
+                             <h3 class="text-lg font-black text-white">Slack Integration</h3>
+                             <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-wider mt-1">Real-time team synchronization</p>
                         </div>
                         <div>
-                            <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Slack Webhook URL <span class="text-red-400" x-show="slackEnabled">*</span></label>
-                            <input x-model="slackWebhook" :class="{'border-red-500': slackEnabled && !slackWebhook}" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border border-transparent placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="https://hooks.slack.com/services/..." />
+                            <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Slack Webhook URL <span class="text-rose-400" x-show="slackEnabled">*</span></label>
+                            <input x-model="slackWebhook" :class="{'border-rose-500': slackEnabled && !slackWebhook}" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 placeholder-indigo-300/30 focus:ring-2 focus:ring-rose-500 transition-all font-mono" placeholder="https://hooks.slack.com/services/..." />
                         </div>
                         <div>
-                            <label class="inline-flex items-center mt-3 text-white text-sm cursor-pointer hover:text-purple-200 transition bg-white bg-opacity-5 rounded-lg p-2 w-full">
-                                <input type="checkbox" x-model="slackEnabled" class="mr-3 rounded text-purple-600 focus:ring-purple-500 w-5 h-5 bg-white bg-opacity-20 border-transparent"/> 
+                            <label class="inline-flex items-center mt-4 text-white text-xs font-bold cursor-pointer hover:text-indigo-200 transition bg-white/5 rounded-xl p-3 w-full border border-white/5">
+                                <input type="checkbox" x-model="slackEnabled" class="mr-3 rounded text-rose-600 focus:ring-rose-500 w-5 h-5 bg-black/20 border-white/10"/> 
                                 Enable Slack Alerts
                             </label>
-                            <p class="text-xs text-red-300 mt-1 ml-2" x-show="slackEnabled && !slackWebhook">Please enter a valid webhook URL.</p>
+                            <p class="text-[10px] text-rose-300 mt-2 font-bold uppercase" x-show="slackEnabled && !slackWebhook">⚠️ Missing webhook URL</p>
                         </div>
                     </div>
 
                     <!-- Panel: Email -->
                     <div x-show="settingsTab==='email'" class="space-y-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" style="display:none">
-                        <div class="flex items-center gap-4 border-b border-purple-500 border-opacity-30 pb-4 mb-4">
-                             <div class="bg-blue-500 w-10 h-10 rounded-lg flex items-center justify-center shadow">
+                        <div class="flex items-center gap-4 border-b border-white/10 pb-4 mb-4">
+                             <div class="bg-blue-500 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                              </div>
                              <div>
-                                 <h3 class="text-sm font-bold">Email Alerts</h3>
-                                 <p class="text-purple-200 text-xs">Configure destination and server.</p>
+                                 <h3 class="text-md font-black text-white">Email Alerts</h3>
+                                 <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-wider">Configure SMTP server reports</p>
                              </div>
                         </div>
 
-                        <div>
-                            <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Alert Email (TO)</label>
-                            <input x-model="mailTo" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="admin@example.com" />
-                            <label class="inline-flex items-center mt-3 text-white text-sm cursor-pointer hover:text-purple-200 transition bg-white bg-opacity-5 rounded-lg p-2 w-full">
-                                <input type="checkbox" x-model="mailEnabled" class="mr-3 rounded text-purple-600 focus:ring-purple-500 w-5 h-5 bg-white bg-opacity-20 border-transparent"/> 
+                        <div class="grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Recipient Email</label>
+                                <input x-model="mailTo" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 placeholder-indigo-300/30 focus:ring-2 focus:ring-blue-500 transition-all" placeholder="admin@example.com" />
+                            </div>
+                            <label class="inline-flex items-center text-white text-xs font-bold cursor-pointer hover:text-indigo-200 transition bg-white/5 rounded-xl p-3 w-full border border-white/5">
+                                <input type="checkbox" x-model="mailEnabled" class="mr-3 rounded text-blue-600 focus:ring-blue-500 w-5 h-5 bg-black/20 border-white/10"/> 
                                 Enable Email Alerts
                             </label>
                         </div>
 
-                        <div class="mt-4 pt-4 border-t border-purple-500 border-opacity-30">
-                            <h3 class="text-sm font-semibold text-white mb-2 uppercase tracking-wide">SMTP Configuration</h3>
-                            <p class="text-xs text-purple-200 mb-4 opacity-75">Leave blank to use default server configuration.</p>
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <h3 class="text-[10px] font-black text-white mb-3 uppercase tracking-[0.2em]">SMTP Configuration</h3>
                             
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Host</label>
-                                    <input type="text" x-model="mailHost" placeholder="smtp.mailtrap.io" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">Host</label>
+                                    <input type="text" x-model="mailHost" placeholder="smtp.mailtrap.io" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Port</label>
-                                    <input type="number" x-model="mailPort" placeholder="2525" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">Port</label>
+                                    <input type="number" x-model="mailPort" placeholder="2525" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                             </div>
                             
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Username</label>
-                                    <input type="text" x-model="mailUsername" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">Username</label>
+                                    <input type="text" x-model="mailUsername" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Password</label>
-                                    <input type="password" x-model="mailPassword" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">Password</label>
+                                    <input type="password" x-model="mailPassword" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Encryption</label>
-                                    <input type="text" x-model="mailEncryption" placeholder="tls" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">Encryption</label>
+                                    <input type="text" x-model="mailEncryption" placeholder="tls" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                                 <div>
-                                    <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">From Address</label>
-                                    <input type="text" x-model="mailFromAddress" placeholder="monitor@lorapok.com" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none placeholder-purple-300 focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition">
+                                    <label class="block text-[8px] text-indigo-200 mb-1 font-black uppercase tracking-widest">From Address</label>
+                                    <input type="text" x-model="mailFromAddress" placeholder="monitor@lorapok.com" class="w-full text-xs p-2.5 rounded-lg bg-black/30 text-white border border-white/10 focus:ring-1 focus:ring-blue-500 transition-all font-mono">
                                 </div>
                             </div>
                         </div>
@@ -652,83 +653,73 @@
                              <div class="bg-amber-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
                                 <span class="text-2xl">🚨</span>
                              </div>
-                             <h3 class="text-lg font-bold">Alert Thresholds</h3>
-                             <p class="text-purple-200 text-xs">Configure when performance notifications are triggered.</p>
+                             <h3 class="text-lg font-black text-white">Alert Thresholds</h3>
+                             <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-wider mt-1">Define your performance budget</p>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Slow Route (ms)</label>
-                                <input type="number" x-model.number="routeThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="1000" />
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Slow Route (ms)</label>
+                                <input type="number" x-model.number="routeThreshold" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-amber-500 transition-all font-mono" placeholder="1000" />
                             </div>
                             <div>
-                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Slow Query (ms)</label>
-                                <input type="number" x-model.number="queryThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="100" />
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Slow Query (ms)</label>
+                                <input type="number" x-model.number="queryThreshold" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-amber-500 transition-all font-mono" placeholder="100" />
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Query Count Limit</label>
-                                <input type="number" x-model.number="queryCountThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="50" />
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Query Count Limit</label>
+                                <input type="number" x-model.number="queryCountThreshold" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-amber-500 transition-all font-mono" placeholder="50" />
                             </div>
                             <div>
-                                <label class="block text-[10px] text-purple-200 mb-1 font-black uppercase tracking-wider">Memory Limit (MB)</label>
-                                <input type="number" x-model.number="memoryThreshold" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="128" />
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Memory Limit (MB)</label>
+                                <input type="number" x-model.number="memoryThreshold" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-amber-500 transition-all font-mono" placeholder="128" />
                             </div>
                         </div>
 
-                        <div class="bg-amber-900 bg-opacity-30 rounded-xl p-4 border border-amber-400 border-opacity-30">
-                            <p class="text-[10px] text-amber-100 leading-tight">
-                                <span class="font-bold uppercase tracking-widest block mb-1">Architect's Note</span>
-                                Lower thresholds provide higher visibility but may increase notification volume. Use these to maintain your application's <strong>Performance Budget</strong>.
+                        <div class="bg-amber-900/40 rounded-2xl p-4 border border-amber-500/20 shadow-inner">
+                            <p class="text-[9px] text-amber-100 leading-relaxed font-medium italic">
+                                <span class="font-black uppercase tracking-widest block mb-1 not-italic text-amber-400">Architect Strategy</span>
+                                Setting strict thresholds ensures early detection of regressions. Aim for <span class="text-white font-bold">100ms</span> for routes and <span class="text-white font-bold">10ms</span> for queries in high-traffic APIs.
                             </p>
                         </div>
                     </div>
 
                     <div x-show="settingsTab==='advanced'" class="space-y-4" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" style="display:none">
                         <div class="text-center mb-4">
-                             <div class="bg-gradient-to-br from-purple-500 to-pink-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                <span class="text-2xl larvae-wiggle">⚙️</span>
+                             <div class="bg-purple-500 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                <span class="text-2xl">⚙️</span>
                              </div>
-                             <h3 class="text-lg font-bold">Advanced Settings</h3>
-                             <p class="text-purple-200 text-xs">Configure system behavior and persistence</p>
+                             <h3 class="text-lg font-black text-white">Advanced Engine</h3>
+                             <p class="text-indigo-200 text-[10px] font-bold uppercase tracking-wider mt-1">Fine-tune system behavior</p>
                         </div>
                         
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Alert Cooldown Period (min)</label>
-                                <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="30" />
-                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Minutes to wait before sending duplicate alerts.</p>
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Alert Cooldown Period (min)</label>
+                                <input x-model.number="rateLimitMinutes" type="number" min="1" max="1440" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-purple-500 transition-all font-mono" placeholder="30" />
+                                <p class="text-[9px] text-indigo-300 mt-1.5 font-medium ml-1 opacity-70">Avoid notification spam for the same performance issue.</p>
                             </div>
 
                             <div>
-                                <label class="block text-xs text-purple-200 mb-1 font-semibold uppercase tracking-wider">Live Data Sync Interval (ms)</label>
-                                <input x-model.number="pollingInterval" type="number" min="1000" step="1000" class="w-full text-sm p-3 rounded-lg bg-white bg-opacity-10 text-white border-none focus:ring-2 focus:ring-purple-400 focus:bg-opacity-20 transition" placeholder="5000" />
-                                <p class="text-[10px] text-purple-200 mt-1 opacity-75">Frequency of automatic dashboard updates. (Min: 1000ms)</p>
+                                <label class="block text-[10px] text-indigo-50 mb-1 font-black uppercase tracking-widest">Live Data Sync Interval (ms)</label>
+                                <input x-model.number="pollingInterval" type="number" min="1000" step="1000" class="w-full text-sm p-3 rounded-xl bg-black/30 text-white border border-white/10 focus:ring-2 focus:ring-purple-500 transition-all font-mono" placeholder="5000" />
+                                <p class="text-[9px] text-indigo-300 mt-1.5 font-medium ml-1 opacity-70">Refresh rate for the monitor dashboard.</p>
                             </div>
 
-                            <div class="bg-white bg-opacity-5 p-4 rounded-2xl border border-white border-opacity-10 transition-all hover:bg-opacity-10">
-                                <label class="flex items-center justify-between cursor-pointer group">
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/10 transition-all hover:bg-white/10 group">
+                                <label class="flex items-center justify-between cursor-pointer">
                                     <div>
-                                        <p class="text-sm font-bold text-white group-hover:text-purple-200 transition-colors">Mirror Browser Logs to Server</p>
-                                        <p class="text-[10px] text-purple-200 opacity-75">Stream client-side console logs to storage/logs/lorapok-client.log</p>
+                                        <p class="text-xs font-black text-white uppercase tracking-wider group-hover:text-indigo-300 transition-colors">Mirror Logs to Server</p>
+                                        <p class="text-[9px] text-indigo-300 mt-1 font-medium opacity-70 italic">Stream console logs to /storage/logs/lorapok-client.log</p>
                                     </div>
                                     <div class="relative">
                                         <input type="checkbox" x-model="clientLogWritingEnabled" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                                        <div class="w-11 h-6 bg-black/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 shadow-inner"></div>
                                     </div>
                                 </label>
-                            </div>
-                        </div>
-
-                        <div class="bg-purple-900 bg-opacity-30 rounded-xl p-4 border border-purple-400 border-opacity-30">
-                            <div class="flex items-start gap-2">
-                                <span class="text-lg">ℹ️</span>
-                                <div class="text-[10px] text-purple-100 leading-relaxed">
-                                    <p class="font-bold mb-1 uppercase tracking-wider">Note on Persistence</p>
-                                    <p>When enabled, client logs will be streamed to <code>storage/logs/lorapok-client.log</code>. Use this for debugging production environments where browser access is limited.</p>
-                                </div>
                             </div>
                         </div>
                     </div>
