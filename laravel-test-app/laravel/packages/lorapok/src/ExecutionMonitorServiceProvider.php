@@ -67,10 +67,29 @@ class ExecutionMonitorServiceProvider extends ServiceProvider
                 if (isset($settings['mail_to'])) $notifications['mail']['to'] = $settings['mail_to'];
                 if (isset($settings['mail_enabled'])) $notifications['mail']['enabled'] = $settings['mail_enabled'];
                 
+                // Merge feature toggles
+                $features = [];
+                if (isset($settings['feature_widget'])) $features['widget'] = $settings['feature_widget'];
+                if (isset($settings['feature_routes'])) $features['routes'] = $settings['feature_routes'];
+                if (isset($settings['feature_queries'])) $features['queries'] = $settings['feature_queries'];
+                if (isset($settings['feature_functions'])) $features['functions'] = $settings['feature_functions'];
+
+                // Merge global enabled
+                if (isset($settings['enabled'])) {
+                    config(['execution-monitor.enabled' => $settings['enabled']]);
+                }
+
                 config(['execution-monitor.notifications' => array_replace_recursive(
                     config('execution-monitor.notifications', []),
                     $notifications
                 )]);
+                
+                if (!empty($features)) {
+                    config(['execution-monitor.features' => array_replace_recursive(
+                        config('execution-monitor.features', []),
+                        $features
+                    )]);
+                }
 
                 if (isset($settings['rate_limit_minutes'])) {
                     config(['execution-monitor.rate_limiting.max_per_hour' => 60 / $settings['rate_limit_minutes']]); // Rough conversion if needed

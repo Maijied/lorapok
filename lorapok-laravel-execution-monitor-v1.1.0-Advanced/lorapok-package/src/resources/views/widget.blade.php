@@ -733,6 +733,22 @@
                     </button>
                 </div>
 
+                <!-- Service Toggles -->
+                <div class="grid grid-cols-4 gap-2 border-t border-gray-800 pt-4">
+                    <button @click="runCommand('monitor:enable routes')" class="px-2 py-1.5 bg-gray-800/50 hover:bg-green-900/30 border border-gray-700 rounded text-[10px] font-mono text-gray-400 hover:text-green-400 transition-colors">
+                        + Routes
+                    </button>
+                    <button @click="runCommand('monitor:disable routes')" class="px-2 py-1.5 bg-gray-800/50 hover:bg-red-900/30 border border-gray-700 rounded text-[10px] font-mono text-gray-400 hover:text-red-400 transition-colors">
+                        - Routes
+                    </button>
+                    <button @click="runCommand('monitor:enable queries')" class="px-2 py-1.5 bg-gray-800/50 hover:bg-green-900/30 border border-gray-700 rounded text-[10px] font-mono text-gray-400 hover:text-green-400 transition-colors">
+                        + Queries
+                    </button>
+                    <button @click="runCommand('monitor:disable queries')" class="px-2 py-1.5 bg-gray-800/50 hover:bg-red-900/30 border border-gray-700 rounded text-[10px] font-mono text-gray-400 hover:text-red-400 transition-colors">
+                        - Queries
+                    </button>
+                </div>
+
                 <!-- Output Area -->
                 <div class="flex-1 bg-black rounded-lg p-4 font-mono text-xs overflow-y-auto border border-gray-800 shadow-inner relative group">
                     <div x-show="terminalLoading" class="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
