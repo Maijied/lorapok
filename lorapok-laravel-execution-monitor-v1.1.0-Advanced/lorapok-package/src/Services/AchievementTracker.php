@@ -42,6 +42,26 @@ class AchievementTracker
             'name' => '📦 Payload Pilot',
             'description' => 'Optimized request payloads to stay under 50KB.',
             'goal' => 5
+        ],
+        'zero_gravity' => [
+            'name' => '👨‍🚀 Zero Gravity',
+            'description' => 'Execute 100 consecutive requests under 50ms.',
+            'goal' => 100
+        ],
+        'database_zen' => [
+            'name' => '🧘 Database Zen',
+            'description' => 'Serve 50 consecutive requests with zero database queries.',
+            'goal' => 50
+        ],
+        'clean_code_crusader' => [
+            'name' => '⚔️ Clean Code Crusader',
+            'description' => '1000 requests without a single exception or error.',
+            'goal' => 1000
+        ],
+        'titanium_stability' => [
+            'name' => '🏔️ Titanium Stability',
+            'description' => '500 requests staying under 10MB memory usage.',
+            'goal' => 500
         ]
     ];
 
@@ -55,7 +75,68 @@ class AchievementTracker
         $this->checkQuerySlayer($report);
         $this->checkErrorEvader($report);
         $this->checkLatencyLegend($report);
-        // More checks can be added here
+        
+        // Harder Achievements
+        $this->checkZeroGravity($report);
+        $this->checkDatabaseZen($report);
+        $this->checkCleanCodeCrusader($report);
+        $this->checkTitaniumStability($report);
+    }
+
+    protected function checkZeroGravity(array $report)
+    {
+        $duration = ($report['request']['duration'] ?? 0) * 1000;
+        $key = 'monitor_zero_gravity_consecutive';
+        if ($duration < 50) {
+            $this->increment($key, 'zero_gravity');
+        } else {
+            $this->reset($key, 'zero_gravity');
+        }
+    }
+
+    protected function checkDatabaseZen(array $report)
+    {
+        $queries = $report['total_queries'] ?? 0;
+        $key = 'monitor_db_zen_consecutive';
+        if ($queries === 0) {
+            $this->increment($key, 'database_zen');
+        } else {
+            $this->reset($key, 'database_zen');
+        }
+    }
+
+    protected function checkCleanCodeCrusader(array $report)
+    {
+        $key = 'monitor_clean_code_consecutive';
+        if (empty($report['last_exception'])) {
+            $this->increment($key, 'clean_code_crusader');
+        } else {
+            $this->reset($key, 'clean_code_crusader');
+        }
+    }
+
+    protected function checkTitaniumStability(array $report)
+    {
+        $memory = (float) $report['memory_peak'];
+        $key = 'monitor_titanium_consecutive';
+        if ($memory < 10) {
+            $this->increment($key, 'titanium_stability');
+        } else {
+            $this->reset($key, 'titanium_stability');
+        }
+    }
+
+    protected function increment(string $cacheKey, string $slug)
+    {
+        $count = Cache::get($cacheKey, 0) + 1;
+        Cache::put($cacheKey, $count, 86400 * 7); // 1 week
+        $this->updateProgress($slug, $count);
+    }
+
+    protected function reset(string $cacheKey, string $slug)
+    {
+        Cache::put($cacheKey, 0, 86400 * 7);
+        $this->updateProgress($slug, 0);
     }
 
     protected function checkErrorEvader(array $report)

@@ -43,6 +43,12 @@
                         </svg>
                     </button>
 
+                    <button title="Terminal" @click.stop="toggleTerminal()" 
+                        :class="openTerminal ? 'bg-gray-700/50 ring-2 ring-gray-400/50 scale-105' : 'bg-white/10 hover:bg-gray-700/30'" 
+                        class="modal-action-btn" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span class="text-xl">💻</span>
+                    </button>
+
                     <button @click="closeModal()" class="text-white hover:text-purple-200 text-3xl ml-2 transition-colors" style="background:transparent;border:none;padding:0 6px">×</button>
                 </div>
             </div>
@@ -60,6 +66,7 @@
                     <button @click="activeTab='queries'" :class="activeTab==='queries'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🗄️ Queries</button>
                     <button @click="activeTab='middleware'" :class="activeTab==='middleware'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🔗 Middleware</button>
                     <button @click="activeTab='logs'" :class="activeTab==='logs'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">📝 Logs</button>
+                    <button @click="activeTab='playground'" :class="activeTab==='playground'?'border-purple-500 text-purple-600 shadow-[inset_0_-2px_0_rgba(168,85,247,1)]':'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-4 text-xs font-black uppercase tracking-widest transition-all">🎮 Playground</button>
                 </nav>
             </div>
 
@@ -163,134 +170,91 @@
                 <div x-show="activeTab==='middleware'">@include('execution-monitor::tabs.middleware')</div>
                 <div x-show="activeTab==='quests'">@include('execution-monitor::tabs.achievements')</div>
                 
-                                                <!-- Logs Tab -->
-                                                <div x-show="activeTab==='logs'" class="space-y-6" x-data="{ 
-                                                    logMode: 'client',
-                                                    logSearch: '',
-                                                    logLevel: 'all',
-                                                    logDate: '',
-                                                    page: 1,
-                                                    perPage: 10,
-                                                    get filteredServerLogs() {
-                                                        let logs = this.data?.server_logs || [];
-                                                        const s = this.logSearch.toLowerCase();
-                                                        const l = this.logLevel.toLowerCase();
-                                                        
-                                                        return logs.filter(log => {
-                                                            const matchSearch = (log.msg || '').toLowerCase().includes(s) || (log.level || '').toLowerCase().includes(s);
-                                                            const matchLevel = l === 'all' || (log.level || '').toLowerCase() === l;
-                                                            return matchSearch && matchLevel;
-                                                        });
-                                                    },
-                                                    get paginatedServerLogs() {
-                                                        const start = (this.page - 1) * this.perPage;
-                                                        return this.filteredServerLogs.slice(start, start + this.perPage);
-                                                    },
-                                                    get totalPages() {
-                                                        return Math.ceil(this.filteredServerLogs.length / this.perPage) || 1;
-                                                    }
-                                                }">
-                                                    <!-- Centered Title -->
-                                                    <div class="text-center">
-                                                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Application Logs</h3>
-                                                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
-                                                    </div>
-                                
-                                                    <!-- Centered Controls -->
-                                                    <div class="flex flex-col items-center gap-4">
-                                                        <div class="flex flex-wrap items-center justify-center gap-3">
-                                                            <!-- Toggle -->
-                                                            <div class="flex bg-gray-100 p-1 rounded-2xl border border-gray-200 shadow-inner">
-                                                                <button @click="logMode = 'client'; page = 1" :class="logMode === 'client' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Client</button>
-                                                                <button @click="logMode = 'server'; page = 1" :class="logMode === 'server' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2">
-                                                                    Server
-                                                                    <span x-show="(data?.server_logs || []).length" class="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-lg text-[9px]" x-text="(data?.server_logs || []).length"></span>
-                                                                </button>
-                                                            </div>
-                                
-                                                            <!-- Level Filter -->
-                                                            <div x-show="logMode === 'server'" class="relative">
-                                                                <select x-model="logLevel" @change="page = 1" class="appearance-none pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm">
-                                                                    <option value="all">All Levels</option>
-                                                                    <option value="error">Error</option>
-                                                                    <option value="warning">Warning</option>
-                                                                    <option value="info">Info</option>
-                                                                    <option value="debug">Debug</option>
-                                                                </select>
-                                                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">▼</span>
-                                                            </div>
-                                
-                                                            <!-- Date Filter -->
-                                                            <div x-show="logMode === 'server'" class="relative">
-                                                                <input type="date" x-model="logDate" @change="page = 1; fetchData()" class="pl-4 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm" />
-                                                            </div>
-                                                        </div>
-                                                                        <div class="flex items-center gap-3 w-full max-w-2xl">
-                                            <!-- Search -->
-                                            <div class="relative flex-1 group">
-                                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
-                                                <input x-model="logSearch" @input="page = 1" type="text" placeholder="Search entries, stack traces, timestamps..." class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-xs focus:ring-2 focus:ring-purple-500 outline-none transition-all shadow-sm" />
-                                            </div>
-                
-                                            <!-- Actions -->
-                                            <div class="flex gap-2">
-                                                <button @click="copyAllLogs(logMode)" class="px-5 py-3 bg-gray-900 text-white rounded-2xl text-xs font-bold shadow-lg hover:bg-gray-800 transition-all flex items-center gap-2 active:scale-95">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-                                                    Copy
-                                                </button>
-                                                <button x-show="logMode==='client'" @click="clearLogs()" class="px-5 py-3 bg-white text-red-600 border border-red-100 rounded-2xl text-xs font-bold shadow-sm hover:bg-red-50 transition-all active:scale-95">Clear</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Client Logs -->
-                    <div x-show="logMode === 'client'" class="space-y-2">
-                        <div class="overflow-y-auto pr-2" style="max-height:50vh;">
-                            <template x-for="(log, idx) in consoleLogs.filter(l => (l.msg || '').toLowerCase().includes(logSearch.toLowerCase()))" :key="idx">
-                                <div class="bg-gray-50 border border-gray-100 rounded-xl overflow-hidden mb-2 transition-all hover:border-purple-200" x-data="{ expanded: false }">
-                                    <div @click="expanded = !expanded" class="flex items-center justify-between p-3 cursor-pointer hover:bg-white transition-colors">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex items-center justify-center w-6 h-6 rounded-lg shadow-sm" :class="{
-                                                'bg-red-100 text-red-600': log.level === 'error',
-                                                'bg-orange-100 text-orange-600': log.level === 'warn',
-                                                'bg-blue-100 text-blue-600': log.level === 'info',
-                                                'bg-gray-100 text-gray-600': log.level === 'log' || log.level === 'debug'
-                                            }">
-                                                <template x-if="log.level === 'error'"><span class="text-[10px]">🔴</span></template>
-                                                <template x-if="log.level === 'warn'"><span class="text-[10px]">🟠</span></template>
-                                                <template x-if="log.level === 'info'"><span class="text-[10px]">🔵</span></template>
-                                                <template x-if="log.level === 'log' || log.level === 'debug'"><span class="text-[10px]">⚪</span></template>
-                                            </div>
-                                            <span class="text-[10px] font-mono text-gray-400" x-text="new Date(log.at).toLocaleTimeString()"></span>
-                                            <span class="text-xs font-bold uppercase tracking-wider" :class="{
-                                                'text-red-600': log.level === 'error',
-                                                'text-orange-600': log.level === 'warn',
-                                                'text-blue-600': log.level === 'info',
-                                                'text-gray-600': log.level === 'log' || log.level === 'debug'
-                                            }" x-text="log.level"></span>
-                                                                                    <span class="text-xs text-gray-700 truncate max-w-[300px] font-medium" x-text="log.msg"></span>
-                                                                                </div>
-                                                                                <div class="flex items-center gap-2">
-                                                                                    <button @click.stop="navigator.clipboard.writeText(log.msg); $el.innerHTML='✅'; setTimeout(()=>$el.innerHTML='📋', 1000)" class="p-1 hover:bg-gray-100 rounded transition text-gray-400 hover:text-purple-600" title="Copy Log">
-                                                                                        📋
-                                                                                    </button>
-                                                                                    <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                                                                </div>
-                                                                            </div>
-                                            
-                                    <div x-show="expanded" x-collapse x-cloak class="border-t border-gray-100 bg-white p-4">
-                                        <div class="bg-gray-900 rounded-lg p-4 font-mono text-[11px] leading-relaxed overflow-x-auto text-emerald-400 shadow-inner" x-html="formatMsgHtml(log.msg)"></div>
-                                    </div>
-                                </div>
-                            </template>
-                            <div x-show="consoleLogs.length===0" class="text-center py-12 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                                <span class="text-4xl block mb-2 opacity-20">📝</span>
-                                <p class="text-sm text-gray-400 font-bold uppercase tracking-widest">No client logs captured</p>
+                <!-- Logs Tab -->
+                <div x-show="activeTab==='logs'" class="space-y-6" x-data="{ 
+                    logMode: 'client',
+                    logSearch: '',
+                    logLevel: 'all',
+                    logDate: new Date().toISOString().split('T')[0],
+                    page: 1,
+                    perPage: 10,
+                    get filteredLogs() {
+                        let logs = this.logMode === 'client' ? (this.consoleLogs || []) : (this.data?.server_logs || []);
+                        const s = this.logSearch.toLowerCase();
+                        const l = this.logLevel.toLowerCase();
+                        
+                        return logs.filter(log => {
+                            const matchSearch = (log.msg || '').toLowerCase().includes(s) || (log.level || '').toLowerCase().includes(s);
+                            const matchLevel = l === 'all' || (log.level || '').toLowerCase() === l;
+                            return matchSearch && matchLevel;
+                        });
+                    },
+                    get paginatedLogs() {
+                        const start = (this.page - 1) * this.perPage;
+                        return this.filteredLogs.slice(start, start + this.perPage);
+                    },
+                    get totalPages() {
+                        return Math.ceil(this.filteredLogs.length / this.perPage) || 1;
+                    }
+                }">
+                    <!-- Centered Title -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">Application Logs</h3>
+                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
+                    </div>
+
+                    <!-- Centered Controls -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="flex flex-wrap items-center justify-center gap-3">
+                            <!-- Toggle -->
+                            <div class="flex bg-gray-100 p-1 rounded-2xl border border-gray-200 shadow-inner">
+                                <button @click="logMode = 'client'; page = 1" :class="logMode === 'client' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Client</button>
+                                <button @click="logMode = 'server'; page = 1" :class="logMode === 'server' ? 'bg-white text-purple-600 shadow-md scale-105' : 'text-gray-500 hover:text-gray-700'" class="px-6 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 flex items-center gap-2">
+                                    Server
+                                    <span x-show="(data?.server_logs || []).length" class="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-lg text-[9px]" x-text="(data?.server_logs || []).length"></span>
+                                </button>
+                            </div>
+
+                            <!-- Level Filter -->
+                            <div class="relative">
+                                <select x-model="logLevel" @change="page = 1" class="appearance-none pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm">
+                                    <option value="all">All Levels</option>
+                                    <option value="error">Error</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="info">Info</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">▼</span>
+                            </div>
+
+                            <!-- Date Filter (Server Only) -->
+                            <div x-show="logMode === 'server'" class="relative">
+                                <input type="date" x-model="logDate" @change="page = 1; fetchData()" class="pl-4 pr-4 py-2.5 bg-white border border-gray-200 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer transition-all shadow-sm" />
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 w-full max-w-2xl">
+                            <!-- Search -->
+                            <div class="relative flex-1 group">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">🔍</span>
+                                <input x-model="logSearch" @input="page = 1" type="text" placeholder="Search entries, stack traces, timestamps..." class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-2xl text-xs focus:ring-2 focus:ring-purple-500 outline-none transition-all shadow-sm" />
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex gap-2">
+                                <button @click="copyAllLogs(logMode)" class="px-5 py-3 bg-gray-900 text-white rounded-2xl text-xs font-bold shadow-lg hover:bg-gray-800 transition-all flex items-center gap-2 active:scale-95">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                                    Copy
+                                </button>
+                                <button @click="logMode === 'client' ? clearLogs() : clearServerLogs()" class="px-5 py-3 bg-white text-red-600 border border-red-100 rounded-2xl text-xs font-bold shadow-sm hover:bg-red-50 transition-all active:scale-95">
+                                    Clear
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Server Logs (Paginated Table) -->
-                    <div x-show="logMode === 'server'" class="space-y-4">
+                    <!-- Unified Logs Table -->
+                    <div class="space-y-4">
                         <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
                             <table class="w-full text-left border-collapse">
                                 <thead class="bg-gray-50 border-b border-gray-200">
@@ -302,21 +266,21 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100">
-                                    <template x-for="(log, idx) in paginatedServerLogs" :key="idx">
-                                        <tr class="hover:bg-gray-50/50 transition-colors group" x-data="{ expanded: false }">
-                                            <td class="px-4 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap" x-text="log.at"></td>
+                                    <template x-for="(log, idx) in paginatedLogs" :key="idx">
+                                        <tr @click="log.expanded = !log.expanded" class="hover:bg-gray-50/50 transition-colors group cursor-pointer" x-data="{ expanded: false }">
+                                            <td class="px-4 py-3 text-[10px] font-mono text-gray-500 whitespace-nowrap" x-text="new Date(log.at).toLocaleString()"></td>
                                             <td class="px-4 py-3">
                                                 <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter" :class="{
-                                                    'bg-red-100 text-red-600': ['error','critical','alert','emergency'].includes(log.level),
-                                                    'bg-orange-100 text-orange-600': ['warning','notice'].includes(log.level),
-                                                    'bg-blue-100 text-blue-600': log.level === 'info',
-                                                    'bg-gray-100 text-gray-600': log.level === 'debug'
+                                                    'bg-red-100 text-red-600': ['error','critical','alert','emergency'].includes(log.level.toLowerCase()),
+                                                    'bg-orange-100 text-orange-600': ['warning','notice','warn'].includes(log.level.toLowerCase()),
+                                                    'bg-blue-100 text-blue-600': log.level.toLowerCase() === 'info',
+                                                    'bg-gray-100 text-gray-600': ['debug','log'].includes(log.level.toLowerCase())
                                                 }" x-text="log.level"></span>
                                             </td>
                                             <td class="px-4 py-3">
                                                 <div class="text-xs text-gray-700 truncate max-w-[400px] font-medium" x-text="log.msg"></div>
-                                                <div x-show="expanded" x-collapse x-cloak class="mt-3">
-                                                    <div class="bg-gray-900 rounded-xl p-4 font-mono text-[10px] leading-relaxed overflow-x-auto text-rose-400 shadow-inner max-h-64" x-text="log.full || log.msg"></div>
+                                                <div x-show="expanded" x-collapse x-cloak class="mt-3" @click.stop>
+                                                    <div class="bg-gray-900 rounded-xl p-4 font-mono text-[10px] leading-relaxed overflow-x-auto text-emerald-400 shadow-inner max-h-64" x-html="logMode === 'client' ? formatMsgHtml(log.msg) : (log.full || log.msg)"></div>
                                                 </div>
                                             </td>
                                             <td class="px-4 py-3 text-center">
@@ -324,7 +288,7 @@
                                                     <button @click.stop="navigator.clipboard.writeText(log.full || log.msg); $el.innerHTML='✅'; setTimeout(()=>$el.innerHTML='📋', 1000)" class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-purple-600 transition-colors" title="Copy Log">
                                                         📋
                                                     </button>
-                                                    <button @click="expanded = !expanded" class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400 transition-colors">
+                                                    <button class="p-1.5 hover:bg-gray-100 rounded-lg text-gray-400 transition-colors">
                                                         <svg class="w-4 h-4 transition-transform duration-200" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                                     </button>
                                                 </div>
@@ -333,7 +297,7 @@
                                     </template>
                                 </tbody>
                             </table>
-                            <div x-show="!filteredServerLogs.length" class="text-center py-12">
+                            <div x-show="!filteredLogs.length" class="text-center py-12">
                                 <span class="text-4xl block mb-2 opacity-20">📂</span>
                                 <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">No logs found</p>
                             </div>
@@ -347,6 +311,90 @@
                                 <button @click="page++" :disabled="page >= totalPages" class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-[10px] font-black disabled:opacity-50 hover:border-purple-300 transition-all">NEXT</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Playground Tab -->
+                <div x-show="activeTab==='playground'" class="space-y-6" x-data="{
+                    method: 'GET',
+                    url: '/lorapok/test/slow-route',
+                    body: '',
+                    response: null,
+                    loading: false,
+                    duration: 0,
+                    status: null,
+                    async sendRequest() {
+                        this.loading = true;
+                        this.response = null;
+                        this.status = null;
+                        const start = performance.now();
+                        try {
+                            const options = {
+                                method: this.method,
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name=\'csrf-token\']')?.content
+                                }
+                            };
+                            if (['POST', 'PUT', 'PATCH'].includes(this.method) && this.body) {
+                                options.body = this.body;
+                            }
+                            const res = await fetch(this.url, options);
+                            this.status = res.status;
+                            const text = await res.text();
+                            try {
+                                this.response = JSON.stringify(JSON.parse(text), null, 2);
+                            } catch (e) {
+                                this.response = text;
+                            }
+                        } catch (e) {
+                            this.response = 'Error: ' + e.message;
+                            this.status = 0;
+                        } finally {
+                            this.duration = Math.round(performance.now() - start);
+                            this.loading = false;
+                        }
+                    }
+                }">
+                    <!-- Centered Title -->
+                    <div class="text-center">
+                        <h3 class="text-lg font-black text-gray-900 uppercase tracking-[0.2em]">API Playground</h3>
+                        <div class="h-1 w-12 bg-purple-500 mx-auto mt-2 rounded-full"></div>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-4">Test endpoints directly from the widget</p>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm">
+                        <div class="flex flex-col gap-4">
+                            <div class="flex gap-2">
+                                <select x-model="method" class="w-24 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs font-black uppercase tracking-wider focus:ring-2 focus:ring-purple-500 outline-none">
+                                    <option>GET</option>
+                                    <option>POST</option>
+                                    <option>PUT</option>
+                                    <option>DELETE</option>
+                                </select>
+                                <input x-model="url" type="text" class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-xs font-mono focus:ring-2 focus:ring-purple-500 outline-none" placeholder="https://..." />
+                                <button @click="sendRequest()" :disabled="loading" class="px-6 bg-purple-600 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-purple-700 transition-colors shadow-lg shadow-purple-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                    <span x-show="loading" class="animate-spin">⌛</span>
+                                    <span x-show="!loading">Send</span>
+                                </button>
+                            </div>
+                            
+                            <div x-show="['POST', 'PUT', 'PATCH'].includes(method)">
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Request Body (JSON)</label>
+                                <textarea x-model="body" class="w-full h-32 bg-gray-50 border border-gray-200 rounded-xl p-4 text-xs font-mono focus:ring-2 focus:ring-purple-500 outline-none resize-none" placeholder="{ &quot;key&quot;: &quot;value&quot; }"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="response !== null" class="bg-gray-900 rounded-3xl p-6 shadow-xl border border-gray-800">
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-4">
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase" :class="status >= 200 && status < 300 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'" x-text="'Status: ' + status"></span>
+                                <span class="text-xs text-gray-400 font-mono" x-text="duration + 'ms'"></span>
+                            </div>
+                            <button @click="navigator.clipboard.writeText(response)" class="text-gray-500 hover:text-white text-xs uppercase font-bold tracking-wider transition-colors">Copy Response</button>
+                        </div>
+                        <pre class="text-xs font-mono text-purple-300 overflow-x-auto max-h-[400px]" x-text="response"></pre>
                     </div>
                 </div>
             </div>
@@ -585,6 +633,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Command Terminal Modal -->
+    <div x-show="openTerminal" x-transition class="fixed inset-0 z-[11000] flex items-center justify-center p-4" style="display:none;pointer-events:auto">
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm" @click="openTerminal = false"></div>
+        <div class="relative bg-gray-900 border border-gray-700 text-white rounded-xl shadow-2xl p-6 w-full max-w-3xl flex flex-col max-h-[80vh]">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-800 pb-4">
+                <h3 class="text-lg font-mono font-bold flex items-center gap-2 text-green-400">
+                    <span>>_</span> Terminal
+                </h3>
+                <button @click="openTerminal = false" class="text-gray-500 hover:text-white">×</button>
+            </div>
+            
+            <div class="flex-1 overflow-hidden flex flex-col gap-4">
+                <!-- Command List -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <button @click="runCommand('monitor:status')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
+                        <span class="w-2 h-2 rounded-full bg-green-500 group-hover:animate-pulse"></span> status
+                    </button>
+                    <button @click="runCommand('monitor:audit')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
+                        <span class="w-2 h-2 rounded-full bg-yellow-500 group-hover:animate-pulse"></span> audit
+                    </button>
+                    <button @click="runCommand('monitor:heatmap')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
+                        <span class="w-2 h-2 rounded-full bg-purple-500 group-hover:animate-pulse"></span> heatmap
+                    </button>
+                    <button @click="runCommand('monitor:export')" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded text-xs font-mono text-left transition-colors flex items-center gap-2 group">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 group-hover:animate-pulse"></span> export
+                    </button>
+                </div>
+
+                <!-- Output Area -->
+                <div class="flex-1 bg-black rounded-lg p-4 font-mono text-xs overflow-y-auto border border-gray-800 shadow-inner relative group">
+                    <div x-show="terminalLoading" class="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+                        <span class="text-green-400 animate-pulse">Executing...</span>
+                    </div>
+                    <template x-for="(line, idx) in terminalOutput" :key="idx">
+                        <div class="mb-1">
+                            <span class="text-gray-500 select-none mr-2">$</span>
+                            <span :class="line.type === 'error' ? 'text-red-400' : 'text-gray-300'" x-text="line.text"></span>
+                        </div>
+                    </template>
+                    <div x-show="terminalOutput.length === 0" class="text-gray-600 italic text-center mt-10">Select a command to execute</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -683,6 +776,7 @@ window.monitorWidget = function() {
         isOpen: false,
         showDevInfo: false,
         openSettings: false,
+        openTerminal: false,
         settingsTab: 'discord',
         showSuccessModal: false,
         isError: false,
@@ -703,6 +797,7 @@ window.monitorWidget = function() {
         mailEncryption: '',
         mailFromAddress: '',
         rateLimitMinutes: 30,
+        pollingInterval: 5000,
         clientLogWritingEnabled: false,
         activeTab: 'overview',
         data: { routes: {}, queries: [], alerts: [], total_queries: 0, total_query_time: 0 },
@@ -712,12 +807,17 @@ window.monitorWidget = function() {
         clipboardHistory: [],
         selectedQueryIndex: null,
         copiedIndex: null,
+        terminalOutput: [],
+        terminalLoading: false,
+        
         init() {
             console.log('🐛 Lorapok Widget Initialized');
             window.__lorapok_console_logs = window.__lorapok_console_logs || [];
             this.consoleLogs = (window.__lorapok_console_logs || []).slice().reverse();
-            this.fetchData();
-            setInterval(() => this.fetchData(), 5000);
+            
+            // Start polling loop
+            this.scheduleNextPoll();
+
             try {
                 var h = localStorage.getItem('lorapok_clipboard_history');
                 if (h) this.clipboardHistory = JSON.parse(h);
@@ -745,10 +845,22 @@ window.monitorWidget = function() {
             // Initial sync
             window.__lorapok_persist_active = !!this.clientLogWritingEnabled;
         },
+
+        scheduleNextPoll() {
+            setTimeout(async () => {
+                if (this.isOpen) { // Only poll when open to save resources
+                    await this.fetchData();
+                }
+                this.scheduleNextPoll();
+            }, this.pollingInterval || 5000);
+        },
+
         toggleModal() { this.isOpen = !this.isOpen; if (this.isOpen) this.fetchData(); },
         closeModal() { this.isOpen = false; },
-        toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) this.showDevInfo = false; },
-        toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) this.openSettings = false; },
+        toggleSettings() { this.openSettings = !this.openSettings; if(this.openSettings) { this.showDevInfo = false; this.openTerminal = false; } },
+        toggleDev() { this.showDevInfo = !this.showDevInfo; if(this.showDevInfo) { this.openSettings = false; this.openTerminal = false; } },
+        toggleTerminal() { this.openTerminal = !this.openTerminal; if(this.openTerminal) { this.openSettings = false; this.showDevInfo = false; } },
+        
         copyAllLogs(mode = 'client') {
             try {
                 let logs = mode === 'client' ? this.consoleLogs : (this.data?.server_logs || []);
@@ -756,9 +868,48 @@ window.monitorWidget = function() {
                 navigator.clipboard.writeText(txt);
             } catch (e) {}
         },
+        
         clearLogs() {
             try { this.consoleLogs = []; window.__lorapok_console_logs = []; } catch (e) {}
         },
+
+        async clearServerLogs() {
+            if(!confirm('Are you sure you want to delete all server logs? This cannot be undone.')) return;
+            try {
+                const r = await fetch('/execution-monitor/api/logs/clear', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content }
+                });
+                if(r.ok) {
+                    this.fetchData(); // Refresh
+                } else {
+                    alert('Failed to clear logs');
+                }
+            } catch(e) { console.error(e); }
+        },
+
+        async runCommand(cmd) {
+            this.terminalLoading = true;
+            this.terminalOutput.push({ text: '> ' + cmd, type: 'input' });
+            try {
+                const r = await fetch('/execution-monitor/api/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
+                    body: JSON.stringify({ command: cmd })
+                });
+                const res = await r.json();
+                if(res.success) {
+                    this.terminalOutput.push({ text: res.output || '(No Output)', type: 'output' });
+                } else {
+                    this.terminalOutput.push({ text: 'Error: ' + res.message, type: 'error' });
+                }
+            } catch(e) {
+                this.terminalOutput.push({ text: 'Request Failed: ' + e.message, type: 'error' });
+            } finally {
+                this.terminalLoading = false;
+            }
+        },
+
         async fetchData() {
             try {
                 const url = new URL('/execution-monitor/api/data', window.location.origin);
@@ -786,9 +937,11 @@ window.monitorWidget = function() {
                     throw new Error('Invalid JSON response from server');
                 }
                 
-                console.log('📊 Lorapok Data:', this.data);
+                // console.log('📊 Lorapok Data:', this.data); // Reduce noise
                 this.hasAlerts = this.data.alerts && this.data.alerts.length > 0;
                 this.lastException = this.data.last_exception || null;
+                
+                // Sync settings only if not editing
                 if (this.data.settings && !this.openSettings) {
                     this.discordWebhook = this.data.settings.discord_webhook;
                     this.discordEnabled = !!this.data.settings.discord_enabled;
@@ -804,6 +957,7 @@ window.monitorWidget = function() {
                     this.mailEncryption = this.data.settings?.mail_encryption || '';
                     this.mailFromAddress = this.data.settings?.mail_from_address || '';
                     this.rateLimitMinutes = this.data.settings?.rate_limit_minutes || 30;
+                    this.pollingInterval = this.data.settings?.polling_interval || 5000;
                     this.clientLogWritingEnabled = !!this.data.settings?.client_log_writing_enabled;
                 }
             } catch (e) { 
@@ -823,7 +977,7 @@ window.monitorWidget = function() {
                 if (this.settingsTab === 'discord') payload = { discord_webhook: this.discordWebhook, discord_enabled: this.discordEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'slack') payload = { slack_webhook: this.slackWebhook, slack_channel: this.slackChannel, slack_enabled: this.slackEnabled ? 1 : 0 };
                 else if (this.settingsTab === 'email') payload = { mail_to: this.mailTo, mail_enabled: this.mailEnabled ? 1 : 0, mail_host: this.mailHost, mail_port: this.mailPort, mail_username: this.mailUsername, mail_password: this.mailPassword, mail_encryption: this.mailEncryption, mail_from_address: this.mailFromAddress };
-                else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes, client_log_writing_enabled: this.clientLogWritingEnabled ? 1 : 0 };
+                else if (this.settingsTab === 'advanced') payload = { rate_limit_minutes: this.rateLimitMinutes, client_log_writing_enabled: this.clientLogWritingEnabled ? 1 : 0, polling_interval: this.pollingInterval };
                 
                 const r = await fetch('/execution-monitor/api/settings', {
                     method: 'POST',

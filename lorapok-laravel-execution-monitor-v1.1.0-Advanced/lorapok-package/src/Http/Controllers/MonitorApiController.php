@@ -253,6 +253,8 @@ class MonitorApiController extends Controller
                     'rate_limit_minutes' => 'nullable|numeric|min:1|max:1440',
 
                     'client_log_writing_enabled' => 'nullable|boolean',
+                    
+                    'polling_interval' => 'nullable|numeric|min:1000|max:60000', // 1s to 60s
 
                 ]);
 
@@ -322,6 +324,52 @@ class MonitorApiController extends Controller
         return response()->json(['success' => false, 'error' => 'Monitor not bound'], 500);
     }
 
+    public function clearLogs(Request $request)
+    {
+        try {
+            $logParser = new ServerLogParser();
+            if ($logParser->clearLogs()) {
+                return response()->json(['success' => true]);
+            }
+            return response()->json(['success' => false, 'message' => 'Failed to clear logs'], 500);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function runCommand(Request $request)
+    {
+        $request->validate([
+            'command' => 'required|string|starts_with:monitor:',
+            'args' => 'nullable|array'
+        ]);
+
+        $command = $request->input('command');
+        $args = $request->input('args', []);
+
+        // White-list allowed commands for safety
+        $allowed = [
+            'monitor:audit', 
+            'monitor:heatmap', 
+            'monitor:status', 
+            'monitor:export',
+            'monitor:disable',
+            'monitor:enable'
+        ];
+
+        if (!in_array($command, $allowed)) {
+            return response()->json(['success' => false, 'message' => 'Command not allowed'], 403);
+        }
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call($command, $args);
+            $output = \Illuminate\Support\Facades\Artisan::output();
+            return response()->json(['success' => true, 'output' => $output]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
     protected function getSettings()
     {
         $path = storage_path('app/lorapok/settings.json');
@@ -340,6 +388,7 @@ class MonitorApiController extends Controller
             'mail_enabled' => config('execution-monitor.notifications.mail.enabled', false),
             'rate_limit_minutes' => 30, // Default to 30 as per user request
             'client_log_writing_enabled' => false,
+            'polling_interval' => 5000,
         ], $settings);
     }
 
