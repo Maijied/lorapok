@@ -135,7 +135,6 @@ A beautiful floating button appears in your application. Click it to see:
 - ⚡ Functions - Custom tracked functions
 - 💾 Memory - Memory usage statistics
 
-![Widget Showcase](images/widget-showcase.png)
 
 ### Clipboard Features
 
@@ -146,14 +145,32 @@ A beautiful floating button appears in your application. Click it to see:
 
 ## 🖼️ Gallery
 
-### Real-Time Monitor
-![Monitor Dashboard](images/monitor_main.png)
+### Core Monitoring Dashboard
+| | |
+|:---:|:---:|
+| **Real-Time Overview**<br>![Monitor Dashboard](images/monitor_main.png) | **Timeline Visualization**<br>![Timeline](images/Timeline_monitor.png) |
+| **Routes Analysis**<br>![Routes](images/Routes_Monitor.png) | **Query Intelligence**<br>![Queries](images/Query_Monitor.png) |
+| **Middleware Stack**<br>![Middleware](images/Middleware%20Monitor.png) | **Cache ROI**<br>![Cache](images/Cache_Monitor.png) |
+| **Log Viewer**<br>![Logs](images/Log_monitor.png) | **Activity Monitor**<br>![Activity](images/Activity_Monitor.png) |
 
-### Developer Profile (#MaJHiBhai)
-![Developer Profile](images/developer_profile.png)
+### Developer Productivity
+| | |
+|:---:|:---:|
+| **Developer Profile (#MaJHiBhai)**<br>![Profile](images/developer_profile.png) | **In-Browser Terminal**<br>![Terminal](images/Lorapok_terminal.png) |
+| **API Playground**<br>![API Playground](images/API_Playgorund_Monitor.png) | **Usage Guide**<br>![Guide](images/Usage_guide.png) |
+| **Optimization Quests**<br>![Quests](images/Optimization%20Quest.png) | |
 
-### Smart Settings Panel
-![Settings Modal](images/settings_modal.png)
+### Settings & Configuration
+| | |
+|:---:|:---:|
+| **Advanced Config**<br>![Advanced](images/Advance_Setting.png) |
+| **Alert Thresholds**<br>![Alerts](images/Alert_Setting.png) | **Email Notifications**<br>![Email](images/Email_setting.png) |
+| **Discord Integration**<br>![Discord](images/Discord_Setting.png) | **Slack Integration**<br>![Slack](images/Slack_Setting.png) |
+
+### Brand Assets
+| | |
+|:---:|:---:|
+| **Larvae Mascot**<br>![Mascot](images/larvae-mascot.png) |
 
 ## 📊 Check Status
 
@@ -324,12 +341,12 @@ Lorapok makes it easy for developers to:
 
 **Lorapok** is developed and maintained by **Mohammad Maizied Hasan Majumder**
 
-📧 Email: [mdshuvo40@gmail.com](mailto:mdshuvo40@gmail.com)  
-🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)  
+📧 Email: [mdshuvo40@gmail.com](mailto:mdshuvo40@gmail.com)
+🔗 LinkedIn: [linkedin.com/in/maizied](https://www.linkedin.com/in/maizied/)
 🐙 GitHub: [@Maijied](https://github.com/Maijied)
 
 Made with ❤️ for the Laravel community by [@Maijied](https://github.com/Maijied)
 
 </div>
- 
- 
+
+

@@ -1,7 +1,12 @@
 ## Package-focused .gitignore
 
 # Ignore the example Laravel app and its build/runtime artifacts
-/laravel-test-app/
+# We are now tracking the test app, but excluding its heavy dependencies
+#/laravel-test-app/
+/laravel-test-app/laravel/vendor/
+/laravel-test-app/laravel/node_modules/
+/laravel-test-app/laravel/storage/
+/laravel-test-app/laravel/.env
 
 # Node and Composer artifacts
 /node_modules/
